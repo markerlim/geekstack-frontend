@@ -1,0 +1,105 @@
+/* Navbar.module.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--gs-bgcolor-one);
+  border-bottom: 0.5px solid rgb(41, 51, 62);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo strong {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.logo span {
+  font-size: 0.85rem;
+  color: var(--gs-fontcolor-one);
+}
+
+.login {
+  position: relative;
+}
+
+.geekstack-title{
+  display: flex;
+  flex-direction: column;
+  gap:3px;
+  color:var(--gs-fontcolor-one);
+  font-family: var(--font-type-one);
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.user-photo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.username {
+  font-weight: 600;
+  color: #222;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.menu button {
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  font-weight: 600;
+  color: #0070f3;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.menu button:hover {
+  background-color: #e6f0ff;
+}
+
+.login button {
+  font-weight: 600;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid var(--gs-color-primary);
+  background-color: var(--gs-bgcolor-one);
+  color: var(--gs-color-primary);
+  transition: background-color 0.2s ease;
+}
+
+.login button:hover {
+  background-color: var(--gs-color-primary);
+  color: var(--gs-fontcolor-one);
+}

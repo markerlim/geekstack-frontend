@@ -1,0 +1,72 @@
+.cardImage {
+  display: block;
+  cursor: pointer;
+  width: 200px;
+  height: auto;
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.detailsContent img {
+  width: 200px;
+  height: auto;
+}
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 9998;
+}
+
+.fullscreenPanel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: calc(100vw - 40px);
+  height: 80vh;
+  background: #26262d;
+  z-index: 9999;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow-y: auto;
+  padding-left: 20px;
+    padding-right: 20px;
+  padding-bottom: 20px;
+
+}
+
+.upper-eff-table{
+  display: flex;
+  flex-direction: row;
+  gap:10px;
+  width: 100%;
+}
+
+.closeBtn{
+  width: 100%;
+  background-color: var(--gs-color-secondary);
+  border: none;
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.puller {
+  width: 40px;          /* width of the bar */
+  height: 4px;          /* thickness */
+  background-color: #ccc; /* light gray color */
+  border-radius: 2px;   /* rounded edges */
+  margin: 15px auto;    /* spacing + center horizontally */
+  cursor: grab;         /* show grab cursor to indicate draggable */
+}

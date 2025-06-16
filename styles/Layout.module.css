@@ -1,0 +1,9 @@
+.pageBody {
+  display: flex;
+  height: calc(100vh - 72px); /* Adjust if Navbar height differs */
+}
+
+.mainContent {
+  flex: 1;
+  overflow-y: auto;
+}

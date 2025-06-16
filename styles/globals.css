@@ -1,0 +1,23 @@
+/* globals.css */
+:root {
+  --gs-color-primary: #7c4fff;
+    --gs-color-primary-light: #c8a2c8;
+  --gs-color-secondary: #E33C58;
+  --gs-bgcolor-one:rgb(16, 20, 24);
+  --gs-bgcolor-two:#121212;
+  --gs-fontcolor-one:#f2f3f8;
+  --gs-fontcolor-two:#121212;
+  --font-type-one:Roboto,sans-serif;
+}
+
+body{
+    margin:0;
+    background-color: rgb(16, 20, 24);
+}
+
+body.light {
+  --gs-color-primary: #c8a2c8;
+  --gs-color-secondary: #ef5050;
+  --gs-bgcolor-one: #f2f3f8;
+  --gs-fontcolor-one: #121212;
+}

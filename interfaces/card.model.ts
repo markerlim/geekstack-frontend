@@ -1,5 +1,13 @@
 import { TCGTYPE } from '../utils/constants';
 
+export type GameCard =
+  | CardUnionArena
+  | CookieRunCard
+  | CardDragonBallZFW
+  | DuelmastersCard
+  | CardOnePiece
+  | HololiveCard;
+
 export interface BaseGameCard {
   _id: string;
   imageSrc: string;
