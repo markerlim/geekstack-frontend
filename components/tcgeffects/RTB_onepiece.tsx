@@ -1,11 +1,11 @@
-import { CardUnionArena } from "../../interfaces/card.model";
+import { CardOnePiece, CardUnionArena } from "../../interfaces/card.model";
 import styles from "../../styles/EffectTable.module.css";
 
-interface TBUnionArenaProps {
-  card: CardUnionArena;
+interface TBOnePieceProps {
+  card: CardOnePiece;
 }
 
-const RTB_onepiece = ({ card }: TBUnionArenaProps) => {
+const RTB_onepiece = ({ card }: TBOnePieceProps) => {
   return (
     <div className={styles["rtb"]}>
     <div className={styles["rtb-main"]}>
@@ -14,8 +14,8 @@ const RTB_onepiece = ({ card }: TBUnionArenaProps) => {
         <div className={styles["rtb-info"]}>{card?.cardId}</div>
       </div>
       <div className={styles["rtb-section"]}>
-        <div className={styles["rtb-header"]}>Traits</div>
-        <div className={styles["rtb-info"]}>{card?.traits}</div>
+        <div className={styles["rtb-header"]}>Type</div>
+        <div className={styles["rtb-info"]}>{card?.typing}</div>
       </div>
     </div>
     <div>

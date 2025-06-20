@@ -1,64 +1,82 @@
 import { useState } from "react";
 import Image from "next/image";
 import styles from "../../styles/Navbar.module.css";
+import LoginModal from "../functional/LoginModal";
+import { User } from "@firebase/auth";
+import { useAuth } from "../../services/auth/authService";
+import { Bell, CircleUser, LogOut } from "lucide-react";
 
-interface User {
-  displaypic: string;
-  name?: string;
-}
-
-interface NavbarProps {
-  user?: User | null;
-}
-
-const Navbar = ({ user }: NavbarProps) => {
+const Navbar = () => {
+  const {currentUser} = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [loginOpen, setLoginOpen] = useState(false);
+  const { logOut } = useAuth();
   const toggleMenu = () => setMenuOpen((prev) => !prev);
+
   const navigateTo = (path: string) => {
     console.log(`Navigate to ${path}`);
     setMenuOpen(false);
   };
-  const handleLogout = () => {
-    console.log("Logout");
-    setMenuOpen(false);
-  };
-  const openLoginModal = () => {
-    console.log("Open login modal");
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      setMenuOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>
-        <Image src="/icons/geekstackicon.svg" alt="Logo" width={45} height={49.5} />
-        <div className={styles['geekstack-title']}>
+        <Image
+          src="/icons/geekstackicon.svg"
+          alt="Logo"
+          width={45}
+          height={49.5}
+        />
+        <div className={styles["geekstack-title"]}>
           <strong>GEEKSTACK</strong>
           <span>Everything Cards</span>
         </div>
       </div>
 
       <div className={styles.login}>
-        {user ? (
+        {currentUser ? (
           <>
             <div
               className={styles["avatar-container"]}
               tabIndex={0}
               onClick={toggleMenu}
             >
-              <img src={user.displaypic} alt="User Photo" className={styles["user-photo"]} />
-              <span className={styles.username}>{user.name || "Guest"}</span>
+              <img
+                src={currentUser.photoURL || "/images/default-avatar.png"}
+                alt="User Photo"
+                className={styles["user-photo"]}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "/images/default-avatar.png";
+                }}
+              />
+              <span className={styles.username}>
+                {currentUser.displayName || "Guest"}
+              </span>
             </div>
             {menuOpen && (
               <div className={styles.menu}>
-                <button onClick={() => navigateTo("account")}>Account</button>
-                <button onClick={() => navigateTo("notifications")}>Notifications</button>
-                <button onClick={handleLogout}>Sign Out</button>
+                <button className={styles.menuItem} onClick={() => navigateTo("account")}><CircleUser /> Account</button>
+                <button className={styles.menuItem} onClick={() => navigateTo("notifications")}>
+                 <Bell/> Notifications
+                </button>
+                <button className={styles.menuItem} onClick={handleLogout}><LogOut/> Sign Out</button>
               </div>
             )}
           </>
         ) : (
-          <button onClick={openLoginModal}>LOGIN</button>
+          <button className={styles.loginBtn} onClick={() => setLoginOpen(true)}>LOGIN</button>
         )}
+        {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
       </div>
     </nav>
   );

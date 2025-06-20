@@ -12,14 +12,6 @@ import "swiper/css/navigation";
 
 import { tcgList } from "../data/tcgList";
 import { BaseGameCard } from "../interfaces/card.model";
-import { GetServerSideProps } from "next";
-import { detectDeviceFromUserAgent } from "../services/devices";
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const userAgent = context.req.headers["user-agent"];
-  const deviceType = detectDeviceFromUserAgent(userAgent);
-  return { props: { deviceType } };
-};
 
 const IndexPage = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -105,7 +97,7 @@ const IndexPage = () => {
         ) : (
           <div className="search-results">
             {cardList.map((item) => (
-              <TcgImage card={item} key={item._id} />
+              <TcgImage card={item} key={item._id} tcgtype=""/>
             ))}
           </div>
         )}

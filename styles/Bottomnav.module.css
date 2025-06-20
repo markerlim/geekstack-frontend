@@ -1,0 +1,61 @@
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: var(--gs-bgcolor-one);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  border-top: var(--gs-border);
+  z-index: 1000;
+}
+
+.bottomNavIcon {
+  cursor: pointer;
+}
+
+.active img {
+  filter: none;
+}
+
+.greyScale {
+  filter: grayscale(100%);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 900;
+}
+
+.cardGameOption {
+  position: fixed;
+  bottom: 56px;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  z-index: 1000;
+  animation-duration: 0.3s;
+}
+
+.slideIn {
+  animation-name: slideIn;
+}
+
+.slideOut {
+  animation-name: slideOut;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideOut {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}

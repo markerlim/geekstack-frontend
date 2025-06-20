@@ -1,9 +1,20 @@
 .pageBody {
   display: flex;
+}
+.pageBodyDesktop{
   height: calc(100vh - 72px); /* Adjust if Navbar height differs */
+
+}
+.pageBodyMobile{
+  height: calc(100vh - 146px); /* Adjust if Navbar height differs */
+}
+.scrollable{
+  overflow-y: auto;
 }
 
+.notScrollable{
+  overflow-y: hidden;
+}
 .mainContent {
   flex: 1;
-  overflow-y: auto;
 }

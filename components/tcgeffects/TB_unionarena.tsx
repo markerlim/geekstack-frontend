@@ -10,7 +10,7 @@ const TB_UnionArena = ({ card }: TBUnionArenaProps) => {
   const normalizedEffect = card.effect.replace(/\\n/g, "\n");
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
-    <div>
+    <div className={styles['lower-table']}>
       <h3 className={styles["card-name"]}>{card.cardName}</h3>
       <table className={styles["tb-main"]}>
         <tbody>

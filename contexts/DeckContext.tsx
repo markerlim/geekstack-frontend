@@ -1,0 +1,131 @@
+import { createContext, useContext, useState, useMemo } from "react";
+import { GameCard } from "../interfaces/card.model";
+import { TCGTYPE } from "../utils/constants";
+
+type DeckCard = {
+  card: GameCard;
+  count: number;
+};
+
+type DeckContextType = {
+  deckCards: DeckCard[];
+  cardlist: GameCard[];
+  setCardlist: (gameCards: GameCard[]) => void;
+  addCard: (card: GameCard, tcgGame?: string) => void;
+  removeCard: (cardId: string) => void;
+  getCardCount: (cardId: string) => number;
+  getCardData: (cardId: string) => GameCard | undefined;
+};
+
+const DeckContext = createContext<DeckContextType | undefined>(undefined);
+
+export function DeckProvider({ children }: { children: React.ReactNode }) {
+  const [deckCards, setDeckCards] = useState<DeckCard[]>([]);
+
+  const addCard = (card: GameCard, tcgGame?: string) => {
+    console.log("Adding card:", card);
+
+    // Determine max copies
+    const maxCopies =
+      tcgGame === TCGTYPE.UNIONARENA && card.banRatio
+        ? Math.min(4, card.banRatio)
+        : 4;
+
+    // Calculate current total count of this card for the cardId(Not unique)
+    const currentTotalCount = deckCards
+      .filter((item) => item.card.cardId === card.cardId)
+      .reduce((sum, item) => sum + item.count, 0);
+    console.log(currentTotalCount);
+    // Find existing exact card match
+    const existingCardIndex = deckCards.findIndex(
+      (item) =>
+        item.card._id === card._id && item.card.urlimage === card.urlimage
+    );
+
+    if (currentTotalCount >= maxCopies) {
+      return; // Don't exceed max copies
+    }
+
+    setDeckCards((prev) => {
+      if (existingCardIndex > -1) {
+        return prev.map((item, index) =>
+          index === existingCardIndex
+            ? { ...item, count: item.count + 1 }
+            : item
+        );
+      } else {
+        return [...prev, { card, count: 1 }];
+      }
+    });
+  };
+
+  const removeCard = (_id: string) => {
+    setDeckCards((prev) => {
+      const existingCardIndex = prev.findIndex((item) => item.card._id === _id);
+
+      if (existingCardIndex === -1) return prev;
+
+      const updatedCards = [...prev];
+      if (updatedCards[existingCardIndex].count > 1) {
+        // Decrement count
+        updatedCards[existingCardIndex] = {
+          ...updatedCards[existingCardIndex],
+          count: updatedCards[existingCardIndex].count - 1,
+        };
+      } else {
+        // Remove entry completely
+        updatedCards.splice(existingCardIndex, 1);
+      }
+
+      return updatedCards;
+    });
+  };
+
+  const getCardCount = (_id: string) => {
+    return deckCards
+      .filter((item) => item.card._id === _id)
+      .reduce((sum, item) => sum + item.count, 0);
+  };
+
+  const getCardData = (cardId: string) => {
+    return deckCards.find((item) => item.card._id === cardId)?.card;
+  };
+
+  const setCardlist = (gameCards: GameCard[]) => {
+    const cardMap = new Map<string, DeckCard>();
+    gameCards.forEach((gameCard) => {
+      cardMap.set(gameCard._id, {
+        card: gameCard,
+        count: gameCard.count,
+      });
+    });
+    setDeckCards(Array.from(cardMap.values()));
+  };
+
+  const cardlist = useMemo(() => {
+    return deckCards.map((deckCard) => deckCard.card); // Just extract the card, ignore count
+  }, [deckCards]);
+
+  const value = useMemo(
+    () => ({
+      deckCards,
+      cardlist,
+      setCardlist,
+      addCard,
+      removeCard,
+      getCardCount,
+      getCardData,
+    }),
+    [deckCards]
+  );
+
+  return <DeckContext.Provider value={value}>{children}</DeckContext.Provider>;
+}
+
+export function useDeck() {
+  const context = useContext(DeckContext);
+  if (!context) {
+    throw new Error("useDeck must be used within a DeckProvider");
+  }
+  return context;
+}

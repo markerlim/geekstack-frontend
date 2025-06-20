@@ -1,0 +1,57 @@
+.counterContainer {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  width: fit-content;
+  user-select: none;
+  color: var(--gs-fontcolor-one);
+}
+
+.counterContainerDesktop {
+  background-color: var(--gs-bgcolor-three);
+  margin-top: 7px;
+  padding: 7px;
+  gap: 6px;
+}
+.counterContainerMobile {
+  margin-top: 2px;
+  padding: 4px;
+  gap: 0px;
+}
+
+.counterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.counterButtonDesktop {
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+}
+
+.counterButtonMobile {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.counterButton:hover {
+  background-color: var(--gs-color-primary-light);
+}
+
+.counterButton:active {
+  transform: scale(0.95);
+}
+
+.counterValue {
+  min-width: 30px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+}

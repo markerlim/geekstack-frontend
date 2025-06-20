@@ -1,0 +1,44 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer; /* Indicates it's clickable to close */
+}
+
+.coverGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 2rem;
+  background: #1a1a1a;
+  border-radius: 8px;
+  cursor: default; /* Reset cursor for the grid area */
+}
+
+.coverGrid > div {
+  aspect-ratio: 5/7; /* Standard card aspect ratio */
+  transition: transform 0.2s ease;
+}
+
+.coverGrid > div:hover {
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+.coverGrid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

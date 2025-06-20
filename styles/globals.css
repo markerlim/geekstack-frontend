@@ -1,13 +1,17 @@
 /* globals.css */
 :root {
   --gs-color-primary: #7c4fff;
-    --gs-color-primary-light: #c8a2c8;
+  --gs-color-primary-light: #c8a2c8;
   --gs-color-secondary: #E33C58;
   --gs-bgcolor-one:rgb(16, 20, 24);
   --gs-bgcolor-two:#121212;
+  --gs-bgcolor-three:rgb(41, 51, 62);
   --gs-fontcolor-one:#f2f3f8;
   --gs-fontcolor-two:#121212;
+  --gs-border:1px solid rgb(41, 51, 62);
   --font-type-one:Roboto,sans-serif;
+  --bottom-nav-height:64px;
+  --top-nav-height:72px;
 }
 
 body{
@@ -21,3 +25,24 @@ body.light {
   --gs-bgcolor-one: #f2f3f8;
   --gs-fontcolor-one: #121212;
 }
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

@@ -14,12 +14,18 @@
 
 .booster-item{
     position:relative;
-    width:200px;
-    height: 277px;
     border-radius: 10px;
     overflow: hidden;
+    line-height: 0;
 }
 
+.imageDesktop{
+    width:180px;
+}
+
+.imageMobile{
+    width:100px;
+}
 .buffer{
     height:0.5rem;
 }

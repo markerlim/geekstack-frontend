@@ -1,0 +1,61 @@
+.sliderWrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none; /* Allows clicks to pass through when closed */
+  z-index: 1000;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: black;
+  pointer-events: auto; /* Enable clicks only when visible */
+}
+
+.sliderPanel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  background: #2d2d2d;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+}
+
+.deckContainer {
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.deckItem {
+  background: #383838;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.deckItem img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.deckInfo {
+  padding: 12px;
+  color: white;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sliderPanel {
+    width: 85%;
+  }
+}

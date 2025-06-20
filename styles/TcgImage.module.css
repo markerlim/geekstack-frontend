@@ -1,9 +1,27 @@
 .cardImage {
   display: block;
+  flex: 0 0 auto;
+  text-align: center;
+  background-color: #26262d;
   cursor: pointer;
-  width: 200px;
   height: auto;
 }
+
+.cardImageMobile {
+  width: 90px;
+  border-radius: 5px;
+}
+
+.cardImageTablet {
+  width: 160px;
+  border-radius: 9px;
+}
+
+.cardImageDesktop {
+  width: 180px;
+  border-radius: 9px;
+}
+
 
 .detailsContent {
   display: flex;

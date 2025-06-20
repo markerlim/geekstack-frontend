@@ -1,13 +1,12 @@
-import { CardUnionArena } from "../../interfaces/card.model";
+import { CardOnePiece } from "../../interfaces/card.model";
 import EffectWithIcons from "../../services/effectUnionArenaTag";
 import styles from "../../styles/EffectTable.module.css";
 
-interface TBUnionArenaProps {
-  card: CardUnionArena;
+interface TBOnePieceProps {
+  card: CardOnePiece;
 }
-
-const TB_Onepiece = ({ card }: TBUnionArenaProps) => {
-  const normalizedEffect = card.effect.replace(/\\n/g, "\n");
+const TB_Onepiece = ({ card }: TBOnePieceProps) => {
+  const normalizedEffect = card.effects.replace(/\\n/g, "\n");
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
     <div>

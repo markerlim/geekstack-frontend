@@ -3,21 +3,45 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "../styles/TcgImage.module.css";
 import TB_UnionArena from "./tcgeffects/TB_unionarena";
 import RTB_UnionArena from "./tcgeffects/RTB_unionarena";
+import RTB_onepiece from "./tcgeffects/RTB_onepiece";
+import TB_Onepiece from "./tcgeffects/TB_onepiece";
+import { useDevice } from "../contexts/DeviceContext";
 
 interface TcgImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   card: any;
+  tcgtype: string;
 }
-const TcgImage = ({ card, ...imgProps }: TcgImageProps) => {
+const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {
   const [showDetails, setShowDetails] = useState(false);
+  const deviceType = useDevice();
+
+  const imageClass =
+    deviceType === "mobile"
+      ? styles.cardImageMobile
+      : deviceType === "tablet"
+      ? styles.cardImageTablet
+      : styles.cardImageDesktop;
+
+  const RTBComponentsMap: Record<string, React.FC<{ card: any }>> = {
+    unionarena: RTB_UnionArena,
+    onepiece: RTB_onepiece,
+  };
+
+  const TBComponentsMap: Record<string, React.FC<{ card: any }>> = {
+    unionarena: TB_UnionArena,
+    onepiece: TB_Onepiece,
+  };
+
+  const RTBComponent = RTBComponentsMap[tcgtype] || null;
+  const TBComponent = TBComponentsMap[tcgtype] || null;
 
   return (
     <>
       <img
         {...imgProps}
-        className={styles.cardImage}
+        className={`${styles.cardImage} ${imageClass}`}
         onClick={() => setShowDetails(true)}
       />
-
       <AnimatePresence>
         {showDetails && (
           <>
@@ -49,10 +73,10 @@ const TcgImage = ({ card, ...imgProps }: TcgImageProps) => {
               <div className={styles.detailsContent}>
                 <div className={styles.puller} />
                 <div className={styles["upper-eff-table"]}>
-                  <img src={imgProps.src} alt={imgProps.alt} />
-                  <RTB_UnionArena card={card} />
+                  <img src={imgProps.src} alt={imgProps.alt}  />
+                  <RTBComponent card={card} />
                 </div>
-                <TB_UnionArena card={card} />
+                <TBComponent card={card} />
                 <button
                   className={styles.closeBtn}
                   onClick={() => setShowDetails(false)}

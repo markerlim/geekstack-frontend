@@ -2,7 +2,7 @@
   --card-width: 200px;
   --card-gap: 15px;
   --container-padding: 0px;
-  --max-cards: 6;
+  --max-cards: 5;
   
   /* Calculated values */
   --total-card-width: calc(var(--card-width) * var(--max-cards));

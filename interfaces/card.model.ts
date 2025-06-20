@@ -1,4 +1,4 @@
-import { TCGTYPE } from '../utils/constants';
+import { TCGTYPE } from "../utils/constants";
 
 export type GameCard =
   | CardUnionArena
@@ -12,6 +12,7 @@ export interface BaseGameCard {
   _id: string;
   imageSrc: string;
   cardName: string;
+  banRatio: number;
   count: number;
 }
 
@@ -20,7 +21,6 @@ export interface CardUnionArena extends BaseGameCard {
   anime: string;
   animeCode: string;
   apcost: number;
-  banRatio: number;
   banWith: string;
   basicpower: string;
   booster: string;

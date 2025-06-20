@@ -38,8 +38,6 @@ export async function  fetchCardsByTcg(tcg:string, setType:string) {
   return rawData.map((rawCard: any) => mapToGameCard(rawCard, tcg));
 }
 
-
-
 function mapToGameCard(rawCard: any, tcgType: string) {
   if (!rawCard) return {} as BaseGameCard;
   

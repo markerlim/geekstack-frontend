@@ -1,3 +1,6 @@
+.lower-table {
+  width: 100%;
+}
 .tb-header {
   background-color: #6b3489;
   color: var(--gs-fontcolor-one);
@@ -5,10 +8,10 @@
   border-radius: 8px;
   padding: 8px;
 }
-.card-name{
+.card-name {
   background-color: #342b73;
   border-radius: 10px;
-  color:#f2f3f8;
+  color: #f2f3f8;
   padding: 10px;
   margin-block-start: 10px !important;
   margin-block-end: 10px !important;
@@ -51,7 +54,7 @@
   background-color: #6b3489;
   color: var(--gs-fontcolor-one);
   font-size: 15px;
-  font-weight: 700;;
+  font-weight: 700;
   border-radius: 8px;
   padding: 6px 10px;
   flex: 0 0 auto;
@@ -59,6 +62,7 @@
 
 .rtb-info {
   background-color: var(--gs-color-primary-light);
+  color: var(--gs-fontcolor-two);
   border-radius: 8px;
   font-size: 14px;
   padding: 6px 10px;
@@ -72,10 +76,9 @@
   font-size: 15px;
 }
 
-.rtb{
+.rtb {
   display: flex;
   flex-direction: column;
-    width: 100%;
+  width: 100%;
   justify-content: space-between;
 }
-
