@@ -1,61 +1,51 @@
-# TypeScript Next.js example
+# 🃏 cards.geekstack.dev
 
-This is a really simple project that shows the usage of Next.js with TypeScript.
+Welcome to **geekstack.dev** — your one-stop platform for browsing and discovering cards from various anime trading card games like **Union Arena**, **One Piece**, and **Hololive**! ✨
 
-## Deploy your own
+This project combines web scraping, REST APIs, and a sleek frontend to create a rich card database experience. This project also aims to be a migration from Angular to Next JS in order to better optimize its function as a social hub for trading card players.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-typescript&project-name=with-typescript&repository-name=with-typescript)
+---
 
-## How to use it?
+## 🔗 Live Website (running on angular)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+👉 Visit: [**https://cards.geekstack.dev**](https://cards.geekstack.dev)
 
-```bash
-npx create-next-app --example with-typescript with-typescript-app
-```
+---
 
-```bash
-yarn create next-app --example with-typescript with-typescript-app
-```
+## 🚀 Features
 
-```bash
-pnpm create next-app --example with-typescript with-typescript-app
-```
+- 🔍 **Powerful Search** — Find cards by name, color, rarity, booster, and more.
+- ⚡ **Instant Filtering** — Responsive filters and pagination for smooth browsing.
+- 🖼️ **High-quality Card Images** — Scraped from official card game websites.
+- 🧠 **Keyword Highlights** — See card effects and traits in detail.
+- 💾 **MongoDB Backend** — Fast and efficient card storage and querying.
+- 📦 **RESTful API** — Access cards by anime or booster via `/data/{anime}`.
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+---
 
-## Notes
+## 🛠 Tech Stack
 
-This example shows how to integrate the TypeScript type system into Next.js. Since TypeScript is supported out of the box with Next.js, all we have to do is to install TypeScript.
+| Tech               | Description                                           |
+|--------------------|-------------------------------------------------------|
+| **Frontend**       | Angular + CSS (no frameworks)                         |
+| **Backend**        | Spring Boot (Java)                                    |
+| **Database**       | MongoDB Atlas (cards) & MySQL (users)                 |
+| **Authentication** | Firebase Authentication (web token protected APIs)    |
+| **Notifications**  | Firebase Cloud Messaging (user/device notifications)  |
+| **Messaging**      | RabbitMQ (async event handling & queue processing)    |
+| **Scraping**       | Python + BeautifulSoup + deep_translator (for EN/JP)  |
+| **Deployment**     | Vercel (frontend) + Railway (backend & workers)       |
 
-```shell
-npm install --save-dev typescript
-```
+---
 
-```shell
-yarn install --save-dev typescript
-```
+## 📁 API Endpoints
 
-```shell
-pnpm install --save-dev typescript
-```
+🔗 **Base URL**: [`https://api.geekstack.dev`](https://api.geekstack.dev)
 
-To enable TypeScript's features, we install the type declarations for React and Node.
+> 🔒 **Most endpoints are protected** with **Firebase Web Token Authentication**.  
+> You must include a valid Firebase ID token in the `Authorization` header as a **Bearer token** to access protected routes.
 
-```shell
-npm install --save-dev @types/react @types/react-dom @types/node
-```
+### 🔐 Authentication Header
 
-```shell
-yarn install --save-dev @types/react @types/react-dom @types/node
-```
-
-```shell
-pnpm install --save-dev @types/react @types/react-dom @types/node
-```
-
-When we run `next dev` the next time, Next.js will start looking for any `.ts` or `.tsx` files in our project and builds it. It even automatically creates a `tsconfig.json` file for our project with the recommended settings.
-
-Next.js has built-in TypeScript declarations, so we'll get autocompletion for Next.js' modules straight away.
-
-A `type-check` script is also added to `package.json`, which runs TypeScript's `tsc` CLI in `noEmit` mode to run type-checking separately. You can then include this, for example, in your `test` scripts.
+```http
+Authorization: Bearer <your-firebase-id-token>
