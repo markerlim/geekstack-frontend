@@ -1,14 +1,26 @@
 import { useState } from "react";
-import { useRouter } from "next/router";  
+import { useRouter } from "next/router";
 import styles from "../../styles/Bottomnav.module.css";
 import Image from "next/image";
 
 const bottoms = [
   { src: "/icons/bottomnav/HomeSelected.svg", alt: "Home", path: "/" },
-  { src: "/icons/bottomnav/DecklibrarySelected.svg", alt: "DeckCreation", path: "/postdeck" },
-  { src: "/icons/bottomnav/DeckcreateSelected.svg", alt: "Deckbuilder", path: "/deckbuilder" },
+  {
+    src: "/icons/bottomnav/DecklibrarySelected.svg",
+    alt: "DeckCreation",
+    path: "/postdeck",
+  },
+  {
+    src: "/icons/bottomnav/DeckcreateSelected.svg",
+    alt: "Deckbuilder",
+    path: "/deckbuilder",
+  },
   { src: "/icons/bottomnav/NewsSelected.svg", alt: "Stacks", path: "/stacks" },
-  { src: "/icons/bottomnav/BellSelected.svg", alt: "Notifications", path: "/notifications" },
+  {
+    src: "/icons/bottomnav/BellSelected.svg",
+    alt: "Notifications",
+    path: "/notifications",
+  },
 ];
 
 const games = [
@@ -18,35 +30,54 @@ const games = [
   { icon: "/icons/duelmastericon.ico", value: "duelmasters" },
   { icon: "/icons/hololiveicon.png", value: "hololive" },
   { icon: "/icons/dragonballz.ico", value: "dragonballzfw" },
+    { icon: "/icons/gundamicon.png", value: "gundam" },
 ];
 
 const Bottomnav = () => {
   const router = useRouter();
   const [showDeckBuilderOptions, setShowDeckBuilderOptions] = useState(false);
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const isActive = (path: string) => router.pathname.startsWith(path);
+  const isActive = (path: string) => {
+    // Get all valid paths except home
+    const validPaths = bottoms.filter((b) => b.path !== "/").map((b) => b.path);
+
+    if (path === "/") {
+      // Check if current path doesn't start with any valid path
+      const isInvalidPath = !validPaths.some((p) =>
+        router.pathname.startsWith(p)
+      );
+      return isInvalidPath && router.pathname === "/";
+    }
+    return router.pathname.startsWith(path);
+  };
 
   const onBottomNavClick = (tab: any) => {
     if (tab.path === "/deckbuilder") {
       setShowDeckBuilderOptions(true);
+      setIsClosing(false);
     } else {
       router.push(tab.path);
     }
   };
 
   const selectCardGame = (value: string) => {
-    router.push(`/deckbuilder/${value}`);
-    setShowDeckBuilderOptions(false);
+    setIsClosing(true);
+    setTimeout(() => {
+      router.push(`/deckbuilder/${value}`);
+      setShowDeckBuilderOptions(false);
+      setIsClosing(false);
+    }, 300); // Match this with your animation duration
   };
 
   const closeOptions = () => {
-    setIsAnimatingOut(true);
-  };
-
-  const onAnimationEnd = () => {
-    setIsAnimatingOut(false);
-    setShowDeckBuilderOptions(false);
+    if (!isClosing) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setShowDeckBuilderOptions(false);
+        setIsClosing(false);
+      }, 300);
+    }
   };
 
   return (
@@ -55,7 +86,9 @@ const Bottomnav = () => {
         {bottoms.map((bottom) => (
           <div
             key={bottom.path}
-            className={`${styles.bottomNavIcon} ${isActive(bottom.path) ? styles.active : ""}`}
+            className={`${styles.bottomNavIcon} ${
+              isActive(bottom.path) ? styles.active : ""
+            }`}
             onClick={() => onBottomNavClick(bottom)}
           >
             <Image
@@ -71,13 +104,23 @@ const Bottomnav = () => {
 
       {showDeckBuilderOptions && (
         <>
-          <div className={styles.overlay} onClick={closeOptions} />
           <div
-            className={`${styles.cardGameOption} ${isAnimatingOut ? styles.slideOut : styles.slideIn}`}
-            onAnimationEnd={onAnimationEnd}
+            className={styles.overlay}
+            onClick={closeOptions}
+            style={{ pointerEvents: isClosing ? "none" : "auto" }}
+          />
+          <div
+            className={`${styles.cardGameOption} ${
+              isClosing ? styles.slideOut : styles.slideIn
+            }`}
           >
             {games.map((item, index) => (
-              <div key={index} onClick={() => selectCardGame(item.value)}>
+              <div
+                key={index}
+                onClick={() => selectCardGame(item.value)}
+                style={{ pointerEvents: isClosing ? "none" : "auto" }}
+                className={styles.gameSelect}
+              >
                 <img src={item.icon} alt={item.value} />
               </div>
             ))}

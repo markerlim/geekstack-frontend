@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import { tcgList } from "../data/tcgList";
-import { BaseGameCard } from "../interfaces/card.model";
+import { BaseGameCard } from "../model/card.model";
 
 const IndexPage = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -52,7 +52,7 @@ const IndexPage = () => {
                 className={styles.swiperContainer}
               >
                 {tcgList.map((tcg, index) => (
-                  <SwiperSlide key={index} style={{ width: "200px" }}>
+                  <SwiperSlide key={index} className={styles.SwiperSlide}>
                     <Link href={tcg.path} className={styles.tcgItem}>
                       <Image
                         src={tcg.img}

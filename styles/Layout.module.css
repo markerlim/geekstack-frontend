@@ -1,12 +1,16 @@
 .pageBody {
   display: flex;
+  
 }
 .pageBodyDesktop{
   height: calc(100vh - 72px); /* Adjust if Navbar height differs */
-
 }
-.pageBodyMobile{
-  height: calc(100vh - 146px); /* Adjust if Navbar height differs */
+.pageBodyMobileWithTopNav{
+  height: calc(100vh - var(--bottom-nav-height) - var(--top-nav-height));  /* Static viewport (fallback) */
+}
+
+.pageBodyMobileNoTop{
+  height: calc(100vh - var(--bottom-nav-height));  /* Static viewport (fallback) */
 }
 .scrollable{
   overflow-y: auto;

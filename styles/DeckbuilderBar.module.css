@@ -3,13 +3,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: var(--db-main-uncollapsed);
   transition: height 0.5s ease-in-out;
   width: 100%;
   position: relative;
 }
-
+.test{
+  position: absolute;
+  right: 5px;
+  top:5px;
+  color:var(--gs-color-secondary);
+}
 .db-main.collapsed {
-  height: 60px;
+  height: var(--db-main-collapsed);
 }
 .deckInfo img {
   transition: all 0.3s ease-in-out;
@@ -23,7 +29,6 @@
   transform: translateX(-100%);
   overflow: hidden;
 }
-
 
 .geekstacklogo {
   height: 40px;
@@ -64,25 +69,36 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   font-weight: 700;
+  font-size: 4px;
+  line-height: 0;
   justify-content: center;
 }
 
-.toggleBtn:focus{
+.toggleBtn:focus {
   border: 1px solid #7c4fff;
 }
-.toggleBtn:focus-visible{
-    outline: 1px solid #7c4fff !important;
+.toggleBtn:focus-visible {
+  outline: 1px solid #7c4fff !important;
 }
 
+.barUtils {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding-right: 20px;
+}
 
 .deckcover {
   width: 70px;
   border-radius: 7px;
   border: 1px solid #7c4fff;
 }
+.decknameinput {
+  margin-right: 20px;
+}
 
-/* DeckbuilderBar.module.css */
 .decknameinput input {
   /* Border styling */
   border: 2px solid var(--gs-color-primary); /* Purple border */
@@ -99,6 +115,12 @@
 
   /* Transition for smooth focus effects */
   transition: all 0.3s ease;
+}
+.decknameinput-mobile input {
+  width: 150px;
+}
+.decknameinput-desktop input{
+  width: 300px;
 }
 
 /* Focus state */

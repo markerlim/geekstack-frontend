@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "../../../styles/DeckbuilderPage.module.css";
 import Layout from "../../../components/Layout";
-import CardList from "../../../components/functional/CardList";
+import CardList from "../../../components/features/CardList";
 import { useDevice } from "../../../contexts/DeviceContext";
-import DeckbuildList from "../../../components/functional/DeckbuildList";
-import BoosterList from "../../../components/functional/BoosterList";
+import DeckbuildList from "../../../components/features/deckbuilding/DeckbuildList";
+import BoosterList from "../../../components/features/BoosterList";
 import {
   ChevronDown,
   ChevronLeft,
@@ -57,6 +57,14 @@ const DeckbuilderBoosterPage = () => {
               </button>
             </div>
 
+            {/* Overlay backdrop - only visible when content is visible */}
+            {contentVisible && (
+              <div
+                className={styles.overlayBackdrop}
+                onClick={() => handleSlider()}
+              />
+            )}
+            
             {/* Sliding content area */}
             <div
               className={`${styles.mobileContentContainer} ${

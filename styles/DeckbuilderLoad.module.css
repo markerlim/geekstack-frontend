@@ -24,33 +24,57 @@
   right: 0;
   bottom: 0;
   width: 400px;
-  background: #2d2d2d;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--gs-bgcolor-one);
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
   pointer-events: auto;
 }
 
 .deckContainer {
+  flex-grow: 1;
   height: 100%;
   padding: 20px;
   overflow-y: auto;
 }
 
 .deckItem {
-  background: #383838;
+  background: var(--gs-bgcolor-one);
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 15px;
+  border: var(--gs-border);
 }
 
 .deckItem img {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
+  object-position: 0% 10%;
 }
 
 .deckInfo {
-  padding: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
   color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deckInfoFunc {
+  color: var(--gs-color-primary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.delete {
+  color: var(--gs-color-secondary);
 }
 
 /* Mobile responsiveness */
@@ -58,4 +82,76 @@
   .sliderPanel {
     width: 85%;
   }
+}
+
+/* Search Styles */
+.searchContainer {
+  position: relative;
+  margin: 1rem;
+}
+
+.searchInput {
+  /* Border styling */
+  border: 2px solid var(--gs-color-primary); /* Purple border */
+  border-radius: 4px;
+
+  /* Code-like background */
+  background-color: #121212; /* Light gray background */
+  font-family: "Courier New", monospace; /* Monospace font */
+  padding: 8px 12px;
+  width: calc(100% - 24px);
+
+  /* Text styling */
+  color: var(--gs-color-primary);
+  font-size: 20px;
+
+  /* Transition for smooth focus effects */
+  transition: all 0.3s ease;
+}
+
+/* Focus state */
+.searchInput:focus {
+  outline: none;
+  color: var(--gs-fontcolor-two);
+  box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.2); /* Purple glow */
+  background-color: var(
+    --gs-color-primary-light
+  ); /* Slightly darker when focused */
+}
+
+/* Placeholder text */
+.searchInput::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* For a more code-editor like appearance */
+.searchInput.code-style {
+  background-color: #282c34; /* Dark editor background */
+  color: #abb2bf; /* Light text */
+  border-color: #6b3fa0;
+}
+
+.searchInput.code-editor {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  border-left: 3px solid #9c27b0;
+  padding: 10px;
+  line-height: 1.5;
+}
+
+.searchInput.highlight {
+  background: linear-gradient(
+    90deg,
+    rgba(156, 39, 176, 0.1) 0%,
+    rgba(156, 39, 176, 0.05) 100%
+  );
+}
+
+/* No Results Style */
+.noResults {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
 }

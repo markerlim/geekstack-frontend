@@ -1,25 +1,46 @@
 .card-list {
-  flex: 1; /* Takes remaining space */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative; /* Needed for absolute positioning of iconbg */
-  overflow: hidden; /* Ensures scroll works properly */
+  position: relative;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
 }
-
-.db-bar{
+.c-height-mobile {
+  height: calc(
+    100vh - var(--bottom-nav-height) - var(--db-main-collapsed) - 40px
+  );
+}
+.uc-height-mobile {
+  height: calc(
+    100vh - var(--bottom-nav-height) - var(--db-main-uncollapsed) - 40px
+  );
+}
+.c-height-desktop {
+  height: calc(
+    100vh - var(--top-nav-height) - var(--db-main-collapsed) - 40px
+  );
+}
+.uc-height-desktop {
+  height: calc(
+    100vh - var(--top-nav-height) - var(--db-main-uncollapsed) - 40px
+  );
+}
+.db-bar {
   height: fit-content;
 }
 .cardlistscroll {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 100%;
   overflow-y: auto;
+  height: inherit;
   gap: 10px;
   padding: 20px;
   align-items: flex-start;
   justify-content: center;
 }
+
 .card-item {
   position: relative;
   margin: 0;
@@ -42,6 +63,6 @@
   color: var(--gs-bgcolor-three);
 }
 
-.empty{
-  color:var(--gs-bgcolor-three)
+.empty {
+  color: var(--gs-bgcolor-three);
 }

@@ -3,7 +3,6 @@
   align-items: center;
   border-radius: 8px;
   width: fit-content;
-  user-select: none;
   color: var(--gs-fontcolor-one);
 }
 

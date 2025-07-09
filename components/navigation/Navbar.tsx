@@ -1,16 +1,20 @@
 import { useState } from "react";
 import Image from "next/image";
 import styles from "../../styles/Navbar.module.css";
-import LoginModal from "../functional/LoginModal";
+import LoginModal from "../features/LoginModal";
 import { User } from "@firebase/auth";
-import { useAuth } from "../../services/auth/authService";
 import { Bell, CircleUser, LogOut } from "lucide-react";
+import { useAuth } from "../../services/auth";
+import { useUserStore } from "../../services/store/user.store";
+import { useDevice } from "../../contexts/DeviceContext";
 
 const Navbar = () => {
-  const {currentUser} = useAuth();
+  const { logOut } = useAuth();
+  const { sqlUser, signOut } = useUserStore();
+  const device = useDevice();
+  const isDesktop = device === "desktop";
   const [menuOpen, setMenuOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-  const { logOut } = useAuth();
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const navigateTo = (path: string) => {
@@ -21,6 +25,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logOut();
+      await signOut();
       setMenuOpen(false);
     } catch (error) {
       console.error("Logout failed:", error);
@@ -41,9 +46,8 @@ const Navbar = () => {
           <span>Everything Cards</span>
         </div>
       </div>
-
       <div className={styles.login}>
-        {currentUser ? (
+        {sqlUser ? (
           <>
             <div
               className={styles["avatar-container"]}
@@ -51,7 +55,7 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               <img
-                src={currentUser.photoURL || "/images/default-avatar.png"}
+                src={sqlUser.displaypic || "/images/default-avatar.png"}
                 alt="User Photo"
                 className={styles["user-photo"]}
                 onError={(e) => {
@@ -59,22 +63,41 @@ const Navbar = () => {
                     "/images/default-avatar.png";
                 }}
               />
-              <span className={styles.username}>
-                {currentUser.displayName || "Guest"}
-              </span>
+              {isDesktop && (
+                <span className={styles.username}>
+                  {sqlUser.name || "Guest"}
+                </span>
+              )}
             </div>
             {menuOpen && (
               <div className={styles.menu}>
-                <button className={styles.menuItem} onClick={() => navigateTo("account")}><CircleUser /> Account</button>
-                <button className={styles.menuItem} onClick={() => navigateTo("notifications")}>
-                 <Bell/> Notifications
+                <button
+                  className={styles.menuItem}
+                  onClick={() => navigateTo("account")}
+                >
+                  <CircleUser /> Account
                 </button>
-                <button className={styles.menuItem} onClick={handleLogout}><LogOut/> Sign Out</button>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => navigateTo("notifications")}
+                >
+                  <Bell /> Notifications
+                </button>
+                <button className={styles.menuItem} onClick={handleLogout}>
+                  <LogOut /> Sign Out
+                </button>
               </div>
             )}
           </>
         ) : (
-          <button className={styles.loginBtn} onClick={() => setLoginOpen(true)}>LOGIN</button>
+          <>
+            <button
+              className={styles.loginBtn}
+              onClick={() => setLoginOpen(true)}
+            >
+              LOGIN
+            </button>
+          </>
         )}
         {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
       </div>

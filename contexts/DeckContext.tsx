@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useMemo } from "react";
-import { GameCard } from "../interfaces/card.model";
+import { GameCard } from "../model/card.model";
 import { TCGTYPE } from "../utils/constants";
 
 type DeckCard = {
@@ -15,6 +15,7 @@ type DeckContextType = {
   removeCard: (cardId: string) => void;
   getCardCount: (cardId: string) => number;
   getCardData: (cardId: string) => GameCard | undefined;
+  clearList: () => void;
 };
 
 const DeckContext = createContext<DeckContextType | undefined>(undefined);
@@ -102,9 +103,18 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     setDeckCards(Array.from(cardMap.values()));
   };
 
-  const cardlist = useMemo(() => {
-    return deckCards.map((deckCard) => deckCard.card); // Just extract the card, ignore count
-  }, [deckCards]);
+  const clearList = () => {
+    if (window.confirm("Are you sure you want to clear all cards?")) {
+      setDeckCards([]);
+    }
+  };
+
+const cardlist = useMemo(() => {
+  return deckCards.map(deckCard => ({
+    ...deckCard.card,
+    count: deckCard.count // Attach the count to each card
+  }));
+}, [deckCards]);
 
   const value = useMemo(
     () => ({
@@ -115,6 +125,7 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
       removeCard,
       getCardCount,
       getCardData,
+      clearList,
     }),
     [deckCards]
   );

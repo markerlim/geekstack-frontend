@@ -1,10 +1,11 @@
 import App, { AppProps, AppContext } from "next/app";
 import { useState, useEffect } from "react";
+import Head from "next/head";
 import "../styles/globals.css";
 import { DeviceContext } from "../contexts/DeviceContext";
-import { detectDeviceFromUserAgent } from "../services/devices";
+import { detectDeviceFromUserAgent } from "../utils/DetectDevice";
 import { DeckProvider } from "../contexts/DeckContext";
-import { AuthProvider } from "../services/auth/authService";
+import { AuthProvider } from "../services/auth";
 
 function MyApp({
   Component,
@@ -15,32 +16,56 @@ function MyApp({
     pageProps.deviceType || "desktop"
   );
 
-  // On client side, optionally update device type by inspecting userAgent or screen size
+  // PWA Service Worker Registration
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // You can run detectDeviceFromUserAgent on client userAgent
+      // Device detection
       const clientDeviceType = detectDeviceFromUserAgent(
         window.navigator.userAgent
       );
       setDeviceType(clientDeviceType);
+
+      // Register service worker in production
+      if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(
+            registration => console.log('SW registered: ', registration),
+            err => console.log('SW registration failed: ', err)
+          );
+        });
+      }
     }
   }, []);
 
   return (
-    <DeviceContext.Provider value={deviceType}>
-      <AuthProvider>
-        <DeckProvider>
-          <Component {...pageProps} />
-        </DeckProvider>
-      </AuthProvider>
-    </DeviceContext.Provider>
+    <>
+      <Head>
+        <meta name="application-name" content="Geekstack" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Geekstack" />
+        <meta name="description" content="One stop app for trading card content!" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#1d1d1d" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
+      
+      <DeviceContext.Provider value={deviceType}>
+        <AuthProvider>
+          <DeckProvider>
+            <Component {...pageProps} />
+          </DeckProvider>
+        </AuthProvider>
+      </DeviceContext.Provider>
+    </>
   );
 }
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
 
-  // This only runs on server side or first load, so safe to read req headers
   const userAgent = appContext.ctx.req?.headers["user-agent"];
   const deviceType = detectDeviceFromUserAgent(userAgent);
 

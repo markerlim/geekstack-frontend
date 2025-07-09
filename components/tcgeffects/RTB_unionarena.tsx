@@ -1,4 +1,4 @@
-import { CardUnionArena } from "../../interfaces/card.model";
+import { CardUnionArena } from "../../model/card.model";
 import styles from "../../styles/EffectTable.module.css";
 
 interface TBUnionArenaProps {

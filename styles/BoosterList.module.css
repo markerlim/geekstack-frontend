@@ -30,23 +30,31 @@
     height:0.5rem;
 }
 
-.categoryHolder{
+.categoryHolder {
     display: flex;
     flex-direction: row;
     border-bottom: 0.5px solid rgb(41, 51, 62);
-    padding-top:10px;
-    padding-bottom:10px;
-    padding-left:10px;
+    padding: 10px 0 10px 20px;
+    overflow-x: auto; /* Allows horizontal scrolling if needed */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    white-space: nowrap; /* Prevents items from wrapping */
 }
-.category-item{
-    padding-top:2px;
-    padding-bottom:2px;
-    padding-left:10px;
-    padding-right: 10px;
+
+.category-item {
+    padding: 3px 10px; /* Relative units that scale better */
+    flex: 0 0 auto;
+    margin: 0 5px; /* Replace padding with margin for better spacing */
     border-radius: 20px;
-    color:#c8a2c8;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #c8a2c8;
+    transition: all 0.3s ease;
+    font-size: clamp(16px, 3vw, 20px); /* Responsive font sizing */
+    white-space: nowrap; /* Prevents text wrapping */
+    display: inline-flex; /* Better for mobile layout */
+    align-items: center; /* Centers text vertically */
+    height: auto; /* Let content determine height */
+    min-height: 30px; /* Minimum touch target size */
 }
+
 .selected-category-item{
     background-color: var(--gs-color-primary);
     color:var(--gs-fontcolor-two)

@@ -1,4 +1,4 @@
-import { CardOnePiece } from "../../interfaces/card.model";
+import { CardOnePiece } from "../../model/card.model";
 import EffectWithIcons from "../../services/effectUnionArenaTag";
 import styles from "../../styles/EffectTable.module.css";
 

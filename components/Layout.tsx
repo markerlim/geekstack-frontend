@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import styles from "../styles/Layout.module.css";
 import Navbar from "./navigation/Navbar";
 import Sidenav from "./navigation/Sidenav";
@@ -14,16 +15,19 @@ type Props = {
 
 const Layout = ({ scrollable = true, children, title = "GeekStack" }: Props) => {
   const deviceType = useDevice();
+  const router = useRouter();
+const hideNavbarPaths = ["/deckbuilder", "/stacks"];
+const shouldHideNavbar = 
+  deviceType !== "desktop" && 
+  hideNavbarPaths.some(path => router.pathname.includes(path));
 
+  const hideValue = (deviceType !== "desktop" && shouldHideNavbar)
   return (
     <div>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-      <Navbar />
-      <div className={`${styles.pageBody} ${deviceType === "desktop" ? styles.pageBodyDesktop:styles.pageBodyMobile}`}>
+      {/* Show Navbar unless: on mobile AND in deckbuilder route */}
+      {!hideValue && <Navbar />}
+      <div className={`${styles.pageBody} ${deviceType === "desktop" ? styles.pageBodyDesktop : !hideValue ? styles.pageBodyMobileWithTopNav : styles.pageBodyMobileNoTop}`}>
+        {/* Always show Sidenav/Bottomnav based on device */}
         {deviceType === "desktop" ? <Sidenav /> : <Bottomnav />}
         <main
           className={`${styles.mainContent} ${

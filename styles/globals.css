@@ -2,21 +2,25 @@
 :root {
   --gs-color-primary: #7c4fff;
   --gs-color-primary-light: #c8a2c8;
-  --gs-color-secondary: #E33C58;
-  --gs-bgcolor-one:rgb(16, 20, 24);
-  --gs-bgcolor-two:#121212;
-  --gs-bgcolor-three:rgb(41, 51, 62);
-  --gs-fontcolor-one:#f2f3f8;
-  --gs-fontcolor-two:#121212;
-  --gs-border:1px solid rgb(41, 51, 62);
-  --font-type-one:Roboto,sans-serif;
-  --bottom-nav-height:64px;
-  --top-nav-height:72px;
+  --gs-color-secondary: #e33c58;
+  --gs-bgcolor-one: rgb(16, 20, 24);
+  --gs-bgcolor-two: #121212;
+  --gs-bgcolor-three: #26262d;
+  --gs-fontcolor-one: #f2f3f8;
+  --gs-fontcolor-two: #121212;
+  --gs-bordercolor: rgb(41, 51, 62);
+  --gs-border: 1px solid rgb(41, 51, 62);
+  --font-type-one: Roboto, sans-serif;
+  --bottom-nav-height: 45px;
+  --top-nav-height: 72px;
+
+  --db-main-collapsed: 60px;
+  --db-main-uncollapsed: 133px;
 }
 
-body{
-    margin:0;
-    background-color: rgb(16, 20, 24);
+body {
+  margin: 0;
+  background-color: rgb(16, 20, 24);
 }
 
 body.light {
@@ -46,3 +50,17 @@ body.light {
   background: #555;
 }
 
+
+/* In your Layout.module.css or globals.css */
+html, body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Prevent bounce/rubber band effect */
+body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+}

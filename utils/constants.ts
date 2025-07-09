@@ -9,3 +9,5 @@ export const TCGTYPE = {
     PKMNPOCKET:'ptcgpocket',
     HOLOLIVE:'hololive'
   };
+
+  

@@ -2,6 +2,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: var(--bottom-nav-height);
   background: var(--gs-bgcolor-one);
   display: flex;
   justify-content: space-around;
@@ -31,13 +32,18 @@
 
 .cardGameOption {
   position: fixed;
-  bottom: 56px;
+  bottom: calc(var(--bottom-nav-height) + 25px);/**/
   left: 0;
   right: 0;
-  background: white;
+  height: 40px;
+  width: calc(100% - 30px);
+  background: var(--gs-bgcolor-one);
+  border-top: var(--gs-border);
   display: flex;
-  justify-content: space-around;
-  padding: 12px 0;
+  flex-direction: row;
+  gap:20px;
+  overflow-x: scroll;
+  padding: 12px 15px;
   z-index: 1000;
   animation-duration: 0.3s;
 }
@@ -50,12 +56,23 @@
   animation-name: slideOut;
 }
 
+.gameSelect{
+  width: 40px;
+  flex:0 0 auto;
+}
+
+.gameSelect img {
+  width: 40px;
+    flex:0 0 auto;
+
+}
+
 @keyframes slideIn {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 @keyframes slideOut {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
 }

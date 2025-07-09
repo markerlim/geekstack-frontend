@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
-import BoosterList from "../../components/functional/BoosterList";
+import BoosterList from "../../components/features/BoosterList";
 
 const BoosterListPage = () => {
   const { tcg } = useRouter().query;
