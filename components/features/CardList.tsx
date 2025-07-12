@@ -4,9 +4,7 @@ import { GameCard } from "../../model/card.model";
 import { useEffect, useState } from "react";
 import { fetchCardsByTcg } from "../../services/functions/gsBoosterService";
 import TcgImage from "../../components/TcgImage";
-import FilterBar, {
-  FilterSection,
-} from "../../components/features/FilterBar";
+import FilterBar, { FilterSection } from "../../components/features/FilterBar";
 import { processCardsByTCG } from "../../utils/CreateFilters";
 import DeckbuilderCounter from "./deckbuilding/DeckbuilderCounter";
 
@@ -18,7 +16,7 @@ const CardList = () => {
       .pathname.replace(/\[.*?\]/g, "") // remove any [param] segments
       .replace(/\/+/g, "/") // replace double slashes with single
       .replace(/\/$/, "") + "/";
-      console.log(base)
+  console.log(base);
   const [isDeckbuilding, setIsDeckbuilding] = useState(false);
   const [cardList, setCardList] = useState<GameCard[]>([]);
   const [filteredCards, setFilteredCards] = useState<GameCard[]>([]);
@@ -26,12 +24,21 @@ const CardList = () => {
   const [filterSections, setFilterSections] = useState<FilterSection[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilterChange = (title: string) => (value: string) => {
-    setFilters((prev) => ({ ...prev, [title.toLowerCase()]: value }));
+  const handleFilterChange = (title: string) => (value: string | undefined) => {
+    console.log(`Filter changed - ${title}:`, value); // Debug log
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+      if (value === undefined || value === "") {
+        delete newFilters[title.toLowerCase()];
+      } else {
+        newFilters[title.toLowerCase()] = value;
+      }
+      return newFilters;
+    });
   };
 
   useEffect(() => {
-    if (base.includes("deckbuilder")){
+    if (base.includes("deckbuilder")) {
       setIsDeckbuilding(true);
     } else {
       setIsDeckbuilding(false);
@@ -57,23 +64,40 @@ const CardList = () => {
     }
   }, [filters, cardList]);
 
+  // Update filter sections when filters change
+  useEffect(() => {
+    if (cardList.length > 0) {
+      const sections = processCardsByTCG(cardList, handleFilterChange, filters);
+      setFilterSections(sections);
+      filterSections.forEach((section) => {
+        console.group;
+        console.log(section.title);
+        console.log(section.active);
+        console.log(section.options);
+        console.groupEnd;
+      });
+    }
+  }, [cardList, filters]);
+
   useEffect(() => {
     if (typeof tcg === "string" && typeof setType === "string") {
       fetchCardsByTcg(tcg, setType)
         .then((data) => {
           console.log("Cards fetched:", data);
-          const sections = processCardsByTCG(data, handleFilterChange, filters);
-          setFilterSections(sections);
           setCardList(data);
           setFilteredCards(data); // Initialize filtered cards with all cards
+          // Reset filters when new data is loaded
+          setFilters({});
         })
         .catch(() => setError("Failed to load boosters"));
     }
   }, [tcg, setType]);
 
   return (
-    <>
-      {filterSections.length > 0 && <FilterBar sections={filterSections} />}
+    <div className={styles["card-container"]}>
+      {filterSections.length > 0 && (
+        <FilterBar sections={filterSections} key={`filter-${tcg}-${setType}`} />
+      )}
       <div className={styles["card-list"]}>
         {filteredCards.map((card) => (
           <div key={card._id} className={styles["card-item"]}>
@@ -87,7 +111,7 @@ const CardList = () => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

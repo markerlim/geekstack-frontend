@@ -7,6 +7,14 @@
   background-color: var(--gs-bgcolor-one);
   border-bottom: 0.5px solid rgb(41, 51, 62);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap:15px;
+}
+
+.navbar-middle {
+  flex: 1;
+  min-width: 0; /* Crucial for proper shrinking */
+  display: flex;
+  justify-content: center;
 }
 
 .logo {

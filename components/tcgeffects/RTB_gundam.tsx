@@ -1,8 +1,8 @@
 import styles from "../../styles/EffectTable.module.css";
-import { TBOnePieceProps } from "./TB_onepiece";
+import { TBGundamProps } from "./TB_gundam";
 
 
-const RTB_Onepiece = ({ card }: TBOnePieceProps) => {
+const RTB_Gundam = ({ card }: TBGundamProps) => {
   return (
     <div className={styles["rtb"]}>
     <div className={styles["rtb-main"]}>
@@ -11,8 +11,8 @@ const RTB_Onepiece = ({ card }: TBOnePieceProps) => {
         <div className={styles["rtb-info"]}>{card?.cardId}</div>
       </div>
       <div className={styles["rtb-section"]}>
-        <div className={styles["rtb-header"]}>Type</div>
-        <div className={styles["rtb-info"]}>{card?.typing}</div>
+        <div className={styles["rtb-header"]}>Traits</div>
+        <div className={styles["rtb-info"]}>{card?.trait}</div>
       </div>
     </div>
     <div>
@@ -22,4 +22,4 @@ const RTB_Onepiece = ({ card }: TBOnePieceProps) => {
   );
 };
 
-export default RTB_Onepiece;
+export default RTB_Gundam;

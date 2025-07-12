@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Bottomnav.module.css";
 import Image from "next/image";
+import { tcgList } from "../../data/tcgList";
 
 const bottoms = [
   { src: "/icons/bottomnav/HomeSelected.svg", alt: "Home", path: "/" },
@@ -21,16 +22,6 @@ const bottoms = [
     alt: "Notifications",
     path: "/notifications",
   },
-];
-
-const games = [
-  { icon: "/icons/unionarenaicon.ico", value: "unionarena" },
-  { icon: "/icons/onepieceicon.png", value: "onepiece" },
-  { icon: "/icons/cookierun.png", value: "cookierunbraverse" },
-  { icon: "/icons/duelmastericon.ico", value: "duelmasters" },
-  { icon: "/icons/hololiveicon.png", value: "hololive" },
-  { icon: "/icons/dragonballz.ico", value: "dragonballzfw" },
-    { icon: "/icons/gundamicon.png", value: "gundam" },
 ];
 
 const Bottomnav = () => {
@@ -114,14 +105,14 @@ const Bottomnav = () => {
               isClosing ? styles.slideOut : styles.slideIn
             }`}
           >
-            {games.map((item, index) => (
+            {tcgList.map((item, index) => (
               <div
                 key={index}
-                onClick={() => selectCardGame(item.value)}
+                onClick={() => selectCardGame(item.tcg)}
                 style={{ pointerEvents: isClosing ? "none" : "auto" }}
                 className={styles.gameSelect}
               >
-                <img src={item.icon} alt={item.value} />
+                <img src={item.icon} alt={item.tcg} />
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import styles from "../../styles/FilterBar.module.css";
-import { RefreshCcw } from "lucide-react";
+import { RefreshCcw, ChevronDown } from "lucide-react";
 
 interface FilterOption {
   label: string;
@@ -19,42 +19,193 @@ interface FilterBarProps {
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const pillRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  const hasActiveFilters = useMemo(
+    () => sections.some((section) => !!section.active),
+    [sections]
+  );
+
   const handleChange = (section: FilterSection, value: string) => {
-    const filterValue = value === "" ? undefined : value;
-    section.active = filterValue;
-    section.onChange(filterValue);
+    console.group(`Filter Change`);
+    console.log("Section:", section.title);
+    console.log("Current value:", section.active);
+    console.log("New value:", value);
+
+    try {
+      section.onChange(value || ""); // Handle empty string for clearing
+      console.log("Change processed successfully");
+    } catch (error) {
+      console.error("Change failed:", error);
+    }
+
+    console.groupEnd();
+    setOpenDropdown(null);
   };
 
   const handleResetAll = () => {
     sections.forEach((section) => {
-      section.active = "";
-      section.onChange(undefined); // Clear each filter
+      section.onChange("");
     });
   };
 
+  const toggleDropdown = (title: string) => {
+    if (openDropdown === title) {
+      setOpenDropdown(null);
+    } else {
+      const pillElement = pillRefs.current[title];
+      if (pillElement) {
+        const rect = pillElement.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom + 4,
+          left: rect.left,
+        });
+      }
+      setOpenDropdown(title);
+    }
+  };
+
+  const getActiveLabel = (section: FilterSection) => {
+    if (!section.active) return section.title;
+    const activeOption = section.options.find(
+      (opt) => opt.value === section.active
+    );
+    return activeOption ? activeOption.label : section.title;
+  };
+
+  useEffect(() => {
+    setRefreshKey((prev) => prev + 1);
+    console.log(refreshKey);
+    sections.forEach((section) => {
+      console.group
+      console.log(section.title);
+      console.log(section.active);
+      console.log(section.options);
+      console.groupEnd
+    });
+  }, [sections]);
+
+  // Replace your current useEffect with this:
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!openDropdown) return;
+
+      const target = event.target as Element;
+      const clickedOnPill = target.closest(`.${styles.filterPill}`);
+      const clickedInDropdown = target.closest(`.${styles.dropdownMenu}`);
+
+      // Only close if clicking outside both the pill and dropdown
+      if (!clickedOnPill && !clickedInDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+
+    // Use 'click' instead of 'mousedown' to allow dropdown clicks to process first
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [openDropdown, styles]);
+
+  // Reposition dropdown on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (openDropdown) {
+        const pillElement = pillRefs.current[openDropdown];
+        if (pillElement) {
+          const rect = pillElement.getBoundingClientRect();
+          setDropdownPosition({
+            top: rect.bottom + 4,
+            left: rect.left,
+          });
+        }
+      }
+    };
+
+    if (openDropdown) {
+      window.addEventListener("scroll", handleScroll, true);
+      return () => window.removeEventListener("scroll", handleScroll, true);
+    }
+  }, [openDropdown]);
+
   return (
-    <div className={styles.filterBar}>
-      {sections.map((section) => (
-        <div key={section.title} className={styles.filterSection}>
-          <label className={styles.filterTitle}>{section.title}</label>
-          <select
-            title={section.title}
-            value={section.active || ""} // Show empty string when active is undefined
-            onChange={(e) => handleChange(section, e.target.value)}
-            className={styles.filterDropdown}
+    <div className={styles.filterBarContainer}>
+      <div className={styles.filterBar}>
+        <span className={styles.filterLabel}>Filters:</span>
+        {sections.map((section) => (
+          <div
+            key={`${section.title}-${refreshKey}`}
+            className={styles.filterSection}
           >
-            <option value="">All</option>
-            {section.options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
+            <div className={styles.filterPillContainer}>
+              <button
+                ref={(el) => {
+                  pillRefs.current[section.title] = el;
+                }}
+                className={`${styles.filterPill} ${
+                  section.active ? styles.active : ""
+                }`}
+                onClick={() => toggleDropdown(section.title)}
+              >
+                {getActiveLabel(section)}
+                <ChevronDown size={16} className={styles.chevron} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {hasActiveFilters && (
+          <button
+            title="Reset all filters"
+            onClick={handleResetAll}
+            className={styles.resetButton}
+          >
+            <RefreshCcw strokeWidth={3} size={16} />
+          </button>
+        )}
+      </div>
+
+      {/* Render dropdown outside the scrolling container */}
+      {openDropdown && (
+        <div
+          className={styles.dropdownMenu}
+          style={{
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+          }}
+        >
+          {sections
+            .find((section) => section.title === openDropdown)
+            ?.options.map((opt) => (
+              <button
+                key={opt.value}
+                className={`${styles.dropdownItem} ${
+                  sections.find((s) => s.title === openDropdown)?.active ===
+                  opt.value
+                    ? styles.selected
+                    : ""
+                }`}
+                onClick={() => {
+                  const section = sections.find(
+                    (s) => s.title === openDropdown
+                  );
+                  handleChange(section, opt.value);
+                }}
+              >
                 {opt.label}
-              </option>
+              </button>
             ))}
-          </select>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => {
+              const section = sections.find((s) => s.title === openDropdown);
+              handleChange(section, "");
+            }}
+          >
+            Clear
+          </button>
         </div>
-      ))}
-      <button title="refresh button" onClick={handleResetAll} className={styles.resetButton}>
-        <RefreshCcw strokeWidth={3} />
-      </button>
+      )}
     </div>
   );
 };

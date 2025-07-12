@@ -1,0 +1,147 @@
+.searchContainer {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.searchInputContainer {
+  display: flex;
+  align-items: center;
+  background: var(--gs-bgcolor-three);
+  border-radius: 8px;
+  border: 2px solid var(--gs-bordercolor);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.searchInputContainer:focus-within {
+  border-color: var(--gs-color-primary);
+}
+
+.searchIcon {
+  margin-left: 12px;
+  color: var(--gs-fontcolor-three);
+  width: 20px;
+  height: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 12px;
+  min-width: 100px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--gs-fontcolor-three);
+  background: transparent;
+}
+
+.dropdownContainer {
+  position: relative;
+}
+
+.customDropdown {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 100%;
+  border-left: 2px solid var(--gs-bordercolor);
+  cursor: pointer;
+  position: relative;
+}
+
+.customDropdown:hover {
+  background: var(--gs-bgcolor-three);
+}
+
+.customDropdown.active {
+  background: var(--gs-bgcolor-three);
+}
+
+.selectedOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.selectedOption img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.dropdownChevron {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.customDropdown.active .dropdownChevron {
+  transform: rotate(180deg);
+}
+
+.dropdownOptions {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: fit-content;
+  background: var(--gs-bgcolor-three);
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--gs-bordercolor);
+  z-index: 10;
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-inline-start: 0px !important;
+}
+
+.gameOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.gameOption:hover {
+  background: var(--gs-bgcolor-one);
+}
+
+.gameOption img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.gameOption code {
+  font-size: 14px;
+  color: var(--gs-fontcolor-one);
+}
+
+.clearBtn {
+  position: absolute;
+  right: 76px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.clearBtn:hover {
+  color: var(--gs-color-secondary);
+}

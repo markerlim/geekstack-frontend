@@ -1,61 +1,73 @@
-.booster-list{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    position:relative;
-    gap:10px;
-    padding-top: 1rem;
-    padding-bottom:20px;
-    margin-left: 20px;
-    margin-right: 20px;
-    align-items: flex-start;
-    justify-content: center;
+.booster-list {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  gap: 10px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  align-content: flex-start;
+  justify-content: center;
+  min-height: 100px;
+  line-height: 0;
+  overflow-y: auto;
 }
 
-.booster-item{
-    position:relative;
-    border-radius: 10px;
-    overflow: hidden;
-    line-height: 0;
+.booster-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
 }
 
-.imageDesktop{
-    width:180px;
+.imageDesktop {
+  width: 180px;
 }
 
-.imageMobile{
-    width:100px;
+.imageMobile {
+  width: 100px;
 }
-.buffer{
-    height:0.5rem;
+.buffer {
+  height: 0.5rem;
 }
 
 .categoryHolder {
-    display: flex;
-    flex-direction: row;
-    border-bottom: 0.5px solid rgb(41, 51, 62);
-    padding: 10px 0 10px 20px;
-    overflow-x: auto; /* Allows horizontal scrolling if needed */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    white-space: nowrap; /* Prevents items from wrapping */
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0; /* Prevent category holder from shrinking */
+  border-bottom: 0.5px solid rgb(41, 51, 62);
+  padding: 10px 0 10px 20px;
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  white-space: nowrap; /* Prevents items from wrapping */
 }
 
 .category-item {
-    padding: 3px 10px; /* Relative units that scale better */
-    flex: 0 0 auto;
-    margin: 0 5px; /* Replace padding with margin for better spacing */
-    border-radius: 20px;
-    color: #c8a2c8;
-    transition: all 0.3s ease;
-    font-size: clamp(16px, 3vw, 20px); /* Responsive font sizing */
-    white-space: nowrap; /* Prevents text wrapping */
-    display: inline-flex; /* Better for mobile layout */
-    align-items: center; /* Centers text vertically */
-    height: auto; /* Let content determine height */
-    min-height: 30px; /* Minimum touch target size */
+  padding: 3px 10px; /* Relative units that scale better */
+  flex: 0 0 auto;
+  margin: 0 5px; /* Replace padding with margin for better spacing */
+  border-radius: 20px;
+  color: #c8a2c8;
+  transition: all 0.3s ease;
+  font-size: clamp(16px, 3vw, 20px); /* Responsive font sizing */
+  white-space: nowrap; /* Prevents text wrapping */
+  display: inline-flex; /* Better for mobile layout */
+  align-items: center; /* Centers text vertically */
+  height: auto; /* Let content determine height */
+  min-height: 30px; /* Minimum touch target size */
 }
 
-.selected-category-item{
-    background-color: var(--gs-color-primary);
-    color:var(--gs-fontcolor-two)
+.selected-category-item {
+  background-color: var(--gs-color-primary);
+  color: var(--gs-fontcolor-two);
+}
+
+.booster-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

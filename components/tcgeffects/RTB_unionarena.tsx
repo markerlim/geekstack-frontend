@@ -1,9 +1,5 @@
-import { CardUnionArena } from "../../model/card.model";
 import styles from "../../styles/EffectTable.module.css";
-
-interface TBUnionArenaProps {
-  card: CardUnionArena;
-}
+import { TBUnionArenaProps } from "./TB_unionarena";
 
 const RTB_UnionArena = ({ card }: TBUnionArenaProps) => {
   return (

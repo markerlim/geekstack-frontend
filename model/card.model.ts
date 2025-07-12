@@ -6,7 +6,8 @@ export type GameCard =
   | CardDragonBallZFW
   | DuelmastersCard
   | CardOnePiece
-  | HololiveCard;
+  | HololiveCard
+  | GundamCard;
 
 export interface BaseGameCard {
   _id: string;
@@ -17,7 +18,7 @@ export interface BaseGameCard {
 }
 
 export interface CardUnionArena extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.UNIONARENA;
+  tcg: typeof TCGTYPE.UNIONARENA;
   anime: string;
   animeCode: string;
   apcost: number;
@@ -55,7 +56,7 @@ export interface CardUnionArena extends BaseGameCard {
 };
  */
 export interface CookieRunCard extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.COOKIERUN;
+  tcg: typeof TCGTYPE.COOKIERUN;
   id: number;
   elementId: number;
   title: string;
@@ -81,7 +82,7 @@ export interface CookieRunCard extends BaseGameCard {
 }
 
 export interface CardDragonBallZFW extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.DRAGONBALLZFW;
+  tcg: typeof TCGTYPE.DRAGONBALLZFW;
   awakenform: boolean;
   booster: string;
   cardId: string;
@@ -108,7 +109,7 @@ export interface CardDragonBallZFW extends BaseGameCard {
 }
 
 export interface DuelmastersCard extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.DUELMASTERS;
+  tcg: typeof TCGTYPE.DUELMASTERS;
   detailUrl: string;
   urlimage: string;
   type: string;
@@ -142,7 +143,7 @@ export interface DuelmastersCard extends BaseGameCard {
 }
 
 export interface CardOnePiece extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.ONEPIECE;
+  tcg: typeof TCGTYPE.ONEPIECE;
   cardId: string;
   rarity: string;
   category: string;
@@ -160,7 +161,7 @@ export interface CardOnePiece extends BaseGameCard {
 }
 
 export interface HololiveCard extends BaseGameCard {
-  tcgtype: typeof TCGTYPE.HOLOLIVE;
+  tcg: typeof TCGTYPE.HOLOLIVE;
   urlimage: string;
   detailUrl: string;
   cardNameJP: string;
@@ -185,4 +186,28 @@ export interface HololiveCard extends BaseGameCard {
   cardId: string;
   cardUid: string;
   booster: string;
+}
+
+export interface GundamCard extends BaseGameCard {
+  tcg: typeof TCGTYPE.GUNDAM;
+  cardId: string;
+  packageId: string;
+  series: string;
+  urlimage: string;
+  cardUid: string;
+  detail_url: string;
+  cardNumber: string;
+  rarity: string;
+  level: string;
+  cost: string;
+  color: string;
+  cardType: string;
+  effect: string;
+  zone: string;
+  trait: string;
+  link: string;
+  attackPower: string;
+  hitPoints: string;
+  sourceTitle: string;
+  obtainedFrom: string;
 }

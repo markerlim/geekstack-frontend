@@ -121,6 +121,7 @@ let unsubscribe: () => void;
 
 if (typeof window !== "undefined") {
   unsubscribe = onAuthStateChanged(auth, () => {
+    console.log("test")
     useUserStore.getState().initializeUserStore();
   });
 

@@ -22,19 +22,19 @@ export function processCardsByTCG(
     {
       title: "Color",
       options: toOptions(colorSet),
-      active: activeFilters["Color"] || "",
+      active: activeFilters["color"] || "",
       onChange: onChangeFactory("Color"),
     },
     {
       title: "Rarity",
       options: toOptions(raritySet),
-      active: activeFilters["Rarity"] || "",
+      active: activeFilters["rarity"] || "",
       onChange: onChangeFactory("Rarity"),
     },
     {
       title: "Booster",
       options: toOptions(boosterSet),
-      active: activeFilters["Booster"] || "",
+      active: activeFilters["booster"] || "",
       onChange: onChangeFactory("Booster"),
     },
   ];

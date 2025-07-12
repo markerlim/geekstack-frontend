@@ -1,12 +1,12 @@
-import { CardUnionArena } from "../../model/card.model";
+import { GundamCard } from "../../model/card.model";
 import EffectWithIcons from "../../services/effectUnionArenaTag";
 import styles from "../../styles/EffectTable.module.css";
 
-export interface TBUnionArenaProps {
-  card: CardUnionArena;
+export interface TBGundamProps {
+  card: GundamCard;
 }
 
-const TB_UnionArena = ({ card }: TBUnionArenaProps) => {
+const TB_Gundam = ({ card }: TBGundamProps) => {
   const normalizedEffect = card.effect.replace(/\\n/g, "\n");
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
@@ -27,20 +27,10 @@ const TB_UnionArena = ({ card }: TBUnionArenaProps) => {
             </td>
           </tr>
           <div className={styles.spacer}></div>
-          <tr>
-            <th className={styles["tb-header"]}>Trigger</th>
-          </tr>
-          <tr>
-            <td className={styles["tb-info"]}>
-                <p>
-                  {card.trigger}
-                </p>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
   );
 };
 
-export default TB_UnionArena;
+export default TB_Gundam;

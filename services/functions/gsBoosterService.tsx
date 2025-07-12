@@ -49,16 +49,37 @@ export async function fetchCardsByTcg(tcg: string, setType: string) {
   return rawData.map((rawCard: any) => mapToGameCard(rawCard, tcg));
 }
 
-export async function fetchOnePieceLeaders(page:number,size:number,searchterm:string) {
+export async function fetchOnePieceLeaders(
+  page: number,
+  size: number,
+  searchterm: string
+) {
   console.log(searchterm);
-  const res = await fetch(`${getApiBaseUrl()}/data/onepiece/leaders?page=${page}&size=${size}&search=${searchterm}`);
+  const res = await fetch(
+    `${getApiBaseUrl()}/data/onepiece/leaders?page=${page}&size=${size}&search=${searchterm}`
+  );
   if (!res.ok) {
     throw new Error(`Failed to fetch onepiece leaders`);
   }
-    console.log(res);
+  console.log(res);
   const rawData = await res.json();
   return rawData.map((rawCard: any) =>
     mapToGameCard(rawCard, TCGTYPE.ONEPIECE)
+  );
+}
+
+export async function searchForCard(term: string, tcg: string) {
+  if (!term.trim()) {
+    return null;
+  }
+  const res = await fetch(`${getApiBaseUrl()}/data/${tcg}/search/${term}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch cards`);
+  }
+  console.log(res);
+  const rawData = await res.json();
+  return rawData.map((rawCard: any) =>
+    mapToGameCard(rawCard, tcg)
   );
 }
 

@@ -2,7 +2,7 @@ import { CardOnePiece } from "../../model/card.model";
 import EffectWithIcons from "../../services/effectUnionArenaTag";
 import styles from "../../styles/EffectTable.module.css";
 
-interface TBOnePieceProps {
+export interface TBOnePieceProps {
   card: CardOnePiece;
 }
 const TB_Onepiece = ({ card }: TBOnePieceProps) => {

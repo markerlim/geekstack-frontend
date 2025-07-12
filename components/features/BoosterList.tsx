@@ -9,7 +9,7 @@ import { useDevice } from "../../contexts/DeviceContext";
 
 const BoosterList = () => {
   const deviceType = useDevice();
-
+  const isDesktop = deviceType === 'desktop'
   const { tcg } = useRouter().query;
   const getCleanBasePath = () => {
     const router = useRouter();
@@ -25,7 +25,10 @@ const BoosterList = () => {
   const basePath = getCleanBasePath();
 
   const imageClass =
-    deviceType === "mobile" ? styles.imageMobile : styles.imageDesktop;
+    isDesktop ? styles.imageDesktop : styles.imageMobile;
+
+  const boosterClass =
+    isDesktop ? styles['booster-list-desktop'] : styles['booster-list-others'];
 
   const [showCategoryBtn, setShowCategoryBtn] = useState(false);
   const [category, setCategory] = useState("expansion");
@@ -36,7 +39,7 @@ const BoosterList = () => {
     TCGTYPE.ONEPIECE,
     TCGTYPE.COOKIERUN,
     TCGTYPE.DUELMASTERS,
-    TCGTYPE.GUNDAM
+    TCGTYPE.GUNDAM,
   ];
 
   const selectCategory = (value: string) => {
@@ -45,7 +48,7 @@ const BoosterList = () => {
   };
 
   const hasExtraCategory =
-    tcg === TCGTYPE.ONEPIECE || tcg === TCGTYPE.DUELMASTERS;
+    tcg === TCGTYPE.ONEPIECE;
 
   const filteredBoosters = boosters.filter((booster) => {
     if (!category) return true;
@@ -57,7 +60,9 @@ const BoosterList = () => {
 
   useEffect(() => {
     if (typeof tcg === "string") {
-      setShowCategoryBtn(TCGS_WITH_CATEGORY.includes(tcg.toLowerCase()));
+      setShowCategoryBtn(
+        TCGS_WITH_CATEGORY.includes(tcg.toLowerCase() as TCGTYPE)
+      );
 
       fetchBoosters(tcg)
         .then((data) => {
@@ -69,7 +74,7 @@ const BoosterList = () => {
   }, [tcg]);
 
   return (
-    <>
+    <div className={styles['booster-container']}>
       {showCategoryBtn ? (
         <div className={styles.categoryHolder}>
           <div
@@ -102,7 +107,7 @@ const BoosterList = () => {
       ) : (
         <></>
       )}
-      <div className={styles["booster-list"]}>
+      <div className={`${styles["booster-list"]}  ${boosterClass}`}>
         {filteredBoosters.map((booster) => (
           <Link
             href={`${basePath}/${tcg}/${booster.pathname}`.replace(/\/+/g, "/")}
@@ -117,7 +122,7 @@ const BoosterList = () => {
           </Link>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
