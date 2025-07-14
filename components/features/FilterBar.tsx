@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import styles from "../../styles/FilterBar.module.css";
+import styles from "../../styles/Filterbar.module.css";
 import { RefreshCcw, ChevronDown } from "lucide-react";
 
 interface FilterOption {

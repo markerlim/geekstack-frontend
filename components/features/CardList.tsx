@@ -7,7 +7,7 @@ import TcgImage from "../../components/TcgImage";
 import FilterBar, { FilterSection } from "../../components/features/FilterBar";
 import { processCardsByTCG } from "../../utils/CreateFilters";
 import DeckbuilderCounter from "./deckbuilding/DeckbuilderCounter";
-import { ArrowLeft, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useDevice } from "../../contexts/DeviceContext";
 
 const CardList = () => {
