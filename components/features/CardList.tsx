@@ -7,16 +7,20 @@ import TcgImage from "../../components/TcgImage";
 import FilterBar, { FilterSection } from "../../components/features/FilterBar";
 import { processCardsByTCG } from "../../utils/CreateFilters";
 import DeckbuilderCounter from "./deckbuilding/DeckbuilderCounter";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
+import { useDevice } from "../../contexts/DeviceContext";
 
 const CardList = () => {
-  const { tcg, setType: rawSetType } = useRouter().query;
+  const router = useRouter();
+  const device = useDevice();
+  const isDesktop = device === 'desktop';
+  const { tcg, setType: rawSetType } = router.query;
   const setType = Array.isArray(rawSetType) ? rawSetType[0] : rawSetType;
   const base =
-    useRouter()
-      .pathname.replace(/\[.*?\]/g, "") // remove any [param] segments
+    router.pathname
+      .replace(/\[.*?\]/g, "") // remove any [param] segments
       .replace(/\/+/g, "/") // replace double slashes with single
       .replace(/\/$/, "") + "/";
-  console.log(base);
   const [isDeckbuilding, setIsDeckbuilding] = useState(false);
   const [cardList, setCardList] = useState<GameCard[]>([]);
   const [filteredCards, setFilteredCards] = useState<GameCard[]>([]);
@@ -24,6 +28,14 @@ const CardList = () => {
   const [filterSections, setFilterSections] = useState<FilterSection[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const handleBackClick = () => {
+    const pathSegments = router.asPath
+      .split("/")
+      .filter((segment) => segment !== "");
+    pathSegments.pop();
+    const newPath = `/${pathSegments.join("/")}`;
+    router.push(newPath);
+  };
   const handleFilterChange = (title: string) => (value: string | undefined) => {
     console.log(`Filter changed - ${title}:`, value); // Debug log
     setFilters((prev) => {
@@ -95,6 +107,9 @@ const CardList = () => {
 
   return (
     <div className={styles["card-container"]}>
+      <div className={`${styles["arrow-left"]} ${isDesktop ? styles["desktop-back"] : styles["mobile-back"]}`} onClick={handleBackClick}>
+        <ChevronLeft/> {isDesktop ? <div>Back</div> : <></>}
+      </div>
       {filterSections.length > 0 && (
         <FilterBar sections={filterSections} key={`filter-${tcg}-${setType}`} />
       )}

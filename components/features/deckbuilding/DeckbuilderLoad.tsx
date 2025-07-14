@@ -1,11 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "../../../styles/DeckbuilderLoad.module.css";
-import { Deck } from "../../../services/functions/gsDeckbuildingFunctions";
 import { useDeck } from "../../../contexts/DeckContext";
-import { Search, Share, Trash2 } from "lucide-react";
+import { Share, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Deck } from "../../../model/deck.model";
+import { deleteDeck } from "../../../services/functions/gsDeckbuildingFunctions";
 
 interface DeckbuilderLoadProps {
+  tcg: string;
   decks: Deck[];
   onClose: () => void;
   onSelectedDeck: (deck: Deck) => void;
@@ -13,6 +15,7 @@ interface DeckbuilderLoadProps {
 }
 
 const DeckbuilderLoad = ({
+  tcg,
   decks,
   onClose,
   onSelectedDeck,
@@ -34,9 +37,20 @@ const DeckbuilderLoad = ({
   const handleDeckSelect = (deck) => {
     onSelectedDeck(deck);
     setCardlist(deck.listofcards);
-    onClose;
+    onClose();
+    console.log("deck selected");
   };
 
+const handleDeleteDeck = async (e: React.MouseEvent, deckuid: string) => {
+    e.stopPropagation(); 
+    try {
+        const response = await deleteDeck(tcg, deckuid);
+        console.log('Deletion successful:', response);
+        onClose();
+    } catch (error) {
+        console.error('Failed to delete deck:', error);
+    }
+};
   return (
     <AnimatePresence>
       {isOpen && (
@@ -88,7 +102,7 @@ const DeckbuilderLoad = ({
                       <h3>{deck.deckname}</h3>
                       <div className={styles.deckInfoFunc}>
                         <Share />
-                        <Trash2 className={styles.delete} />
+                        <Trash2 className={styles.delete} onClick={(e)=>handleDeleteDeck(e,deck.deckuid)}/>
                       </div>
                     </div>
                   </motion.div>

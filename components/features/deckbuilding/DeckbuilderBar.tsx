@@ -8,6 +8,7 @@ import DeckbuilderLoad from "./DeckbuilderLoad";
 import { useDeck } from "../../../contexts/DeckContext";
 import { Deck } from "../../../model/deck.model";
 import { useDevice } from "../../../contexts/DeviceContext";
+import DeckbuilderStats from "./DeckbuilderStats";
 
 interface DeckbuilderBarProps {
   tcg: string;
@@ -22,30 +23,28 @@ const DeckbuilderBar = ({
 }: DeckbuilderBarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCoverSelOpen, setCoverSelOpen] = useState(false);
-  const [isDeckcoverLoad, setDeckcoverLoad] = useState(false);
+  const [isCoverSelOpen, setIsCoverSelOpen] = useState(false);
+  const [isDeckcoverLoad, setIsDeckcoverLoad] = useState(false);
   const device = useDevice();
   const isDesktop = device === "desktop";
   const [loader, setLoader] = useState(false);
-  const [selectedCover, setSelectedCover] = useState("/gsdeckimage.jpg");
-  const [selectedDeck, setSelectedDeck] = useState<Deck>({
-    deckuid: "",
-    deckname: "DeckName",
-    deckcover: "/gsdeckimage.jpg",
-    listofcards: [],
-  });
+
   const [listofdecks, setListofdecks] = useState<Deck[]>([]);
-  const { clearList } = useDeck();
+  const { clearList, selectedDeck, setSelectedDeck, updateDeckName } =
+    useDeck();
 
   const handleCoverSelect = (coverUrl: string) => {
-    setSelectedCover(coverUrl);
     selectedDeck.deckcover = coverUrl;
-    setCoverSelOpen(false);
+    setIsCoverSelOpen(false);
+  };
+
+  const handleDeckLoaderClose = () => {
+    setIsDeckcoverLoad(false);
   };
 
   const handleLoad = async () => {
     try {
-      setDeckcoverLoad(true);
+      setIsDeckcoverLoad(true);
       setLoader(true);
       const decks = await loadDeck(tcg);
       setListofdecks(decks);
@@ -56,14 +55,11 @@ const DeckbuilderBar = ({
   };
 
   const handleDeckNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDeck((prev) => ({
-      ...prev,
-      deckname: e.target.value,
-    }));
+    console.log(e.target.value);
+    updateDeckName(e.target.value);
   };
 
   const handleSelectedDeck = (deck: Deck) => {
-    setSelectedCover(deck.deckcover);
     setSelectedDeck(deck);
   };
 
@@ -77,53 +73,62 @@ const DeckbuilderBar = ({
       className={`${styles["db-main"]} ${isCollapsed ? styles.collapsed : ""}`}
     >
       <div className={styles.content}>
-        <div className={styles.deckInfo}>
-          <img
-            onClick={() => setCoverSelOpen(true)}
-            className={`${styles.deckcover} ${
-              isCollapsed ? styles["item-collapsed"] : ""
-            }`}
-            src={selectedCover}
-            alt="default deckcover"
-          />
-          <img
-            onClick={() => setCoverSelOpen(true)}
-            className={`${styles.geekstacklogo} ${
-              isCollapsed ? "" : styles["item-collapsed"]
-            }`}
-            src="/icons/geekstackicon.svg"
-            alt="default deckcover"
-          />{" "}
-          <div
-            className={`${styles.decknameinput} ${
-              isDesktop
-                ? styles["decknameinput-desktop"]
-                : styles["decknameinput-mobile"]
-            }`}
-          >
-            <input
-              title="input deckname"
-              type="text"
-              placeholder="DeckName"
-              value={selectedDeck?.deckname}
-              onChange={handleDeckNameChange}
-              className={styles.codeStyle}
+        <div className={styles.holderTop}>
+          <div className={styles.deckInfo}>
+            <img
+              onClick={() => setIsCoverSelOpen(true)}
+              className={`${styles.deckcover} ${
+                isCollapsed ? styles["item-collapsed"] : ""
+              }`}
+              src={selectedDeck.deckcover || "/gsdeckimage.jpg"}
+              alt="default deckcover"
             />
+            <img
+              onClick={() => setIsCoverSelOpen(true)}
+              className={`${styles.geekstacklogo} ${
+                isCollapsed ? "" : styles["item-collapsed"]
+              }`}
+              src="/icons/geekstackicon.svg"
+              alt="default deckcover"
+            />{" "}
+            <div
+              className={`${styles.decknameinput} ${
+                isDesktop
+                  ? styles["decknameinput-desktop"]
+                  : styles["decknameinput-mobile"]
+              }`}
+            >
+              <input
+                title="input deckname"
+                type="text"
+                placeholder="DeckName"
+                value={selectedDeck?.deckname}
+                onChange={handleDeckNameChange}
+                className={styles.codeStyle}
+              />
+            </div>
           </div>
+          <div className={styles.barUtils}>
+            <BrushCleaning onClick={clearList} />
+            <Menu onClick={() => setIsMenuOpen(true)} />
+          </div>
+          {isMenuOpen && (
+            <DeckbuilderMenu
+              tcg={tcg}
+              userId={userId}
+              selectedDeck={selectedDeck}
+              onClose={() => setIsMenuOpen(false)}
+              onLoad={handleLoad}
+            />
+          )}
         </div>
-        <div className={styles.barUtils}>
-          <BrushCleaning onClick={clearList} />
-          <Menu onClick={() => setIsMenuOpen(true)} />
+        <div
+          className={`${styles["stats"]} ${
+            isCollapsed ? styles.hidestats : styles.showstats
+          }`}
+        >
+          <DeckbuilderStats tcg={tcg} />
         </div>
-        {isMenuOpen && (
-          <DeckbuilderMenu
-            tcg={tcg}
-            userId={userId}
-            selectedDeck={selectedDeck}
-            onClose={() => setIsMenuOpen(false)}
-            onLoad={handleLoad}
-          />
-        )}
       </div>
       <button
         className={styles.toggleButton}
@@ -139,15 +144,16 @@ const DeckbuilderBar = ({
       {isCoverSelOpen && (
         <DeckbuilderCover
           onCoverSelect={handleCoverSelect}
-          onClose={() => setCoverSelOpen(false)}
+          onClose={() => setIsCoverSelOpen(false)}
           tcg={tcg}
         />
       )}
       <DeckbuilderLoad
+        tcg={tcg}
         decks={listofdecks}
         isOpen={isDeckcoverLoad}
         onSelectedDeck={handleSelectedDeck}
-        onClose={() => setDeckcoverLoad(false)}
+        onClose={handleDeckLoaderClose}
       />
       <code className={styles.test}>[{tcg}]</code>
     </div>

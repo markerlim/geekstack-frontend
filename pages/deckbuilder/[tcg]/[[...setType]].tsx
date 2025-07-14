@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../../../styles/DeckbuilderPage.module.css";
 import Layout from "../../../components/Layout";
 import CardList from "../../../components/features/CardList";
@@ -12,6 +12,7 @@ import {
   ChevronRight,
   ChevronUp,
 } from "lucide-react";
+import { useDeck } from "../../../contexts/DeckContext";
 
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
@@ -21,6 +22,9 @@ const DeckbuilderBoosterPage = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentSetType, setCurrentSetType] = useState<string | null>(null);
   const [contentVisible, setContentVisible] = useState(false);
+  const { clearList, cardlist } = useDeck();
+  const [confirmedTcg, setConfirmedTcg] = useState(tcg);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Initialize setType
   useEffect(() => {
@@ -28,15 +32,34 @@ const DeckbuilderBoosterPage = () => {
     setCurrentSetType(normalized || null);
   }, [setType]);
 
+  // Intercept route changes
+  useEffect(() => {
+    const handleRouteChange = async (url: string) => {
+      const newTcg = url.split("/")[2];
+      if (newTcg === confirmedTcg) return;
+
+      if (cardlist.length > 0) {
+        setIsTransitioning(true);
+        try {
+          await new Promise((resolve) => {
+            clearList();
+            setTimeout(resolve, 0);
+          });
+          setConfirmedTcg(newTcg);
+        } finally {
+          setIsTransitioning(false);
+        }
+      } else {
+        setConfirmedTcg(newTcg);
+      }
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+    return () => router.events.off("routeChangeStart", handleRouteChange);
+  }, [confirmedTcg, cardlist.length, clearList]);
+
   const handleSlider = () => {
     setContentVisible((prev) => !prev);
-  };
-
-  const handleSetTypeChange = (newSetType: string | null) => {
-    setCurrentSetType(newSetType);
-    if (!newSetType) {
-      router.push(`/deckbuilder/${tcg}`, undefined, { shallow: true });
-    }
   };
 
   return (
@@ -64,7 +87,7 @@ const DeckbuilderBoosterPage = () => {
                 onClick={() => handleSlider()}
               />
             )}
-            
+
             {/* Sliding content area */}
             <div
               className={`${styles.mobileContentContainer} ${
@@ -81,12 +104,6 @@ const DeckbuilderBoosterPage = () => {
               <div className={styles.mainMobileContent}>
                 {currentSetType ? (
                   <>
-                    <button
-                      onClick={() => handleSetTypeChange(null)}
-                      className={styles.closeButton}
-                    >
-                      Close
-                    </button>
                     <CardList />
                   </>
                 ) : (
@@ -119,9 +136,6 @@ const DeckbuilderBoosterPage = () => {
                 <div className={styles.listofbc}>
                   {currentSetType ? (
                     <>
-                      <button onClick={() => handleSetTypeChange(null)}>
-                        Clear
-                      </button>
                       <CardList />
                     </>
                   ) : (

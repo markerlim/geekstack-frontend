@@ -30,3 +30,41 @@
   flex-direction: column;
   height: 100%;
 }
+
+.arrow-left {
+  position: fixed;
+  color: var(--gs-color-secondary);
+  background-color: var(--gs-bgcolor-one);
+  border: 2px solid var(--gs-bordercolor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  z-index: 1000;
+}
+.desktop-back {
+  top: calc(var(--top-nav-height) + 10px);
+  right: 20px;
+  border-radius: 20px;
+  font-size: 18px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.desktop-back svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mobile-back {
+  bottom: calc(var(--bottom-nav-height) + 40px);
+  right: 20px;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.mobile-back svg {
+  width: 35px;
+  height: 35px;
+}

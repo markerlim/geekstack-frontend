@@ -6,13 +6,13 @@
   color: var(--gs-fontcolor-one);
   font-size: 18px;
   border-radius: 8px;
-  padding: 8px;
+  padding: 14px 10px;
 }
 .card-name {
   background-color: #342b73;
   border-radius: 10px;
   color: #f2f3f8;
-  padding: 10px;
+  padding: 20px;
   margin-block-start: 10px !important;
   margin-block-end: 10px !important;
 }
@@ -56,7 +56,7 @@
   font-size: 15px;
   font-weight: 700;
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 14px 10px;
   flex: 0 0 auto;
 }
 
@@ -65,7 +65,7 @@
   color: var(--gs-fontcolor-two);
   border-radius: 8px;
   font-size: 14px;
-  padding: 6px 10px;
+  padding: 14px 10px;
   flex: 0 0 auto;
 }
 

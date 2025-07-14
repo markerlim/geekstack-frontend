@@ -4,14 +4,19 @@
   color: var(--gs-fontcolor-one);
   transition: width 0.3s ease;
   padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 1rem;
-  padding-top:1.5rem;
   box-sizing: border-box;
   position: relative;
   border-right: 1px solid rgb(41, 51, 62);
   margin-left: auto;
   margin-right: auto;
+}
+
+.nav{
+  overflow-y: auto;
+  height: calc(100% - 2.5rem);
+    padding-right: 1rem;
+  padding-bottom: 1rem;
+  padding-top:1.5rem;
 }
 
 .collapsed {

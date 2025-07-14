@@ -18,7 +18,7 @@ export interface BaseGameCard {
 }
 
 export interface CardUnionArena extends BaseGameCard {
-  tcg: typeof TCGTYPE.UNIONARENA;
+  tcg?: typeof TCGTYPE.UNIONARENA;
   anime: string;
   animeCode: string;
   apcost: number;
@@ -82,7 +82,7 @@ export interface CookieRunCard extends BaseGameCard {
 }
 
 export interface CardDragonBallZFW extends BaseGameCard {
-  tcg: typeof TCGTYPE.DRAGONBALLZFW;
+  tcg?: typeof TCGTYPE.DRAGONBALLZFW;
   awakenform: boolean;
   booster: string;
   cardId: string;
@@ -143,7 +143,7 @@ export interface DuelmastersCard extends BaseGameCard {
 }
 
 export interface CardOnePiece extends BaseGameCard {
-  tcg: typeof TCGTYPE.ONEPIECE;
+  tcg?: typeof TCGTYPE.ONEPIECE;
   cardId: string;
   rarity: string;
   category: string;
@@ -196,7 +196,6 @@ export interface GundamCard extends BaseGameCard {
   urlimage: string;
   cardUid: string;
   detail_url: string;
-  cardNumber: string;
   rarity: string;
   level: string;
   cost: string;

@@ -54,7 +54,7 @@ const DeckbuildList = () => {
         <div className={styles.cardlistscroll}>
           {Array.isArray(cardlist) && cardlist.length > 0 ? (
             cardlist.map((card) => {
-              if (!card?._id || !card?.urlimage) {
+              if (!card?._id || !card?.urlimage ) {
                 console.warn("Invalid card data:", card);
                 return null;
               }

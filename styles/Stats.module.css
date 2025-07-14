@@ -1,0 +1,147 @@
+.cost-grid {
+  display: flex;
+  overflow-y: auto;
+  gap: 4px;
+  margin-top: 0.5rem;
+  align-items: flex-end; /* Align bars to bottom */
+  height: 100px; /* Fixed height for chart area */
+}
+
+.cost-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border-radius: 4px;
+  color: var(--gs-fontcolor-one);
+  height: 100%; /* Take full height of grid */
+}
+
+.cost-bar-container {
+  width: 15px;
+  flex-grow: 1;
+  background-color: var(--gs-bgcolor-three);
+  border: var(--gs-border);
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 45px;
+}
+
+.cost-bar {
+  width: 100%;
+  background-color: var(--gs-color-primary);
+  transition: height 0.3s ease;
+}
+
+.cost-value {
+  font-weight: bold;
+  font-size: 14px;
+  background-color: var(--gs-bgcolor-one);
+  border: 2px solid var(--gs-bordercolor);
+  color: var(--gs-color-primary);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  z-index: 1; /* Ensure circle stays above bars */
+}
+
+.cost-count {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.extra-stats{
+  display: flex;
+  flex-direction: column;
+  gap:3px;    
+  height: 100px;
+  font-size: 14px;
+  margin-left: 10px;
+  color:var(--gs-fontcolor-one);
+}
+
+.extra-stats img{
+  width: 40px;
+}
+
+.extra-stats div{
+  line-height: 0;
+  display: flex;
+  flex-direction: row;
+  height:14.63px;
+  width: 70px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exceeded{
+  color:var(--gs-color-secondary)
+}
+
+.level-grid {
+  display: flex;
+  overflow-y: auto;
+  gap: 4px;
+  margin-top: 0.5rem;
+  align-items: flex-end; /* Align bars to bottom */
+  height: 100px; /* Fixed height for chart area */
+}
+
+.level-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border-radius: 4px;
+  color: var(--gs-fontcolor-one);
+  height: 100%; /* Take full height of grid */
+}
+
+.level-bar-container {
+  width: 15px;
+  flex-grow: 1;
+  background-color: var(--gs-bgcolor-three);
+  border: var(--gs-border);
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 45px;
+}
+
+.level-bar {
+  width: 100%;
+  background-color: var(--gs-color-primary);
+  transition: height 0.3s ease;
+}
+
+.level-value {
+  font-weight: bold;
+  font-size: 14px;
+  background-color: var(--gs-bgcolor-one);
+  border: 2px solid var(--gs-bordercolor);
+  color: var(--gs-color-secondary);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  z-index: 1; /* Ensure circle stays above bars */
+}
+
+.level-count {
+  font-size: 14px;
+  margin-top: 4px;
+}

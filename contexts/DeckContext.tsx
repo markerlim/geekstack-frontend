@@ -1,6 +1,14 @@
-import { createContext, useContext, useState, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+} from "react";
 import { GameCard } from "../model/card.model";
 import { TCGTYPE } from "../utils/constants";
+import { Deck } from "../model/deck.model";
 
 type DeckCard = {
   card: GameCard;
@@ -10,7 +18,10 @@ type DeckCard = {
 type DeckContextType = {
   deckCards: DeckCard[];
   cardlist: GameCard[];
+  selectedDeck: Deck;
   setCardlist: (gameCards: GameCard[]) => void;
+  setSelectedDeck: (deck: Deck) => void;
+  updateDeckName: (name: string) => void;
   addCard: (card: GameCard, tcgGame?: string) => void;
   removeCard: (cardId: string) => void;
   getCardCount: (cardId: string) => number;
@@ -22,10 +33,14 @@ const DeckContext = createContext<DeckContextType | undefined>(undefined);
 
 export function DeckProvider({ children }: { children: React.ReactNode }) {
   const [deckCards, setDeckCards] = useState<DeckCard[]>([]);
+  const [currentDeck, setCurrentDeck] = useState<Deck>({
+    deckuid: "",
+    deckname: "DeckName",
+    deckcover: "/gsdeckimage.jpg",
+    listofcards: [],
+  });
 
   const addCard = (card: GameCard, tcgGame?: string) => {
-    console.log("Adding card:", card);
-
     // Determine max copies
     const maxCopies =
       tcgGame === TCGTYPE.UNIONARENA && card.banRatio
@@ -103,31 +118,66 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     setDeckCards(Array.from(cardMap.values()));
   };
 
-  const clearList = () => {
-    if (window.confirm("Are you sure you want to clear all cards?")) {
-      setDeckCards([]);
-    }
+  const setSelectedDeck = (deck: Deck) => {
+    setCurrentDeck(deck);
   };
 
-const cardlist = useMemo(() => {
-  return deckCards.map(deckCard => ({
-    ...deckCard.card,
-    count: deckCard.count // Attach the count to each card
-  }));
-}, [deckCards]);
+  const updateDeckName = useCallback((name: string) => {
+    console.log("Updating deck name to:", name); // Add this log
+    setCurrentDeck((prev) => {
+      const newDeck = {
+        ...prev,
+        deckname: name,
+      };
+      console.log("New deck state:", newDeck); // Verify the new state
+      return newDeck;
+    });
+  }, []);
+
+  const clearList = () => {
+    return new Promise((resolve) => {
+      if (cardlist.length > 0) {
+        if (window.confirm("Are you sure you want to clear all cards?")) {
+          setDeckCards([]);
+          setCardlist([]);
+          setSelectedDeck({
+            deckuid: "",
+            deckname: "DeckName",
+            deckcover: "/gsdeckimage.jpg",
+            listofcards: [],
+          });
+          resolve(true); // Confirmed
+        } else {
+          resolve(false); // Cancelled
+        }
+      } else {
+        resolve(true); // No cards to clear
+      }
+    });
+  };
+
+  const cardlist = useMemo(() => {
+    return deckCards.map((deckCard) => ({
+      ...deckCard.card,
+      count: deckCard.count, // Attach the count to each card
+    }));
+  }, [deckCards]);
 
   const value = useMemo(
     () => ({
       deckCards,
       cardlist,
+      selectedDeck: currentDeck,
       setCardlist,
+      setSelectedDeck,
+      updateDeckName,
       addCard,
       removeCard,
       getCardCount,
       getCardData,
       clearList,
     }),
-    [deckCards]
+    [currentDeck, deckCards]
   );
 
   return <DeckContext.Provider value={value}>{children}</DeckContext.Provider>;
@@ -135,6 +185,7 @@ const cardlist = useMemo(() => {
 
 export function useDeck() {
   const context = useContext(DeckContext);
+
   if (!context) {
     throw new Error("useDeck must be used within a DeckProvider");
   }

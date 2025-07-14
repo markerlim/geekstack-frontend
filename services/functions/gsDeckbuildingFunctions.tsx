@@ -40,4 +40,15 @@ export async function loadDeck(tcg: string): Promise<Deck[]> {
   }
 }
 
+export async function deleteDeck(tcg: string,deckuid:string) {
+  try {
+    const urlPath = `/user/delete/${tcg}/deck/${deckuid}`
+    const response = await apiClient.delete(urlPath);
+    return response.data;
+  } catch (error) {
+    console.error('Error loading deck:', error);
+    throw error;
+  }
+}
+
 export function exportDeck() {}

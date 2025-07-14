@@ -65,7 +65,6 @@ const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {
             />
 
             {isCookieRun ? (
-              /* SIMPLE MODAL FOR COOKIERUN */
               <div className={styles.cookieRunModalContainer}>
                 <motion.div
                   className={styles.cookieRunModal}

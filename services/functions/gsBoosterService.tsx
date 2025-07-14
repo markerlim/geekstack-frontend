@@ -7,9 +7,7 @@ import {
   DuelmastersCard,
   HololiveCard,
 } from "../../model/card.model";
-import { DeckPost } from "../../model/deckpost.model";
 import { getApiBaseUrl } from "../../utils/apiBase";
-import apiClient from "../../utils/apiClient";
 import { TCGTYPE } from "../../utils/constants";
 
 /**
