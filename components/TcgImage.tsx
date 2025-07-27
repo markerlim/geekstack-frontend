@@ -7,7 +7,7 @@ interface TcgImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   tcgtype: string;
 }
 
-export const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {
+const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {
   const deviceType = useDevice();
 
   const imageClass =
@@ -24,3 +24,5 @@ export const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {
     />
   );
 };
+
+export default TcgImage;
