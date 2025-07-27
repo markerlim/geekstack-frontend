@@ -1,6 +1,6 @@
 import { useSearchCards } from "../../../contexts/SearchContext";
 import styles from "../../../styles/IndexPage.module.css";
-import TcgImage from "../../TcgImage";
+import { TcgImage } from "../../TcgImage";
 
 const SearchContainer = ({onOpen}) => {
     const {searchResults, isLoading} = useSearchCards();
