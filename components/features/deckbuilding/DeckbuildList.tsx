@@ -7,10 +7,10 @@ import Image from "next/image";
 import { useUserStore } from "../../../services/store/user.store";
 import { useState } from "react";
 import { useDevice } from "../../../contexts/DeviceContext";
-import { TcgImage } from "../../TcgImage";
 import { TcgImageDetails } from "../../TcgImageDetails";
 import { GameCard } from "../../../model/card.model";
 import cardNavEvent from "../../../services/eventBus/cardNavEvent";
+import TcgImage from "../../TcgImage";
 
 const DeckbuildList = () => {
   const { tcg } = useRouter().query;

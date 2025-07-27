@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import styles from "../../../styles/IndexPage.module.css";
 import { useSearchCards } from "../../../contexts/SearchContext";
-import { TcgImage } from "../../TcgImage";
+import TcgImage from "../../TcgImage";
 
 const SearchResModal = ({onClose}) => {
   const { searchResults, searchTerm } = useSearchCards();

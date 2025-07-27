@@ -9,8 +9,8 @@ import DeckbuilderCounter from "./deckbuilding/DeckbuilderCounter";
 import { ChevronLeft } from "lucide-react";
 import { useDevice } from "../../contexts/DeviceContext";
 import cardNavEvent from "../../services/eventBus/cardNavEvent";
-import { TcgImage } from "../TcgImage";
 import { TcgImageDetails } from "../TcgImageDetails";
+import TcgImage from "../TcgImage";
 
 const CardList = () => {
   const router = useRouter();

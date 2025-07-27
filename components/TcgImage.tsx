@@ -1,4 +1,3 @@
-// components/TcgImage.tsx
 import { useDevice } from "../contexts/DeviceContext";
 import styles from "../styles/TcgImage.module.css";
 
