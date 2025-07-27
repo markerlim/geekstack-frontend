@@ -22,8 +22,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "components/tcgeffects/RTB_onepiecetsx"  ],
+    "**/*.tsx" ],
   "exclude": [
     "node_modules"
   ]

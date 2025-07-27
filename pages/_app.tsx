@@ -7,6 +7,19 @@ import { detectDeviceFromUserAgent } from "../utils/DetectDevice";
 import { DeckProvider } from "../contexts/DeckContext";
 import { AuthProvider } from "../services/auth";
 import { SearchProvider } from "../contexts/SearchContext";
+import { Noto_Sans, Titillium_Web } from "next/font/google";
+
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-noto-sans", // This matches your CSS var
+});
+
+const titillium = Titillium_Web({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "600", "700", "900"],
+  variable: "--font-titillium", // This matches your CSS var
+});
 
 function MyApp({
   Component,
@@ -63,16 +76,17 @@ function MyApp({
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
       </Head>
-
-      <DeviceContext.Provider value={deviceType}>
-        <AuthProvider>
-          <SearchProvider>
-            <DeckProvider>
-              <Component {...pageProps} />
-            </DeckProvider>
-          </SearchProvider>
-        </AuthProvider>
-      </DeviceContext.Provider>
+      <main className={`${notoSans.variable} ${titillium.variable}`}>
+        <DeviceContext.Provider value={deviceType}>
+          <AuthProvider>
+            <SearchProvider>
+              <DeckProvider>
+                <Component {...pageProps} />
+              </DeckProvider>
+            </SearchProvider>
+          </AuthProvider>
+        </DeviceContext.Provider>
+      </main>
     </>
   );
 }

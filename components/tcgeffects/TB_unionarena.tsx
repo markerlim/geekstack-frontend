@@ -11,14 +11,14 @@ const TB_UnionArena = ({ card }: TBUnionArenaProps) => {
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
     <div className={styles['lower-table']}>
-      <h3 className={styles["card-name"]}>{card.cardName}</h3>
+      <div className={styles["card-name"]}>{card.cardName}</div>
       <table className={styles["tb-main"]}>
         <tbody>
           <tr>
-            <th className={styles["tb-header"]}>Effects</th>
+            <th className={styles["tb-header"]} >Effects</th>
           </tr>
           <tr>
-            <td className={styles["tb-info"]}>
+            <td className={`${styles["tb-info"]} ${styles['roboto-font']}`}>
               {effectLines.map((line, index) => (
                 <p key={index}>
                   <EffectWithIcons text={line.trim()} />
@@ -26,7 +26,7 @@ const TB_UnionArena = ({ card }: TBUnionArenaProps) => {
               ))}
             </td>
           </tr>
-          <div className={styles.spacer}></div>
+          <tr className={styles.spacer}></tr>
           <tr>
             <th className={styles["tb-header"]}>Trigger</th>
           </tr>

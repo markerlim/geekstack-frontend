@@ -5,27 +5,41 @@
   background-color: #6b3489;
   color: var(--gs-fontcolor-one);
   font-size: 18px;
-  border-radius: 8px;
-  padding: 14px 10px;
+  border-radius: 8px 8px 0px 0px;
+  padding: 5px 10px;
+  line-height: 1.3rem;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 700;
+  font-style: var(--gs-font-style);
 }
 .card-name {
   background-color: #342b73;
   border-radius: 10px;
   color: #f2f3f8;
-  padding: 20px;
-  margin-block-start: 10px !important;
-  margin-block-end: 10px !important;
+  display: block;
+  padding: 10px;
+  margin: 10px 0 !important;
+  line-height: 1.3rem;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 700;
+  font-size: large;
+  font-style: var(--gs-font-style);
 }
+
 .tb-info {
   text-align: left;
   background-color: var(--gs-color-primary-light);
-  border-radius: 8px;
+  border-radius: 0px 0px 8px 8px;
   padding: 5px;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 400;
+  font-style: var(--gs-font-style);
 }
+
 .tb-info p {
   margin: 0;
   color: var(--gs-fontcolor-two);
-  line-height: 1rem;
+  line-height: 1.15rem;
   font-size: 15px;
 }
 
@@ -55,18 +69,29 @@
   color: var(--gs-fontcolor-one);
   font-size: 15px;
   font-weight: 700;
-  border-radius: 8px;
-  padding: 14px 10px;
+  border-radius: 8px 8px 0px 0px;
+  padding: 5px;
+  line-height: 1rem;
   flex: 0 0 auto;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 700;
+  font-style: var(--gs-font-style);
 }
 
 .rtb-info {
   background-color: var(--gs-color-primary-light);
-  color: var(--gs-fontcolor-two);
-  border-radius: 8px;
+  border-radius: 0px 0px 8px 8px;
   font-size: 14px;
-  padding: 14px 10px;
+  padding: 5px;
   flex: 0 0 auto;
+  line-height: 1rem;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
+  
+  /* Fix for long words and slashes */
+  word-break: break-word; /* Breaks at any character */
+  overflow-wrap: anywhere; /* More aggressive than break-word */
 }
 
 .rtb-info p {
@@ -74,6 +99,9 @@
   color: var(--gs-fontcolor-two);
   line-height: 1rem;
   font-size: 15px;
+  /* Inherit the breaking rules */
+  word-break: inherit;
+  overflow-wrap: inherit;
 }
 
 .rtb {
@@ -81,4 +109,23 @@
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
+}
+
+.rtb-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.rtb-nav button {
+  background-color: var(--gs-bgcolor-two);
+  border: none;
+  color: var(--gs-fontcolor-one);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+  width: 40px;
+  border-radius: 50%;
 }

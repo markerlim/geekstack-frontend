@@ -11,7 +11,7 @@ const TB_Gundam = ({ card }: TBGundamProps) => {
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
     <div className={styles['lower-table']}>
-      <h3 className={styles["card-name"]}>{card.cardName}</h3>
+      <div className={styles["card-name"]}>{card.cardName}</div>
       <table className={styles["tb-main"]}>
         <tbody>
           <tr>
@@ -26,7 +26,7 @@ const TB_Gundam = ({ card }: TBGundamProps) => {
               ))}
             </td>
           </tr>
-          <div className={styles.spacer}></div>
+          <tr className={styles.spacer}></tr>
         </tbody>
       </table>
     </div>

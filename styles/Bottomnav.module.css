@@ -35,7 +35,7 @@
   bottom: calc(var(--bottom-nav-height) + 25px);/**/
   left: 0;
   right: 0;
-  height: 40px;
+  height: 60px;
   width: calc(100% - 30px);
   background: var(--gs-bgcolor-one);
   border-top: var(--gs-border);

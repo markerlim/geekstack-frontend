@@ -1,13 +1,16 @@
 import { useRouter } from "next/router";
 import { useDeck } from "../../../contexts/DeckContext";
 import styles from "../../../styles/DeckbuildList.module.css";
-import TcgImage from "../../TcgImage";
 import DeckbuilderCounter from "./DeckbuilderCounter";
 import DeckbuilderBar from "./DeckbuilderBar";
 import Image from "next/image";
 import { useUserStore } from "../../../services/store/user.store";
 import { useState } from "react";
 import { useDevice } from "../../../contexts/DeviceContext";
+import { TcgImage } from "../../TcgImage";
+import { TcgImageDetails } from "../../TcgImageDetails";
+import { GameCard } from "../../../model/card.model";
+import cardNavEvent from "../../../services/eventBus/cardNavEvent";
 
 const DeckbuildList = () => {
   const { tcg } = useRouter().query;
@@ -17,8 +20,19 @@ const DeckbuildList = () => {
   const deviceType = useDevice();
   const isDesktop = deviceType === "desktop";
   const userId = sqlUser?.userId;
+  const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
   const tcgType = Array.isArray(tcg) ? tcg[0] : tcg || "default";
+
+  const handleCardClick = (card: GameCard) => {
+    setCurrentCard(card);
+    cardNavEvent.emit("card:open", card._id);
+  };
+
+  const handleCloseModal = () => {
+    setCurrentCard(null);
+    cardNavEvent.emit("card:close");
+  };
 
   return (
     <>
@@ -54,7 +68,7 @@ const DeckbuildList = () => {
         <div className={styles.cardlistscroll}>
           {Array.isArray(cardlist) && cardlist.length > 0 ? (
             cardlist.map((card) => {
-              if (!card?._id || !card?.urlimage ) {
+              if (!card?._id || !card?.urlimage) {
                 console.warn("Invalid card data:", card);
                 return null;
               }
@@ -66,6 +80,7 @@ const DeckbuildList = () => {
                     alt={card.cardName || `Card ${card._id}`}
                     tcgtype={tcgType}
                     card={card}
+                    onClick={() => handleCardClick(card)}
                   />
                   <DeckbuilderCounter card={card} />
                 </div>
@@ -78,6 +93,18 @@ const DeckbuildList = () => {
           )}
         </div>
       </div>
+      {/* Single Modal Instance */}
+      {currentCard && (
+        <TcgImageDetails
+          card={currentCard}
+          tcgtype={Array.isArray(tcg) ? tcg[0] : tcg || ""}
+          imgProps={{
+            src: currentCard.urlimage,
+            alt: currentCard.cardName,
+          }}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
   );
 };

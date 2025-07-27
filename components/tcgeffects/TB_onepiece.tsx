@@ -10,7 +10,7 @@ const TB_Onepiece = ({ card }: TBOnePieceProps) => {
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
     <div>
-      <h3 className={styles["card-name"]}>{card.cardName}</h3>
+      <div className={styles["card-name"]}>{card.cardName}</div>
       <table className={styles["tb-main"]}>
         <tbody>
           <tr>
@@ -25,7 +25,7 @@ const TB_Onepiece = ({ card }: TBOnePieceProps) => {
               ))}
             </td>
           </tr>
-          <div className={styles.spacer}></div>
+          <tr className={styles.spacer}></tr>
           <tr>
             <th className={styles["tb-header"]}>Trigger</th>
           </tr>

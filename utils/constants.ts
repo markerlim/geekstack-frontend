@@ -1,4 +1,5 @@
 export enum TCGTYPE {
+  ALL = "all",
   UNIONARENA = "unionarena",
   ONEPIECE = "onepiece",
   COOKIERUN = "cookierunbraverse",

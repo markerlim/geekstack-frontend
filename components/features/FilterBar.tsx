@@ -30,14 +30,8 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
   );
 
   const handleChange = (section: FilterSection, value: string) => {
-    console.group(`Filter Change`);
-    console.log("Section:", section.title);
-    console.log("Current value:", section.active);
-    console.log("New value:", value);
-
     try {
-      section.onChange(value || ""); // Handle empty string for clearing
-      console.log("Change processed successfully");
+      section.onChange(value || "");
     } catch (error) {
       console.error("Change failed:", error);
     }

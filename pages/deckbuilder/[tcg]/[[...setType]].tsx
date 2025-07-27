@@ -80,13 +80,6 @@ const DeckbuilderBoosterPage = () => {
               </button>
             </div>
 
-            {/* Overlay backdrop - only visible when content is visible */}
-            {contentVisible && (
-              <div
-                className={styles.overlayBackdrop}
-                onClick={() => handleSlider()}
-              />
-            )}
 
             {/* Sliding content area */}
             <div
@@ -111,10 +104,14 @@ const DeckbuilderBoosterPage = () => {
                 )}
               </div>
             </div>
+            {contentVisible && (
+              <div
+                className={styles.overlayBackdrop}
+                onClick={() => handleSlider()}
+              />
+            )}
           </>
         )}
-
-        {/* Desktop view (unchanged) */}
         {isDesktop && (
           <>
             <div className={styles.mainContent}>

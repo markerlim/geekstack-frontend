@@ -17,12 +17,15 @@
   padding: 4px 12px;
   height: 48px;
   width: calc(100% - 24px);
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
 }
 
 .filterLabel {
   font-size: 14px;
   font-weight: 600;
-  color: var(--gs-color-text);
+  color: var(--gs-fontcolor-three);
   white-space: nowrap;
   margin-right: 8px;
   flex-shrink: 0;
@@ -51,6 +54,10 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
+    font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
+  
 }
 
 .filterPill:hover {
@@ -76,13 +83,16 @@
 .dropdownMenu {
   position: fixed; /* Use fixed positioning */
   z-index: 1000;
-  width:100px;
+  width: 100px;
   margin-top: 4px;
   padding: 8px 0;
   background-color: var(--gs-bgcolor-three);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--gs-bordercolor);
+    font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
   /* Position will be set via JavaScript */
 }
 
@@ -169,6 +179,6 @@
 }
 
 .filterBar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

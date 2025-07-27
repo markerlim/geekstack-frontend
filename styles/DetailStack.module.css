@@ -74,6 +74,7 @@
 
 .detail-content p {
   font-size: 16px;
+  font-weight: 400;
   margin-block-end: 0 !important;
   margin-block-start: 0 !important;
 }
@@ -106,9 +107,13 @@
 }
 
 .comment-holder-name {
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .comment-holder-comment {
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .comment-holder-func {

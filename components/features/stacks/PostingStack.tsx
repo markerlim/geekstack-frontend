@@ -32,7 +32,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
   const [postObject, setPostObject] = useState<DeckPost | null>(null);
 
-  const {mongoUser,sqlUser} = useUserStore();
+  const { mongoUser, sqlUser } = useUserStore();
   const listofdecks: Deck[] = mongoUser?.[deckFieldMap[deckType]] || [];
 
   const prevRef = useRef<HTMLButtonElement>(null);
@@ -65,47 +65,46 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   ) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-    console.log(name,value)
+    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-const handlePosting = (deck: Deck) => {
-  
-  const postObject: DeckPost = {
-    postType: "deck",
-    userId: mongoUser?.userId || "", // Assuming uid is available
-    deckName: deck.deckname || "Untitled Deck",
-    isTournamentDeck: false, // Set this based on your logic
-    selectedCards: deck.listofcards.map(card => ({
-      imageSrc: card.urlimage,
-      count: card.count
-    })),
-    listofcards: deck.listofcards.map(card => ({
-      _id: card._id,
-      imageSrc: card.urlimage,
-      cardName: card.cardName,
-      count: card.count
-    })),
-    listoflikes: [],
-    listofcomments: [],
-    name: sqlUser?.name || "Anonymous",
-    displaypic: sqlUser?.displaypic || "/images/default-avatar.png",
+  const handlePosting = (deck: Deck) => {
+    const postObject: DeckPost = {
+      postType: deckType,
+      userId: mongoUser?.userId || "", // Assuming uid is available
+      deckName: deck.deckname || "Untitled Deck",
+      isTournamentDeck: false, // Set this based on your logic
+      selectedCards: deck.listofcards.map((card) => ({
+        imageSrc: card.urlimage,
+        count: card.count,
+      })),
+      listofcards: deck.listofcards.map((card) => ({
+        _id: card._id,
+        imageSrc: card.urlimage,
+        cardName: card.cardName,
+        count: card.count,
+      })),
+      listoflikes: [],
+      listofcomments: [],
+      name: sqlUser?.name || "Anonymous",
+      displaypic: sqlUser?.displaypic || "/images/default-avatar.png",
+    };
+
+    // Optional fields if needed
+    if (formData.headline) postObject.headline = formData.headline;
+    if (formData.content) postObject.content = formData.content;
+
+    userMakePost(postObject)
+      .then(() => {
+        console.log("Deck posted successfully:", postObject);
+        onClose();
+      })
+      .catch((error) => {
+        console.error("Error posting deck:", error);
+      });
   };
-
-  // Optional fields if needed
-  if (formData.headline) postObject.headline = formData.headline;
-  if (formData.content) postObject.content = formData.content;
-
-  userMakePost(postObject)
-    .then(() => {
-      console.log("Deck posted successfully:", postObject);
-      onClose();
-    })
-    .catch(error => {
-      console.error("Error posting deck:", error);
-    });
-};
 
   useEffect(() => {
     if (
@@ -124,14 +123,18 @@ const handlePosting = (deck: Deck) => {
 
   return (
     <div className={styles["posting-main"]}>
-      <button onClick={onClose} className={styles["close-btn"]}>
+      <button
+        title="close-tb"
+        onClick={onClose}
+        className={styles["close-btn"]}
+      >
         <X size={24} />
       </button>
       <div className={styles["posting-header"]}></div>
       <div className={styles["deck-type-selector"]}>
         {Object.values(TCGTYPE).map((type) => (
           <button
-            key={type}
+            title="setting deck type"
             className={`${styles["type-btn"]} ${
               deckType === type ? styles["active"] : ""
             }`}
@@ -176,6 +179,7 @@ const handlePosting = (deck: Deck) => {
         <button
           ref={prevRef}
           type="button"
+          title="prev"
           className={styles["custom-prev"]}
           aria-label="Previous slide"
         >
@@ -184,6 +188,7 @@ const handlePosting = (deck: Deck) => {
         <button
           ref={nextRef}
           type="button"
+          title="next"
           className={styles["custom-next"]}
           aria-label="Next slide"
         >
@@ -215,7 +220,7 @@ const handlePosting = (deck: Deck) => {
           </label>
           <input
             id="headline"
-              name="headline"
+            name="headline"
             type="text"
             className={styles["form-input"]}
             placeholder="Enter a catchy headline"
@@ -229,7 +234,7 @@ const handlePosting = (deck: Deck) => {
         <div className={styles["form-group"]}>
           <textarea
             id="content"
-              name="content"
+            name="content"
             className={styles["form-textarea"]}
             placeholder="Write your post content here..."
             onChange={handleChange}
@@ -242,6 +247,7 @@ const handlePosting = (deck: Deck) => {
       </form>
       <div className={styles["posting-footer"]}>
         <button
+          title="posting"
           onClick={() => handlePosting(selectedDeck)}
           className={styles["post-btn"]}
           disabled={!selectedDeck}

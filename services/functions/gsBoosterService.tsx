@@ -5,6 +5,7 @@ import {
   CardUnionArena,
   CookieRunCard,
   DuelmastersCard,
+  GundamCard,
   HololiveCard,
 } from "../../model/card.model";
 import { getApiBaseUrl } from "../../utils/apiBase";
@@ -99,6 +100,8 @@ function mapToGameCard(rawCard: any, tcgType: string) {
       return cardWithTcg as DuelmastersCard;
     case TCGTYPE.HOLOLIVE:
       return cardWithTcg as HololiveCard;
+    case TCGTYPE.GUNDAM:
+      return cardWithTcg as GundamCard;
     default:
       console.warn("Unknown card type:", tcgType);
       return cardWithTcg as BaseGameCard;

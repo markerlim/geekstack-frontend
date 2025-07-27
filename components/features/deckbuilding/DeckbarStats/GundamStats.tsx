@@ -9,10 +9,7 @@ const GundamStats = ({ cardlist }) => {
     2: 0,
     3: 0,
     4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    "8+": 0,
+    "5+": 0,
   };
 
   const levelCounts = {
@@ -22,7 +19,7 @@ const GundamStats = ({ cardlist }) => {
     4: 0,
     "5+": 0,
   };
-  const statsCounts = {
+  const statsCounts = { 
     pilot: 0,
     command: 0,
     unit: 0,
@@ -36,10 +33,10 @@ const GundamStats = ({ cardlist }) => {
     const cost = card.cost;
     const level = card.level;
 
-    if (cost >= 0 && cost <= 7) {
+    if (cost >= 0 && cost <= 5) {
       energyCounts[cost] += card.count;
-    } else if (cost >= 8) {
-      energyCounts["8+"] += card.count;
+    } else if (cost >= 6) {
+      energyCounts["5+"] += card.count;
     }
 
     if (level >= 1 && level <= 4) {

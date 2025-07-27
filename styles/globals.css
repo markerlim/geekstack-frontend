@@ -17,7 +17,15 @@
 
   --db-main-collapsed: 60px;
   --db-main-uncollapsed: 223px;
+
+  --gs-font-family-noto: var(--font-noto-sans, sans-serif);
+  --gs-font-family-titillium: var(--font-titillium, sans-serif);
+  --gs-font-optical-sizing: auto;
+  --gs-font-weight: 500;
+  --gs-font-style: normal;
+  --gs-font-variation-settings: "wdth" 100;
 }
+
 
 body {
   margin: 0;
@@ -51,9 +59,9 @@ body.light {
   background: #555;
 }
 
-
 /* In your Layout.module.css or globals.css */
-html, body {
+html,
+body {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -64,4 +72,9 @@ html, body {
 body {
   overscroll-behavior: none;
   -webkit-overflow-scrolling: auto;
+}
+
+button, input, a, textarea, select, div {
+  -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+  outline: none; /* Removes focus outline (replace with a better a11y alternative if needed) */
 }

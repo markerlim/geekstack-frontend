@@ -23,6 +23,9 @@
   background: none;
   border: none;
   cursor: pointer;
+    font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
 }
 
 .menuItem:hover {
