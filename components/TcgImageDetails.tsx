@@ -91,12 +91,20 @@ export const TcgImageDetails = ({
             transition={{ duration: 0.3 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 100 }}
-            dragElastic={1}
+            dragElastic={0}
             dragMomentum={false}
+            onDrag={(e, info) => {
+              if (info.offset.y < 0) {
+                return false;
+              }
+            }}
             onDragEnd={(e, info) => {
-              if (info.offset.y > 80) onClose();
-              if (info.offset.x < -80 && onNext) onNext(e);
-              if (info.offset.x > 80 && onPrev) onPrev(e);
+              const swipeThreshold = 50;
+              const horizontalSwipeThreshold = 50;
+              if (info.offset.y > swipeThreshold) onClose();
+              if (info.offset.x < -horizontalSwipeThreshold && onNext)
+                onNext(e);
+              if (info.offset.x > horizontalSwipeThreshold && onPrev) onPrev(e);
             }}
           >
             <div className={styles.puller} />

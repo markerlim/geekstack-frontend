@@ -9,7 +9,7 @@ const TB_Onepiece = ({ card }: TBOnePieceProps) => {
   const normalizedEffect = card.effects.replace(/\\n/g, "\n");
   const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
-    <div>
+    <div className={styles['lower-table']}>
       <div className={styles["card-name"]}>{card.cardName}</div>
       <table className={styles["tb-main"]}>
         <tbody>
@@ -17,7 +17,7 @@ const TB_Onepiece = ({ card }: TBOnePieceProps) => {
             <th className={styles["tb-header"]}>Effects</th>
           </tr>
           <tr>
-            <td className={styles["tb-info"]}>
+            <td className={`${styles["tb-info"]} ${styles['roboto-font']}`}>
               {effectLines.map((line, index) => (
                 <p key={index}>
                   <EffectWithIcons text={line.trim()} />

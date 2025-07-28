@@ -18,7 +18,7 @@ const TB_Gundam = ({ card }: TBGundamProps) => {
             <th className={styles["tb-header"]}>Effects</th>
           </tr>
           <tr>
-            <td className={styles["tb-info"]}>
+            <td className={`${styles["tb-info"]} ${styles['roboto-font']}`}>
               {effectLines.map((line, index) => (
                 <p key={index}>
                   <EffectWithIcons text={line.trim()} />

@@ -35,7 +35,7 @@
   position: fixed;
   color: var(--gs-color-secondary);
   background-color: var(--gs-bgcolor-one);
-  border: 2px solid var(--gs-bordercolor);
+  border: 2px solid var(--gs-color-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +43,7 @@
   z-index: 1000;
 }
 .desktop-back {
-  top: calc(var(--top-nav-height) + 10px);
+  top: calc(var(--top-nav-height) + 20px);
   right: 20px;
   border-radius: 20px;
   font-size: 18px;
