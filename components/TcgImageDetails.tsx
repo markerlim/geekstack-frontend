@@ -1,4 +1,3 @@
-// components/CardModal.tsx
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import styles from "../styles/TcgImage.module.css";
@@ -9,18 +8,19 @@ import RTB_Onepiece from "./tcgeffects/RTB_onepiece";
 import TB_Onepiece from "./tcgeffects/TB_onepiece";
 import RTB_Gundam from "./tcgeffects/RTB_gundam";
 import TB_Gundam from "./tcgeffects/TB_gundam";
+import { useSwipeable } from "react-swipeable";
 
 interface CardModalProps {
   card: any;
   tcgtype: string;
   imgProps: React.ImgHTMLAttributes<HTMLImageElement>;
   onClose: () => void;
-  onNext?: (e) => void;
-  onPrev?: (e) => void;
+  onNext?: () => void;
+  onPrev?: () => void;
   isCookieRun?: boolean; // Now optional since we'll determine it internally
 }
 
-export const TcgImageDetails = ({
+const TcgImageDetails = ({
   card,
   tcgtype,
   imgProps,
@@ -47,6 +47,19 @@ export const TcgImageDetails = ({
     [TCGTYPE.ONEPIECE]: TB_Onepiece,
     [TCGTYPE.GUNDAM]: TB_Gundam,
   };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (onNext) onNext();
+    },
+    onSwipedRight: () => {
+      if (onPrev) onPrev();
+    },
+    onSwipedDown: (e) => onClose(),
+    delta: 30,
+    trackTouch: true,
+    trackMouse: false,
+  });
 
   const RTBComponent = RTBComponentsMap[tcgtype] || null;
   const TBComponent = TBComponentsMap[tcgtype] || null;
@@ -93,19 +106,11 @@ export const TcgImageDetails = ({
             dragConstraints={{ top: 0, bottom: 100 }}
             dragElastic={0}
             dragMomentum={false}
-            onDrag={(e, info) => {
-              if (info.offset.y < 0) {
-                return false;
-              }
-            }}
             onDragEnd={(e, info) => {
               const swipeThreshold = 50;
-              const horizontalSwipeThreshold = 50;
               if (info.offset.y > swipeThreshold) onClose();
-              if (info.offset.x < -horizontalSwipeThreshold && onNext)
-                onNext(e);
-              if (info.offset.x > horizontalSwipeThreshold && onPrev) onPrev(e);
             }}
+              {...swipeHandlers} 
           >
             <div className={styles.puller} />
             {card && (
@@ -132,3 +137,5 @@ export const TcgImageDetails = ({
     </AnimatePresence>
   );
 };
+
+export default TcgImageDetails;

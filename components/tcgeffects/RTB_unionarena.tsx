@@ -5,8 +5,8 @@ import { CardUnionArena } from "../../model/card.model";
 
 interface RTBProps {
   card: CardUnionArena;
-  onNext?: (e: React.MouseEvent) => void;
-  onPrev?: (e: React.MouseEvent) => void;
+  onNext?: () => void;
+  onPrev?: () => void;
 }
 
 const RTB_UnionArena = ({ card, onNext, onPrev }: RTBProps) => {

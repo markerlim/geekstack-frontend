@@ -9,7 +9,7 @@ import DeckbuilderCounter from "./deckbuilding/DeckbuilderCounter";
 import { ChevronLeft } from "lucide-react";
 import { useDevice } from "../../contexts/DeviceContext";
 import cardNavEvent from "../../services/eventBus/cardNavEvent";
-import { TcgImageDetails } from "../TcgImageDetails";
+import TcgImageDetails from "../TcgImageDetails";
 import TcgImage from "../TcgImage";
 
 const CardList = () => {
@@ -84,16 +84,14 @@ const CardList = () => {
   );
 
   const handleNext = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
+    () => {
       navigateToAdjacentCard("next");
     },
     [navigateToAdjacentCard]
   );
 
   const handlePrev = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
+    () => {
       navigateToAdjacentCard("prev");
     },
     [navigateToAdjacentCard]

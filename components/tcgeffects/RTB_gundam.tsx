@@ -5,8 +5,8 @@ import { GundamCard } from "../../model/card.model";
 
 interface RTBProps {
   card: GundamCard;
-  onNext?: (e: React.MouseEvent) => void;
-  onPrev?: (e: React.MouseEvent) => void;
+  onNext?: () => void;
+  onPrev?: () => void;
 }
 
 const RTB_Gundam = ({ card, onNext, onPrev }: RTBProps) => {

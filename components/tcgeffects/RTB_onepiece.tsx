@@ -4,8 +4,8 @@ import { CardOnePiece } from "../../model/card.model";
 
 interface RTBProps {
   card: CardOnePiece;
-  onNext?: (e: React.MouseEvent) => void;
-  onPrev?: (e: React.MouseEvent) => void;
+  onNext?: () => void;
+  onPrev?: () => void;
 }
 
 const RTB_Onepiece = ({ card, onNext, onPrev }: RTBProps) => {

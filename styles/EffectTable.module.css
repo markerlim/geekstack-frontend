@@ -81,6 +81,7 @@
 .rtb-info {
   background-color: var(--gs-color-primary-light);
   border-radius: 0px 0px 8px 8px;
+  color: var(--gs-fontcolor-two);
   font-size: 14px;
   padding: 5px;
   flex: 0 0 auto;

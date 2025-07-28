@@ -1,9 +1,25 @@
+import { useState } from "react";
 import { useSearchCards } from "../../../contexts/SearchContext";
+import { GameCard } from "../../../model/card.model";
+import cardNavEvent from "../../../services/eventBus/cardNavEvent";
 import styles from "../../../styles/IndexPage.module.css";
 import TcgImage from "../../TcgImage";
+import TcgImageDetails from "../../TcgImageDetails";
 
-const SearchContainer = ({onOpen}) => {
-    const {searchResults, isLoading} = useSearchCards();
+const SearchContainer = ({ onOpen }) => {
+  const { searchResults, isLoading } = useSearchCards();
+  const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
+
+  const handleCardClick = (card: GameCard) => {
+    setCurrentCard(card);
+    cardNavEvent.emit("card:open", card._id);
+  };
+
+  const handleCloseModal = () => {
+    setCurrentCard(null);
+    cardNavEvent.emit("card:close");
+  };
+  
   return (
     <div className={styles.searchResultsContainer}>
       <div className={styles.inlineResults}>
@@ -18,6 +34,7 @@ const SearchContainer = ({onOpen}) => {
                 tcgtype={card.tcg}
                 src={card.urlimage}
                 alt={card.cardName}
+                onClick={() => handleCardClick(card)}
               />
             ))}
           </>
@@ -26,6 +43,15 @@ const SearchContainer = ({onOpen}) => {
         )}
       </div>
 
+      <TcgImageDetails
+        card={currentCard}
+        tcgtype={currentCard?.tcg || ""}
+        imgProps={{
+          src: currentCard?.urlimage,
+          alt: currentCard?.cardName,
+        }}
+        onClose={handleCloseModal}
+      />
       {searchResults.length > 5 && (
         <button
           title="show more"
