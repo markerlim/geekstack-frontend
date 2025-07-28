@@ -50,38 +50,44 @@ const DeckbuilderCover = ({ onCoverSelect, onClose, tcg }) => {
     loadCards();
   }, [tcg, deckCards, isLeaderBased, triggerSearch]); // Removed searchTerm from dependencies
 
-  const handleClick = (e: React.MouseEvent, card: any) => {
-    e.stopPropagation();
-
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      setClickTimeout(null);
-      handleDoubleClick(card);
-    } else {
-      const timeout = setTimeout(() => {
-        handleSingleClick(card);
-        setClickTimeout(null);
-      }, 200);
-      setClickTimeout(timeout);
-    }
-  };
-
   const handleSingleClick = (card: any) => {
-        setPreviewCard(card);
-
-  };
-
-  const handleDoubleClick = (card: any) => {
     onCoverSelect(card.urlimage);
   };
 
-    const closePreview = () => {
+  const handleContextClick = (e, card: any) => {
+    e.preventDefault();
+    setPreviewCard(card);
+  };
+
+  const closePreview = () => {
     setPreviewCard(null);
   };
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.coverGrid}>
+          {isLoading ? (
+            <div className={styles.loading}>Loading...</div>
+          ) : listofcards.length > 0 ? (
+            listofcards.map((card) => (
+              <div
+                key={card._id}
+                onClick={() => handleSingleClick(card)}
+                onContextMenu={(e) => handleContextClick(e, card)}
+                className={styles["deckcover"]}
+              >
+                <img src={card.urlimage} alt={card._id} />
+              </div>
+            ))
+          ) : (
+            <div className={styles.noResults}>
+              {isLeaderBased && searchTerm
+                ? "No matching cards found"
+                : "No cards available"}
+            </div>
+          )}
+        </div>
         {isLeaderBased && (
           <div className={styles.searchContainer}>
             <input
@@ -103,28 +109,6 @@ const DeckbuilderCover = ({ onCoverSelect, onClose, tcg }) => {
             </button>
           </div>
         )}
-
-        <div className={styles.coverGrid}>
-          {isLoading ? (
-            <div className={styles.loading}>Loading...</div>
-          ) : listofcards.length > 0 ? (
-            listofcards.map((card) => (
-              <div
-                key={card._id}
-                onClick={(e) => handleClick(e, card)}
-                className={styles["deckcover"]}
-              >
-                <img src={card.urlimage} alt={card._id} />
-              </div>
-            ))
-          ) : (
-            <div className={styles.noResults}>
-              {isLeaderBased && searchTerm
-                ? "No matching cards found"
-                : "No cards available"}
-            </div>
-          )}
-        </div>
       </div>
       {previewCard && (
         <LeaderPreviewModal card={previewCard} onClose={closePreview} />

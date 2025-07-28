@@ -9,7 +9,6 @@ export interface DeckPost {
   timestamp?: { $date: TimestampValue };
   selectedCards: {
     imageSrc: string;
-    count: number;
   }[];
   listofcards: {
     _id: string;

@@ -1,6 +1,6 @@
 // components/CardModal.tsx
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { X } from "lucide-react";
 import styles from "../styles/TcgImage.module.css";
 import { TCGTYPE } from "../utils/constants";
 import TB_UnionArena from "./tcgeffects/TB_unionarena";
@@ -15,8 +15,8 @@ interface CardModalProps {
   tcgtype: string;
   imgProps: React.ImgHTMLAttributes<HTMLImageElement>;
   onClose: () => void;
-  onNext?: (e: React.MouseEvent) => void;
-  onPrev?: (e: React.MouseEvent) => void;
+  onNext?: (e) => void;
+  onPrev?: (e) => void;
   isCookieRun?: boolean; // Now optional since we'll determine it internally
 }
 
@@ -33,8 +33,8 @@ export const TcgImageDetails = ({
     string,
     React.FC<{
       card: any;
-      onNext?: (e: React.MouseEvent) => void;
-      onPrev?: (e: React.MouseEvent) => void;
+      onNext?: (e) => void;
+      onPrev?: (e) => void;
     }>
   > = {
     [TCGTYPE.UNIONARENA]: RTB_UnionArena,
@@ -55,15 +55,16 @@ export const TcgImageDetails = ({
   return (
     <AnimatePresence>
       <>
-        <motion.div
-          className={styles.backdrop}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          onClick={onClose}
-        />
-
+        {card && (
+          <motion.div
+            className={styles.backdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={onClose}
+          />
+        )}
         {isCookieRun ? (
           <div className={styles.cookieRunModalContainer}>
             <motion.div
@@ -85,30 +86,38 @@ export const TcgImageDetails = ({
           <motion.div
             className={styles.fullscreenPanel}
             initial={{ y: "100%" }}
-            animate={{ y: 0 }}
+            animate={{ y: card ? 0 : "100%" }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.3 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 100 }}
-            dragElastic={0}
+            dragElastic={1}
             dragMomentum={false}
             onDragEnd={(e, info) => {
               if (info.offset.y > 80) onClose();
+              if (info.offset.x < -80 && onNext) onNext(e);
+              if (info.offset.x > 80 && onPrev) onPrev(e);
             }}
           >
-            <div className={styles.detailsContent}>
-              <div className={styles.puller} />
-              <div className={styles["upper-eff-table"]}>
-                <img src={imgProps.src} alt={imgProps.alt} />
-                {RTBComponent && (
-                  <RTBComponent card={card} onNext={onNext} onPrev={onPrev} />
-                )}
+            <div className={styles.puller} />
+            {card && (
+              <div className={styles.detailsContent}>
+                <div className={styles["upper-eff-table"]}>
+                  <img src={imgProps.src} alt={imgProps.alt} />
+                  {RTBComponent && (
+                    <RTBComponent card={card} onNext={onNext} onPrev={onPrev} />
+                  )}
+                </div>
+                {TBComponent && <TBComponent card={card} />}
+                <button
+                  title="close button"
+                  className={styles.closeBtn}
+                  onClick={onClose}
+                >
+                  <X size={24} color="#000" />
+                </button>
               </div>
-              {TBComponent && <TBComponent card={card} />}
-              <button title="close button" className={styles.closeBtn} onClick={onClose}>
-                <X size={24} color="#000"/>
-              </button>
-            </div>
+            )}
           </motion.div>
         )}
       </>

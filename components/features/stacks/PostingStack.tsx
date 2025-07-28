@@ -30,8 +30,9 @@ const deckFieldMap: Record<string, string> = {
 const PostingStack = ({ onClose }: PostingStackProps) => {
   const [deckType, setDeckType] = useState(TCGTYPE.UNIONARENA);
   const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
-  const [postObject, setPostObject] = useState<DeckPost | null>(null);
-
+  const [selectedPostCover, setSelectedPostCover] = useState<string | null>(
+    null
+  );
   const { mongoUser, sqlUser } = useUserStore();
   const listofdecks: Deck[] = mongoUser?.[deckFieldMap[deckType]] || [];
 
@@ -76,10 +77,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       userId: mongoUser?.userId || "", // Assuming uid is available
       deckName: deck.deckname || "Untitled Deck",
       isTournamentDeck: false, // Set this based on your logic
-      selectedCards: deck.listofcards.map((card) => ({
-        imageSrc: card.urlimage,
-        count: card.count,
-      })),
+      selectedCards: [{ imageSrc: selectedPostCover }],
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
         imageSrc: card.urlimage,
@@ -104,6 +102,10 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       .catch((error) => {
         console.error("Error posting deck:", error);
       });
+  };
+
+  const handlePostCover = (coverurl) => {
+    setSelectedPostCover(coverurl);
   };
 
   useEffect(() => {
@@ -205,9 +207,15 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
             {selectedDeck.listofcards.map((card) => (
               <img
                 key={card._id}
-                className={styles["image-selection"]}
+                className={
+                  styles["image-selection"] +
+                  (selectedPostCover === card.urlimage
+                    ? " " + styles["selected"]
+                    : "")
+                }
                 src={card.urlimage}
                 alt={card.cardName}
+                onClick={() => handlePostCover(card.urlimage)}
               />
             ))}
           </div>

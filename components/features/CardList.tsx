@@ -193,19 +193,17 @@ const CardList = () => {
           </div>
         ))}
       </div>
-      {currentCard && (
         <TcgImageDetails
           card={currentCard}
           tcgtype={Array.isArray(tcg) ? tcg[0] : tcg || ""}
           imgProps={{
-            src: currentCard.urlimage,
-            alt: currentCard.cardName,
+            src: currentCard?.urlimage,
+            alt: currentCard?.cardName,
           }}
           onClose={handleCloseModal}
           onNext={handleNext}
           onPrev={handlePrev}
         />
-      )}
     </div>
   );
 };
