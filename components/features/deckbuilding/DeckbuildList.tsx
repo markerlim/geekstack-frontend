@@ -11,6 +11,7 @@ import TcgImageDetails from "../../TcgImageDetails";
 import { GameCard } from "../../../model/card.model";
 import cardNavEvent from "../../../services/eventBus/cardNavEvent";
 import TcgImage from "../../TcgImage";
+import { TCGTYPE } from "../../../utils/constants";
 
 const DeckbuildList = () => {
   const { tcg } = useRouter().query;
@@ -19,10 +20,10 @@ const DeckbuildList = () => {
   const [isBarCollapsed, setIsBarCollapsed] = useState(false);
   const deviceType = useDevice();
   const isDesktop = deviceType === "desktop";
-  const userId = sqlUser?.userId;
+  const userId = sqlUser?.userId || "";
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
-  const tcgType = Array.isArray(tcg) ? tcg[0] : tcg || "default";
+  const tcgType = Array.isArray(tcg) ? tcg[0] : tcg || TCGTYPE.UNIONARENA;
 
   const handleCardClick = (card: GameCard) => {
     setCurrentCard(card);

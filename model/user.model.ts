@@ -15,5 +15,6 @@ export interface gsMongoUser extends gsUser {
   opdecks: Deck[];
   dbzfwdecks: Deck[];
   dmdecks: Deck[];
+  gcgdecks: Deck[];
   hocgdecks: Deck[];
 }

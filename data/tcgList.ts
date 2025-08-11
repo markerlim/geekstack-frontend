@@ -86,9 +86,9 @@ export const fullTcgList: TCGListItem[] = [
   {
     img: "/images/homeRBbtn.webp",
     alt: "Riftbound League Of Legends",
-    path: `/${TCGTYPE.RIFTBOUND}`,
+    path: `/`,
     icon: "/images/homeRBbtn.webp",
-    tcg: TCGTYPE.RIFTBOUND,
+    tcg: "ritfboundlol" as TCGTYPE, // Placeholder for Riftbound
   },
   {
     img: "/images/homeGCGbtn.webp",
@@ -122,8 +122,8 @@ export const fullTcgList: TCGListItem[] = [
   {
     img: "/images/homePTCGPbtn.jpg",
     alt: "Pokemon",
-    path: `/${TCGTYPE.PKMNPOCKET}`,
+    path: `/`,
     icon: "/images/homePTCGPbtn.jpg",
-    tcg: TCGTYPE.PKMNPOCKET,
+    tcg: "ptcgpocket" as TCGTYPE, // Placeholder for Pokemon Pocket TCG
   },
 ];

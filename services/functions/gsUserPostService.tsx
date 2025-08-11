@@ -25,7 +25,6 @@ export async function fetchUserPost(page: number, limit: number) {
     throw new Error(`Failed to fetch userpost`);
   }
   const rawData = await res.json();
-  console.log(rawData);
   return rawData;
 }
 
@@ -69,7 +68,6 @@ export async function fetchUserPostByListing(page: number, limit: number) {
  */
 export async function userMakePost(post: DeckPost) {
   const response = await apiClient.post(`/userpost/post`, post);
-  console.log(response);
   return {
     message: response.data.message,
   };
@@ -82,7 +80,6 @@ export async function userMakePost(post: DeckPost) {
  */
 export async function userDeletePost(postId: string) {
   const response = await apiClient.delete(`/userpost/delete/${postId}`);
-  console.log(response);
   return {
     message: response.data.message,
   };
@@ -105,7 +102,6 @@ export async function userDeleteComment(postId: string, commentId: string) {
   const response = await apiClient.delete(
     `/userpost/comment/${postId}/delete/${commentId}`
   );
-  console.log(response);
   return {
     commentId: response.data.comment,
     message: response.data.message,

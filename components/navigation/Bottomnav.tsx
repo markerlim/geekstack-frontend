@@ -8,8 +8,8 @@ const bottoms = [
   { src: "/icons/bottomnav/HomeSelected.svg", alt: "Home", path: "/" },
   {
     src: "/icons/bottomnav/DecklibrarySelected.svg",
-    alt: "DeckCreation",
-    path: "/postdeck",
+    alt: "Deck Library",
+    path: "/decklib",
   },
   {
     src: "/icons/bottomnav/DeckcreateSelected.svg",

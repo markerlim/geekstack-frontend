@@ -1,12 +1,31 @@
-// user.store.ts
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { auth } from "../../utils/firebase";
-import { onAuthStateChanged, User, signOut as firebaseSignOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  User,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
 import { initUser } from "../functions/gsUserDetailsService";
 import { gsMongoUser, gsSQLUser } from "../../model/user.model";
+import { Deck } from "../../model/deck.model";
+import { TCGTYPE } from "../../utils/constants";
 
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
+
+type DeckCategory = keyof Omit<gsMongoUser, "userId">;
+
+const EMPTY_DECKS: readonly Deck[] = Object.freeze([]);
+
+const deckFieldMap: Record<TCGTYPE, keyof Omit<gsMongoUser, "userId">> = {
+  [TCGTYPE.UNIONARENA]: "uadecks",
+  [TCGTYPE.ONEPIECE]: "opdecks",
+  [TCGTYPE.COOKIERUN]: "crbdecks",
+  [TCGTYPE.DUELMASTERS]: "dmdecks",
+  [TCGTYPE.DRAGONBALLZFW]: "dbzfwdecks",
+  [TCGTYPE.GUNDAM]: "gcgdecks",
+  [TCGTYPE.HOLOLIVE]: "hocgdecks",
+};
 
 interface UserStore {
   currentUser: User | null;
@@ -15,9 +34,32 @@ interface UserStore {
   loading: boolean;
   error: string | null;
   _lastUpdated: number | null;
+
+  // Existing actions
   initializeUserStore: () => Promise<void>;
   clearUserStore: () => void;
-  signOut: () => Promise<void>; // Added signOut method
+  signOut: () => Promise<void>;
+
+  // gsMongoUser actions
+  updateMongoUser: (updates: Partial<gsMongoUser>) => void;
+
+  // Deck management actions
+  addDeckToCategory: (category: DeckCategory, deck: Deck) => void;
+  removeDeckFromCategory: (category: DeckCategory, deckId: string) => void;
+  updateDeckInCategory: (
+    category: DeckCategory,
+    deckId: string,
+    updates: Partial<Deck>
+  ) => void;
+  setDecksForCategory: (category: DeckCategory, decks: Deck[]) => void;
+  clearDecksForCategory: (category: DeckCategory) => void;
+
+  // Getter helpers
+  getDecksByCategory: (category: string) => Deck[];
+  getAllDecks: () => Deck[];
+  getDeckById: (
+    deckId: string
+  ) => { deck: Deck; category: DeckCategory } | null;
 }
 
 export const useUserStore = create<UserStore>()(
@@ -32,25 +74,27 @@ export const useUserStore = create<UserStore>()(
 
       initializeUserStore: async () => {
         const { loading, _lastUpdated } = get();
-        
-        if (loading || (_lastUpdated && Date.now() - _lastUpdated < CACHE_DURATION)) {
+
+        if (
+          loading ||
+          (_lastUpdated && Date.now() - _lastUpdated < CACHE_DURATION)
+        ) {
           return;
         }
-        
+
         const user = auth.currentUser;
-        console.log(user)
-        
+
         if (!user) {
           get().clearUserStore();
           return;
         }
 
         set({ loading: true, error: null });
-        
+
         try {
-          console.log("<<<<<<<<<<INIT>>>>>>>>>>")
+          console.log("<<<<<<<<<<INIT>>>>>>>>>>");
           const response = await initUser();
-          
+
           set({
             currentUser: user,
             mongoUser: response.gsMongoUser,
@@ -59,16 +103,15 @@ export const useUserStore = create<UserStore>()(
             _lastUpdated: Date.now(),
           });
         } catch (error) {
-          set({ 
-            error: error instanceof Error ? error.message : 'Unknown error',
+          set({
+            error: error instanceof Error ? error.message : "Unknown error",
             loading: false,
-            _lastUpdated: null
+            _lastUpdated: null,
           });
         }
       },
 
       clearUserStore: () => {
-        // This will be persisted to localStorage automatically
         set({
           currentUser: null,
           mongoUser: null,
@@ -79,24 +122,154 @@ export const useUserStore = create<UserStore>()(
         });
       },
 
-      // New signOut method that properly clears everything
       signOut: async () => {
         try {
           set({ loading: true });
           await firebaseSignOut(auth);
           get().clearUserStore();
-          
+
           // Manually clear the persisted data
-          localStorage.removeItem('user-storage');
+          localStorage.removeItem("user-storage");
         } catch (error) {
-          set({ 
-            error: error instanceof Error ? error.message : 'Logout failed',
-            loading: false
+          set({
+            error: error instanceof Error ? error.message : "Logout failed",
+            loading: false,
           });
         } finally {
           set({ loading: false });
         }
-      }
+      },
+
+      // gsMongoUser actions
+      updateMongoUser: (updates: Partial<gsMongoUser>) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: { ...mongoUser, ...updates },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      // Deck management actions
+      addDeckToCategory: (category: DeckCategory, deck: Deck) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: {
+            ...mongoUser,
+            [category]: [...mongoUser[category], deck],
+          },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      removeDeckFromCategory: (category: DeckCategory, deckId: string) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: {
+            ...mongoUser,
+            [category]: mongoUser[category].filter(
+              (deck) => deck.deckuid !== deckId
+            ),
+          },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      updateDeckInCategory: (
+        category: DeckCategory,
+        deckId: string,
+        updates: Partial<Deck>
+      ) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: {
+            ...mongoUser,
+            [category]: mongoUser[category].map((deck) =>
+              deck.deckuid === deckId ? { ...deck, ...updates } : deck
+            ),
+          },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      setDecksForCategory: (category: DeckCategory, decks: Deck[]) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: {
+            ...mongoUser,
+            [category]: decks,
+          },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      clearDecksForCategory: (category: DeckCategory) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return;
+
+        set({
+          mongoUser: {
+            ...mongoUser,
+            [category]: [],
+          },
+          _lastUpdated: Date.now(),
+        });
+      },
+
+      // Getter helpers
+      getDecksByCategory: (category: string) => {
+        const { mongoUser } = get();
+        const deckField = deckFieldMap[category];
+        return mongoUser?.[deckField] || EMPTY_DECKS;
+      },
+
+      getAllDecks: () => {
+        const { mongoUser } = get();
+        if (!mongoUser) return [];
+
+        return [
+          ...mongoUser.crbdecks,
+          ...mongoUser.uadecks,
+          ...mongoUser.opdecks,
+          ...mongoUser.dbzfwdecks,
+          ...mongoUser.dmdecks,
+          ...mongoUser.gcgdecks,
+          ...mongoUser.hocgdecks,
+        ];
+      },
+
+      getDeckById: (deckId: string) => {
+        const { mongoUser } = get();
+        if (!mongoUser) return null;
+
+        const categories: DeckCategory[] = [
+          "crbdecks",
+          "uadecks",
+          "opdecks",
+          "dbzfwdecks",
+          "dmdecks",
+          "gcgdecks",
+          "hocgdecks",
+        ];
+
+        for (const category of categories) {
+          const deck = mongoUser[category].find((d) => d.deckuid === deckId);
+          if (deck) {
+            return { deck, category };
+          }
+        }
+
+        return null;
+      },
     }),
     {
       name: "user-storage",
@@ -108,7 +281,11 @@ export const useUserStore = create<UserStore>()(
         _lastUpdated: state._lastUpdated,
       }),
       onRehydrateStorage: () => (state) => {
-        if (state && state._lastUpdated && Date.now() - state._lastUpdated > CACHE_DURATION) {
+        if (
+          state &&
+          state._lastUpdated &&
+          Date.now() - state._lastUpdated > CACHE_DURATION
+        ) {
           state.clearUserStore();
         }
       },
@@ -121,7 +298,6 @@ let unsubscribe: () => void;
 
 if (typeof window !== "undefined") {
   unsubscribe = onAuthStateChanged(auth, () => {
-    console.log("test")
     useUserStore.getState().initializeUserStore();
   });
 

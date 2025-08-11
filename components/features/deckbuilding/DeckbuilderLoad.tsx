@@ -8,7 +8,7 @@ import { deleteDeck } from "../../../services/functions/gsDeckbuildingFunctions"
 
 interface DeckbuilderLoadProps {
   tcg: string;
-  decks: Deck[];
+  decks: readonly Deck[];
   onClose: () => void;
   onSelectedDeck: (deck: Deck) => void;
   isOpen: boolean;
@@ -27,7 +27,7 @@ const DeckbuilderLoad = ({
   const filteredDecks = useMemo(() => {
     return decks.filter(
       (deck) =>
-        deck.deckname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        deck.deckname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         deck.listofcards?.some((card) =>
           card.cardName?.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -38,19 +38,19 @@ const DeckbuilderLoad = ({
     onSelectedDeck(deck);
     setCardlist(deck.listofcards);
     onClose();
-    console.log("deck selected");
   };
 
-const handleDeleteDeck = async (e: React.MouseEvent, deckuid: string) => {
-    e.stopPropagation(); 
+  const handleDeleteDeck = async (e: React.MouseEvent, deckuid: string) => {
+    e.stopPropagation();
     try {
-        const response = await deleteDeck(tcg, deckuid);
-        console.log('Deletion successful:', response);
-        onClose();
+      const response = await deleteDeck(tcg, deckuid);
+      console.log("Deletion successful:", response);
+      onClose();
     } catch (error) {
-        console.error('Failed to delete deck:', error);
+      console.error("Failed to delete deck:", error);
     }
-};
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -102,7 +102,10 @@ const handleDeleteDeck = async (e: React.MouseEvent, deckuid: string) => {
                       <h3>{deck.deckname}</h3>
                       <div className={styles.deckInfoFunc}>
                         <Share />
-                        <Trash2 className={styles.delete} onClick={(e)=>handleDeleteDeck(e,deck.deckuid)}/>
+                        <Trash2
+                          className={styles.delete}
+                          onClick={(e) => handleDeleteDeck(e, deck.deckuid)}
+                        />
                       </div>
                     </div>
                   </motion.div>

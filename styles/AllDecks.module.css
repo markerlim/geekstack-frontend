@@ -1,0 +1,76 @@
+.deckItem {
+  background: var(--gs-bgcolor-one);
+  overflow-x: auto;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 20px);
+  padding-left: 10px;
+    padding-right: 10px;
+  gap: 10px;
+}
+
+.deckCategory{
+  color: var(--gs-fontcolor-one);
+  padding:10px;
+}
+
+.deckItem img {
+  width: 100px;
+  height: auto;
+  object-fit: cover;
+  object-position: 0% 10%;
+}
+
+.deckLibrary {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 20px;
+  height: calc(100% - 20px);
+}
+
+.deckCategoryContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 20px);
+  padding-bottom: 10px;
+  padding-top: 10px;
+  overflow-y:auto;
+}
+
+/* Add these to your existing CSS */
+.categorySelect {
+  background: var(--gs-bgcolor-one);
+  color: var(--gs-fontcolor-one);
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+.searchInput {
+  background: var(--gs-bgcolor-one);
+  color: var(--gs-fontcolor-one);
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.noDecks {
+  color: var(--gs-fontcolor-one);
+  padding: 10px;
+  text-align: center;
+}
+.deckCategory{
+  height: 30px;
+}
+/* Ensure the dropdown and search input match your existing style */
+.deckCategory select, 
+.deckCategory input {
+  margin-bottom: 15px;
+}

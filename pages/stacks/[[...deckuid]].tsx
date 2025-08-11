@@ -8,10 +8,8 @@ const StacksPage = () => {
   const router = useRouter();
   const { deckuid } = router.query;
   const [deckUid, setDeckUid] = useState("");
-  const device = useDevice();
-  const isDesktop = device === "desktop";
 
-  const handleSetTypeChange = (newDeckUid: string | null) => {
+  const handleSetTypeChange = (newDeckUid: string) => {
     setDeckUid(newDeckUid);
     if (!newDeckUid) {
       router.push(`/stacks`, undefined, { shallow: true });

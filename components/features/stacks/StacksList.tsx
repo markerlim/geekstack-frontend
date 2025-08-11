@@ -17,7 +17,8 @@ import { formatFirstLetterCap } from "../../../utils/FormatText";
 
 const StacksList = () => {
   const device = useDevice();
-  const [tcg, setTcg] = useState(TCGTYPE.ALL);
+  const all = "all" as TCGTYPE
+  const [tcg, setTcg] = useState(all);
   const [leftColumn, setLeftColumn] = useState<DeckPost[]>([]);
   const [rightColumn, setRightColumn] = useState<DeckPost[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -97,7 +98,7 @@ const StacksList = () => {
     try {
       // Immediately fetch new posts
       const posts =
-        tcgItem === TCGTYPE.ALL
+        tcgItem === all
           ? await fetchUserPost(0, POSTS_PER_PAGE)
           : await fetchUserPostByType(tcgItem, 0, POSTS_PER_PAGE);
 
@@ -192,7 +193,7 @@ const StacksList = () => {
         }}
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
       >
-        <div className={`${TCGTYPE.ALL === tcg && styles['active']}`} onClick={() => handleSelectTCG(TCGTYPE.ALL)}>
+        <div className={`${all === tcg && styles['active']}`} onClick={() => handleSelectTCG(all)}>
           All
         </div>
         {tcgList.map((tcgItem) => (

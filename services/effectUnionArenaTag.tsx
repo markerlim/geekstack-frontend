@@ -28,6 +28,7 @@ const tagsToIcons: { [key: string]: string } = {
   '[On Block]': '/icons/UAtags/CTOnBlock.png',
   '[When Blocking]': '/icons/UAtags/CTWhenBlocking.png',
   '[Activate Main]': '/icons/UAtags/CTActivateMain.png',
+  '[Activate: Main]': '/icons/UAtags/CTActivateMain.png',
   '[When Attacking]': '/icons/UAtags/CTWhenAttacking.png',
   '[Your Turn]': '/icons/UAtags/CTYourTurn.png',
   "[Opponent's Turn]": '/icons/UAtags/CTOppTurn.png',

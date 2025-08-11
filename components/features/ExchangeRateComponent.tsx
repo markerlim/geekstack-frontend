@@ -1,8 +1,8 @@
-import { useState } from "react";
 import styles from "../../styles/IndexPage.module.css";
+import { useAppStore } from "../../services/store/store";
 
 const ExchangeRate = () => {
-  const [exchangeRate] = useState(106.54);
+  const exchangeRate = useAppStore((state) => state.exchangeRate);
 
   return (
     <div className={styles["additional-content"]}>
@@ -10,7 +10,7 @@ const ExchangeRate = () => {
       <div className={styles["exchange-rate-container"]}>
         <span className={styles.currency}>1 SGD</span>
         <span className={styles.equals}>=</span>
-        <span className={styles.value}>{exchangeRate.toFixed(2)}</span>
+        <span className={styles.value}>{exchangeRate?.toFixed(2)}</span>
         <span className={styles.currency}>JPY</span>
       </div>
       <div className={styles["additional-sub-header"]}>

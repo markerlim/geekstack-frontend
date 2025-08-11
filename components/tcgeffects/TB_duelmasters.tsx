@@ -1,13 +1,14 @@
-import { CardOnePiece } from "../../model/card.model";
+import { DuelmastersCard } from "../../model/card.model";
 import EffectWithIcons from "../../services/effectUnionArenaTag";
 import styles from "../../styles/EffectTable.module.css";
 
-export interface TBOnePieceProps {
-  card: CardOnePiece;
+export interface TBDuelmasterProps {
+  card: DuelmastersCard;
 }
-const TB_Onepiece = ({ card }: TBOnePieceProps) => {
+
+const TB_Duelmasters = ({ card }: TBDuelmasterProps) => {
   const normalizedEffect = card.effects.replace(/\\n/g, "\n");
-  const effectLines = normalizedEffect.split(/\r?\n|;|<br\s*\/?>/i).filter(Boolean);
+  const effectLines = normalizedEffect.split(/\r?\n|;/).filter(Boolean);
   return (
     <div className={styles['lower-table']}>
       <div className={styles["card-name"]}>{card.cardName}</div>
@@ -26,20 +27,10 @@ const TB_Onepiece = ({ card }: TBOnePieceProps) => {
             </td>
           </tr>
           <tr className={styles.spacer}></tr>
-          <tr>
-            <th className={styles["tb-header"]}>Trigger</th>
-          </tr>
-          <tr>
-            <td className={styles["tb-info"]}>
-                <p>
-                  {card.trigger}
-                </p>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
   );
 };
 
-export default TB_Onepiece;
+export default TB_Duelmasters;

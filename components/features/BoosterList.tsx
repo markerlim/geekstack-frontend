@@ -9,7 +9,7 @@ import { useDevice } from "../../contexts/DeviceContext";
 
 const BoosterList = () => {
   const deviceType = useDevice();
-  const isDesktop = deviceType === 'desktop'
+  const isDesktop = deviceType === "desktop";
   const { tcg } = useRouter().query;
   const getCleanBasePath = () => {
     const router = useRouter();
@@ -24,11 +24,11 @@ const BoosterList = () => {
 
   const basePath = getCleanBasePath();
 
-  const imageClass =
-    isDesktop ? styles.imageDesktop : styles.imageMobile;
+  const imageClass = isDesktop ? styles.imageDesktop : styles.imageMobile;
 
-  const boosterClass =
-    isDesktop ? styles['booster-list-desktop'] : styles['booster-list-others'];
+  const boosterClass = isDesktop
+    ? styles["booster-list-desktop"]
+    : styles["booster-list-others"];
 
   const [showCategoryBtn, setShowCategoryBtn] = useState(false);
   const [category, setCategory] = useState("expansion");
@@ -39,6 +39,7 @@ const BoosterList = () => {
     TCGTYPE.ONEPIECE,
     TCGTYPE.COOKIERUN,
     TCGTYPE.DUELMASTERS,
+    TCGTYPE.DRAGONBALLZFW,
     TCGTYPE.GUNDAM,
   ];
 
@@ -47,8 +48,7 @@ const BoosterList = () => {
     console.log(value);
   };
 
-  const hasExtraCategory =
-    tcg === TCGTYPE.ONEPIECE;
+  const hasExtraCategory = tcg === TCGTYPE.ONEPIECE || tcg === TCGTYPE.DRAGONBALLZFW;
 
   const filteredBoosters = boosters.filter((booster) => {
     if (!category) return true;
@@ -74,7 +74,7 @@ const BoosterList = () => {
   }, [tcg]);
 
   return (
-    <div className={styles['booster-container']}>
+    <div className={styles["booster-container"]}>
       {showCategoryBtn ? (
         <div className={styles.categoryHolder}>
           <div

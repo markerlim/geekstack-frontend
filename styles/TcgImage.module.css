@@ -71,6 +71,10 @@
   gap: 10px;
   width: 100%;
 }
+.upper-eff-table img{
+  border-radius: 10px;
+  border: var(--gs-border);
+}
 
 .closeBtn {
   width: 100%;

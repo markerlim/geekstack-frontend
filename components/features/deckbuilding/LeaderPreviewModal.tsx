@@ -12,7 +12,7 @@ const LeaderPreviewModal = ({ card, onClose }) => {
           <h3>{card.cardName}</h3>
           <p>{card.effects}</p>
         </div>
-        <button className={styles.closeButton} onClick={onClose}>
+        <button title="close button" className={styles.closeButton} onClick={onClose}>
           <X/>
         </button>
       </div>

@@ -15,17 +15,6 @@ interface PostingStackProps {
   onClose: () => void;
 }
 
-const deckFieldMap: Record<string, string> = {
-  [TCGTYPE.UNIONARENA]: "uadecks",
-  [TCGTYPE.ONEPIECE]: "opdecks",
-  [TCGTYPE.COOKIERUN]: "crbdecks",
-  [TCGTYPE.DUELMASTERS]: "dmdecks",
-  [TCGTYPE.DRAGONBALLZFW]: "dbzfwdecks",
-  [TCGTYPE.GUNDAM]: "gcgdecks",
-  [TCGTYPE.RIFTBOUND]: "riftdecks",
-  [TCGTYPE.PKMNPOCKET]: "pkdecks",
-  [TCGTYPE.HOLOLIVE]: "holodecks",
-};
 
 const PostingStack = ({ onClose }: PostingStackProps) => {
   const [deckType, setDeckType] = useState(TCGTYPE.UNIONARENA);
@@ -33,8 +22,9 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   const [selectedPostCover, setSelectedPostCover] = useState<string | null>(
     null
   );
-  const { mongoUser, sqlUser } = useUserStore();
-  const listofdecks: Deck[] = mongoUser?.[deckFieldMap[deckType]] || [];
+  const { sqlUser, getDecksByCategory} = useUserStore();
+  const listofdecks = getDecksByCategory(deckType);
+
 
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
@@ -44,6 +34,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     headline: "",
     content: "",
   });
+
   const [errors, setErrors] = useState({
     headline: "",
     content: "",
@@ -71,13 +62,18 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const handlePosting = (deck: Deck) => {
+  const handlePosting = (deck: Deck | null) => {
+
+    if (!deck) {
+      console.error("No deck selected for posting");
+      return;}
+      
     const postObject: DeckPost = {
       postType: deckType,
-      userId: mongoUser?.userId || "", // Assuming uid is available
+      userId: sqlUser?.userId || "", // Assuming uid is available
       deckName: deck.deckname || "Untitled Deck",
       isTournamentDeck: false, // Set this based on your logic
-      selectedCards: [{ imageSrc: selectedPostCover }],
+      selectedCards: [{ imageSrc: selectedPostCover || ""}],
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
         imageSrc: card.urlimage,
@@ -136,6 +132,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       <div className={styles["deck-type-selector"]}>
         {Object.values(TCGTYPE).map((type) => (
           <button
+          key={type}
             title="setting deck type"
             className={`${styles["type-btn"]} ${
               deckType === type ? styles["active"] : ""

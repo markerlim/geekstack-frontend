@@ -18,6 +18,8 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [initialGame, setInitialGame] = useState(tcgList[0]); // State for dynamic game
+  const [authChecked, setAuthChecked] = useState(false);
+
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const navigateTo = (path: string) => {
@@ -42,6 +44,11 @@ const Navbar = () => {
     setInitialGame(matchedGame || tcgList[0]);
     console.log("Matched Game: ", matchedGame);
   }, [router.asPath]);
+
+  useEffect(() => {
+    // When sqlUser is loaded (either user object or null), mark auth as checked
+    setAuthChecked(true);
+  }, [sqlUser]);
 
   return (
     <nav className={styles.navbar}>
@@ -69,7 +76,9 @@ const Navbar = () => {
         )}
       </div>
       <div className={styles.login}>
-        {sqlUser ? (
+        {!authChecked ? (
+          <div className={styles.loading}>Loading...</div>
+        ) : sqlUser ? (
           <>
             <div
               className={styles["avatar-container"]}
@@ -112,14 +121,12 @@ const Navbar = () => {
             )}
           </>
         ) : (
-          <>
-            <button
-              className={styles.loginBtn}
-              onClick={() => setLoginOpen(true)}
-            >
-              LOGIN
-            </button>
-          </>
+          <button
+            className={styles.loginBtn}
+            onClick={() => setLoginOpen(true)}
+          >
+            LOGIN
+          </button>
         )}
         {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
       </div>

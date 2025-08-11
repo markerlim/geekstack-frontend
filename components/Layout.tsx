@@ -15,7 +15,7 @@ type Props = {
 const Layout = ({ scrollable = true, children, title = "GeekStack" }: Props) => {
   const deviceType = useDevice();
   const router = useRouter();
-const hideNavbarPaths = ["/deckbuilder", "/stacks"];
+const hideNavbarPaths = ["/deckbuilder", "/stacks", "/decklib"];
 const shouldHideNavbar = 
   deviceType !== "desktop" && 
   hideNavbarPaths.some(path => router.pathname.includes(path));

@@ -38,3 +38,14 @@ export async function initUser(): Promise<InitUserResponse> {
     };
   }
 }
+
+/**
+ * Fetches exchange rate from the backend
+ * @param base - Base currency (default: 'SGD')
+ * @param symbol - Target currency (default: 'JPY')
+ */
+export function getExcRate(base = 'SGD', symbol = 'JPY'): Promise<string> {
+  return apiClient.get(`${getApiBaseUrl()}/user/getExcRate`, {
+    params: { base, symbol }
+  }).then(response => response.data);
+}

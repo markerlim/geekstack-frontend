@@ -1,17 +1,11 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import SearchResModal from "../components/features/search/SearchResModal";
-import Link from "next/link";
-import Image from "next/image";
 import Layout from "../components/Layout";
 import SearchBar from "../components/SearchBar";
 import styles from "../styles/IndexPage.module.css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { tcgList } from "../data/tcgList";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import ExchangeRate from "../components/features/ExchangeRateComponent";
 import { useDevice } from "../contexts/DeviceContext";
 import { useSearchCards } from "../contexts/SearchContext";
 import SearchContainer from "../components/features/search/SearchContainer";
