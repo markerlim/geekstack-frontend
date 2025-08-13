@@ -4,7 +4,7 @@ interface ErrorProps {
   statusCode?: number;
 }
 
-export default function ErrorPage({ statusCode = 404 }: ErrorProps) {
+const ErrorPage = ({ statusCode = 404 }: ErrorProps) => {
   return (
     <div style={{ textAlign: 'center', padding: '4rem' }}>
       <h1>{statusCode}</h1>
@@ -16,3 +16,5 @@ export default function ErrorPage({ statusCode = 404 }: ErrorProps) {
     </div>
   );
 }
+
+export default ErrorPage;
