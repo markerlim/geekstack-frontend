@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { useDeck } from "../../../contexts/DeckContext";
 
+export const runtime = 'experimental-edge';
+
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
   const { tcg, setType } = router.query;

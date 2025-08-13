@@ -34,7 +34,7 @@ const DeckbuilderLoad = ({
     );
   }, [decks, searchTerm]);
 
-  const handleDeckSelect = (deck) => {
+  const handleDeckSelect = (deck : Deck) => {
     onSelectedDeck(deck);
     setCardlist(deck.listofcards);
     onClose();

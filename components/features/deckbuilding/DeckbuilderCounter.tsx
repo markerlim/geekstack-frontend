@@ -2,8 +2,12 @@ import { CircleMinus, CirclePlus } from "lucide-react";
 import { useDevice } from "../../../contexts/DeviceContext";
 import styles from "../../../styles/DeckbuilderCounter.module.css";
 import { useDeck } from "../../../contexts/DeckContext";
+import { GameCard } from "../../../model/card.model";
 
-const DeckbuilderCounter = ({card}) => {
+interface DeckbuilderCounterProps {
+  card: GameCard
+}
+const DeckbuilderCounter = ({card}:DeckbuilderCounterProps) => {
   const device = useDevice();
   const { addCard, removeCard, getCardCount} = useDeck();
 

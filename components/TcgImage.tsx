@@ -1,9 +1,10 @@
 import { useDevice } from "../contexts/DeviceContext";
 import styles from "../styles/TcgImage.module.css";
+import { TCGTYPE } from "../utils/constants";
 
 interface TcgImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   card: any;
-  tcgtype: string;
+  tcgtype: TCGTYPE;
 }
 
 const TcgImage = ({ card, tcgtype, ...imgProps }: TcgImageProps) => {

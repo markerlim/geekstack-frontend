@@ -15,16 +15,13 @@ interface PostingStackProps {
   onClose: () => void;
 }
 
-
 const PostingStack = ({ onClose }: PostingStackProps) => {
   const [deckType, setDeckType] = useState(TCGTYPE.UNIONARENA);
   const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
-  const [selectedPostCover, setSelectedPostCover] = useState<string | null>(
-    null
-  );
-  const { sqlUser, getDecksByCategory} = useUserStore();
-  const listofdecks = getDecksByCategory(deckType);
+  const [selectedPostCover, setSelectedPostCover] = useState<string>("");
 
+  const { sqlUser, getDecksByCategory } = useUserStore();
+  const listofdecks = getDecksByCategory(deckType);
 
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
@@ -63,17 +60,17 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   };
 
   const handlePosting = (deck: Deck | null) => {
-
     if (!deck) {
       console.error("No deck selected for posting");
-      return;}
-      
+      return;
+    }
+
     const postObject: DeckPost = {
       postType: deckType,
       userId: sqlUser?.userId || "", // Assuming uid is available
       deckName: deck.deckname || "Untitled Deck",
       isTournamentDeck: false, // Set this based on your logic
-      selectedCards: [{ imageSrc: selectedPostCover || ""}],
+      selectedCards: [{ imageSrc: selectedPostCover || "" }],
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
         imageSrc: card.urlimage,
@@ -100,7 +97,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       });
   };
 
-  const handlePostCover = (coverurl) => {
+  const handlePostCover = (coverurl: string) => {
     setSelectedPostCover(coverurl);
   };
 
@@ -132,7 +129,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       <div className={styles["deck-type-selector"]}>
         {Object.values(TCGTYPE).map((type) => (
           <button
-          key={type}
+            key={type}
             title="setting deck type"
             className={`${styles["type-btn"]} ${
               deckType === type ? styles["active"] : ""
@@ -148,7 +145,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
           modules={[Navigation]}
           spaceBetween={15}
           slidesPerView={"auto"}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSwiper={(swiper:any) => (swiperRef.current = swiper)}
           className={styles["swiper-container"]}
           slidesOffsetBefore={30}
           slidesOffsetAfter={30}

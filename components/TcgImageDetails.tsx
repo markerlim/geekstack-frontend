@@ -9,8 +9,8 @@ import TB_Onepiece from "./tcgeffects/TB_onepiece";
 import RTB_Gundam from "./tcgeffects/RTB_gundam";
 import TB_Gundam from "./tcgeffects/TB_gundam";
 import { useSwipeable } from "react-swipeable";
-import RTB_Duelmaster from "./tcgeffects/RTB_duelmaster";
 import TB_Duelmasters from "./tcgeffects/TB_duelmasters";
+import RTB_Duelmasters from "./tcgeffects/RTB_duelmasters";
 
 interface CardModalProps {
   card: any;
@@ -35,14 +35,14 @@ const TcgImageDetails = ({
     string,
     React.FC<{
       card: any;
-      onNext?: (e) => void;
-      onPrev?: (e) => void;
+      onNext?: () => void;
+      onPrev?: () => void;
     }>
   > = {
     [TCGTYPE.UNIONARENA]: RTB_UnionArena,
     [TCGTYPE.ONEPIECE]: RTB_Onepiece,
     [TCGTYPE.GUNDAM]: RTB_Gundam,
-    [TCGTYPE.DUELMASTERS]: RTB_Duelmaster,
+    [TCGTYPE.DUELMASTERS]: RTB_Duelmasters,
   };
 
   const TBComponentsMap: Record<string, React.FC<{ card: any }>> = {

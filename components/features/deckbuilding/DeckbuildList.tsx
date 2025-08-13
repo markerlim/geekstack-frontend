@@ -23,7 +23,7 @@ const DeckbuildList = () => {
   const userId = sqlUser?.userId || "";
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
-  const tcgType = Array.isArray(tcg) ? tcg[0] : tcg || TCGTYPE.UNIONARENA;
+  const tcgType = (Array.isArray(tcg) ? tcg[0] : tcg || TCGTYPE.UNIONARENA) as TCGTYPE;
 
   const handleCardClick = (card: GameCard) => {
     setCurrentCard(card);

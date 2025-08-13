@@ -1,17 +1,21 @@
+import { CardUnionArena } from "../../../../model/card.model";
 import styles from "../../../../styles/Stats.module.css";
+import { GameCardStatsProps } from "../DeckbuilderStats";
 
-const UnionArenaStats = ({ cardlist }) => {
+const UnionArenaStats = ({ cardlist }: GameCardStatsProps) => {
   const maxTotal = 50;
   const maxCopy = 4;
-  const energyCounts = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
+  type EnergyKey = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8+";
+
+  const energyCounts: Record<EnergyKey, number> = {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8+": 0,
   };
 
@@ -23,13 +27,12 @@ const UnionArenaStats = ({ cardlist }) => {
   };
 
   cardlist.forEach((card) => {
-    const { count, triggerState, energycost } = card;
+    const { count, triggerState, energycost } = card as CardUnionArena;
     const normalizedType = triggerState?.toLowerCase() || "";
-
     statsCounts.total += count;
 
     if (energycost >= 0 && energycost <= 7) {
-      energyCounts[energycost] += card.count;
+      energyCounts[energycost.toString() as EnergyKey] += card.count;
     } else if (energycost >= 8) {
       energyCounts["8+"] += card.count;
     }

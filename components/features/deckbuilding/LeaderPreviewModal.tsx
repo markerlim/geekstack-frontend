@@ -1,7 +1,13 @@
 import { X } from "lucide-react";
 import styles from "../../../styles/LeaderPreviewModal.module.css";
+import { CardDragonBallZFW, CardOnePiece, GameCard } from "../../../model/card.model";
 
-const LeaderPreviewModal = ({ card, onClose }) => {
+interface LeaderPreviewModalProps {
+  card: CardOnePiece | CardDragonBallZFW;
+  onClose: () => void;
+}
+
+const LeaderPreviewModal = ({ card, onClose }:LeaderPreviewModalProps) => {
   return (
     <div className={styles.previewOverlay} onClick={onClose}>
       <div

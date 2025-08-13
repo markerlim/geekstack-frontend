@@ -226,10 +226,10 @@ export const useUserStore = create<UserStore>()(
       },
 
       // Getter helpers
-      getDecksByCategory: (category: string) => {
+      getDecksByCategory: (category: string): Deck[] => {
         const { mongoUser } = get();
-        const deckField = deckFieldMap[category];
-        return mongoUser?.[deckField] || EMPTY_DECKS;
+        const deckField = deckFieldMap[category as TCGTYPE];
+        return [...(mongoUser?.[deckField] || EMPTY_DECKS)];
       },
 
       getAllDecks: () => {

@@ -36,7 +36,7 @@ const HomeContent = () => {
           modules={[Navigation]}
           spaceBetween={15}
           slidesPerView={"auto"}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSwiper={(swiper:any) => (swiperRef.current = swiper)}
           className={styles.swiperContainer}
         >
           {tcgList.map((tcg, index) => (

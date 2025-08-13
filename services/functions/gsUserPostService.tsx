@@ -117,7 +117,7 @@ export async function userLikePost(postId: string, posterId: string) {
       message: response.data?.message || 'Liked successfully', // Optional message
       success: response.status >= 200 && response.status < 300 // Status-based success
     };
-  } catch (error) {
+  } catch (error:any) {
     return {
       message: error.response?.data?.message || 'Failed to like post',
       success: false
@@ -134,7 +134,7 @@ export async function userUnlikePost(postId: string) {
       message: response.data?.message || 'Unliked successfully',
       success: response.status >= 200 && response.status < 300
     };
-  } catch (error) {
+  } catch (error:any) {
     return {
       message: error.response?.data?.message || 'Failed to unlike post',
       success: false

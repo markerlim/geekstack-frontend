@@ -11,6 +11,7 @@ import { useDevice } from "../../contexts/DeviceContext";
 import cardNavEvent from "../../services/eventBus/cardNavEvent";
 import TcgImageDetails from "../TcgImageDetails";
 import TcgImage from "../TcgImage";
+import { TCGTYPE } from "../../utils/constants";
 
 const CardList = () => {
   const router = useRouter();
@@ -183,7 +184,7 @@ const CardList = () => {
             <TcgImage
               src={card.urlimage}
               alt={card.cardName}
-              tcgtype={Array.isArray(tcg) ? tcg[0] : tcg}
+              tcgtype={(Array.isArray(tcg) ? tcg[0] : tcg) as TCGTYPE}
               card={card}
               onClick={() => handleCardClick(card)}
             />

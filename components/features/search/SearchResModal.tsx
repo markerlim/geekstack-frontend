@@ -6,8 +6,13 @@ import TcgImageDetails from "../../TcgImageDetails";
 import { GameCard } from "../../../model/card.model";
 import { useState } from "react";
 import cardNavEvent from "../../../services/eventBus/cardNavEvent";
+import { TCGTYPE } from "../../../utils/constants";
 
-const SearchResModal = ({onClose}) => {
+interface SearchResModalProps {
+  onClose: () => void;
+} 
+
+const SearchResModal = ({onClose}:SearchResModalProps) => {
   const { searchResults, searchTerm } = useSearchCards();
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
@@ -38,7 +43,7 @@ const SearchResModal = ({onClose}) => {
           <div key={card._id}>
             <TcgImage
               card={card}
-              tcgtype={card.tcg}
+              tcgtype={card.tcg as TCGTYPE}
               src={card.urlimage}
               alt={card.cardName}
               onClick={() => handleCardClick(card)}

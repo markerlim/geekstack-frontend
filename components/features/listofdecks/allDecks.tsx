@@ -99,6 +99,7 @@ const AllDecks = () => {
       {/* Category Dropdown - Placed first as requested */}
       <div className={styles.deckCategory}>
         <select
+          title="Select Deck Category"
           value={selectedCategory}
           onChange={(e) =>
             setSelectedCategory(e.target.value as TCGTYPE | "ALL")

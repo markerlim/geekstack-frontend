@@ -1,8 +1,10 @@
+import { CookieRunCard } from "../../../../model/card.model";
 import styles from "../../../../styles/Stats.module.css";
+import { GameCardStatsProps } from "../DeckbuilderStats";
 
-const CookieRunStats = ({ cardlist }) => {
+const CookieRunStats = ({ cardlist }: GameCardStatsProps) => {
   const maxTotal = 50;
-  const energyCounts = {
+  const energyCounts: Record<string, number> = {
     1: 0,
     2: 0,
     3: 0,
@@ -17,7 +19,7 @@ const CookieRunStats = ({ cardlist }) => {
   };
 
   cardlist.forEach((card) => {
-    const { count, cardType, cardLevelTitle } = card;
+    const { count, cardType, cardLevelTitle } = card as CookieRunCard;
     const normalizedType = cardType?.toLowerCase() || "";
 
     statsCounts.total += count;

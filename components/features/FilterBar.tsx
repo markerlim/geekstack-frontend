@@ -29,9 +29,9 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
     [sections]
   );
 
-  const handleChange = (section: FilterSection, value: string) => {
+  const handleChange = (section: FilterSection | undefined, value: string) => {
     try {
-      section.onChange(value || "");
+      section?.onChange(value || "");
     } catch (error) {
       console.error("Change failed:", error);
     }

@@ -17,7 +17,6 @@ interface StacksComponentProps {
 
 const StacksComponent = ({ post }: StacksComponentProps) => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-
   const sqlUser = useUserStore((state) => state.sqlUser);
   const isOwner = sqlUser?.userId === post.userId;
   const [isLiked, setIsLiked] = useState(
@@ -30,57 +29,68 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     );
   }, [post.listoflikes, sqlUser?.userId]);
 
-const handleLike = async (e: React.MouseEvent) => {
-  e.stopPropagation();
-  
-  if (!sqlUser?.userId) return; // Guard clause if no user
-  
-  const previousState = isLiked;
-  setIsLiked(!previousState); // Optimistic update
-  
-  try {
-    let success: boolean;
-    
-    if (previousState) {
-      // Unlike the post
-      const response = await userUnlikePost(post.postId);
-      success = response.success;
-    } else {
-      // Like the post
-      const response = await userLikePost(post.postId, sqlUser.userId);
-      success = response.success;
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!sqlUser?.userId) return; // Guard clause if no user
+
+    const previousState = isLiked;
+    setIsLiked(!previousState); // Optimistic update
+
+    if (!post.postId) {
+      console.error("Post ID is missing");
+      return;
     }
-    
-    if (!success) {
-      setIsLiked(previousState); // Revert if API call failed
+    try {
+      let success: boolean;
+
+      if (previousState) {
+        // Unlike the post
+        const response = await userUnlikePost(post.postId);
+        success = response.success;
+      } else {
+        // Like the post
+        const response = await userLikePost(post.postId, sqlUser.userId);
+        success = response.success;
+      }
+
+      if (!success) {
+        setIsLiked(previousState); // Revert if API call failed
+      }
+    } catch (error) {
+      setIsLiked(previousState); // Revert on network error
+      console.error("Error toggling like:", error);
     }
-  } catch (error) {
-    setIsLiked(previousState); // Revert on network error
-    console.error("Error toggling like:", error);
-  }
-};
+  };
   const handleCommentPost = () => {
     console.log("comment clicked");
   };
 
-  const handleSharePost = (e) => {
+  const handleSharePost = (e: any) => {
     e.stopPropagation();
     console.log("share clicked");
   };
 
-const handleDeletingPost = (e: React.MouseEvent, postId: string) => {
-  e.stopPropagation();
-  
-  // Show confirmation dialog
-  if (window.confirm('Are you sure you want to delete this post?')) {
-    // User clicked "OK"
-    userDeletePost(postId);
-    console.log("Post deletion confirmed");
-  } else {
-    // User clicked "Cancel"
-    console.log("Post deletion cancelled");
-  }
-};
+  const handleDeletingPost = (
+    e: React.MouseEvent,
+    postId: string | undefined
+  ) => {
+    e.stopPropagation();
+    if (!postId) {
+      console.error("Post ID is missing for deletion");
+      return;
+    }
+
+    // Show confirmation dialog
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      // User clicked "OK"
+      userDeletePost(postId);
+      console.log("Post deletion confirmed");
+    } else {
+      // User clicked "Cancel"
+      console.log("Post deletion cancelled");
+    }
+  };
 
   return (
     <>

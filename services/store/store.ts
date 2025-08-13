@@ -59,7 +59,7 @@ const createUserSlice = (set: any): UserSlice => ({
     language: "en-US",
   },
   updatePreferences: (prefs) =>
-    set((state) => ({
+    set((state:any) => ({
       preferences: { ...state.preferences, ...prefs },
     })),
 });
@@ -67,7 +67,7 @@ const createUserSlice = (set: any): UserSlice => ({
 const createAppSlice = (set: any): AppSlice => ({
   notifications: [],
   addNotification: (message, type = "info") =>
-    set((state) => ({
+    set((state:any) => ({
       notifications: [
         ...state.notifications,
         { id: Date.now(), message, type, timestamp: new Date() },

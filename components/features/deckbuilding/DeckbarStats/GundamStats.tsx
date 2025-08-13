@@ -1,25 +1,30 @@
+import { GundamCard } from "../../../../model/card.model";
 import styles from "../../../../styles/Stats.module.css";
+import { GameCardStatsProps } from "../DeckbuilderStats";
 
-const GundamStats = ({ cardlist }) => {
+const GundamStats = ({ cardlist }: GameCardStatsProps) => {
   const maxTotal = 50;
 
-  const energyCounts = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
+  type EnergyKey = "0" | "1" | "2" | "3" | "4" | "5+";
+  const energyCounts: Record<EnergyKey, number> = {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
     "5+": 0,
   };
 
-  const levelCounts = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
+  type LevelKey = "0" | "1" | "2" | "3" | "4" | "5+";
+  const levelCounts: Record<LevelKey, number> = {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
     "5+": 0,
   };
-  const statsCounts = { 
+  const statsCounts = {
     pilot: 0,
     command: 0,
     unit: 0,
@@ -29,20 +34,32 @@ const GundamStats = ({ cardlist }) => {
 
   // Count cards for each energy cost
   cardlist.forEach((card) => {
-    statsCounts["total"] += card.count;
-    const cost = card.cost;
-    const level = card.level;
+    const { count, cardType, cost, level } = card as GundamCard;
+    const normalizedType = cardType?.toLowerCase() || "";
 
-    if (cost >= 0 && cost <= 5) {
-      energyCounts[cost] += card.count;
-    } else if (cost >= 6) {
+    statsCounts["total"] += card.count;
+    const parsedCost = parseInt(cost);
+    const parsedLevel = parseInt(level);
+
+    if (parsedCost >= 0 && parsedCost <= 5) {
+      energyCounts[cost as EnergyKey] += card.count;
+    } else if (parsedCost >= 6) {
       energyCounts["5+"] += card.count;
     }
 
-    if (level >= 1 && level <= 4) {
-      levelCounts[level] += card.count;
-    } else if (level >= 5) {
+    if (parsedLevel >= 1 && parsedLevel <= 4) {
+      levelCounts[level as LevelKey] += card.count;
+    } else if (parsedLevel >= 5) {
       levelCounts["5+"] += card.count;
+    }
+
+    switch (normalizedType) {
+      case "pilot":
+      case "command":
+      case "unit":
+      case "base":
+        statsCounts[normalizedType] += count;
+        break;
     }
   });
 

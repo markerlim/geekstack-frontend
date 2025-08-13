@@ -4,12 +4,22 @@ import styles from "../../../styles/DeckbuilderCover.module.css";
 import { fetchOnePieceLeaders } from "../../../services/functions/gsBoosterService";
 import { TCGTYPE } from "../../../utils/constants";
 import LeaderPreviewModal from "./LeaderPreviewModal";
+import { GameCard } from "../../../model/card.model";
 
-const DeckbuilderCover = ({ onCoverSelect, onClose, tcg }) => {
+interface DeckbuilderCoverProps {
+  onCoverSelect: (coverUrl: string) => void;
+  onClose: () => void;
+  tcg: string;
+}
+
+const DeckbuilderCover = ({
+  onCoverSelect,
+  onClose,
+  tcg,
+}: DeckbuilderCoverProps) => {
   const { deckCards } = useDeck();
-  const [listofcards, setListofcards] = useState([]);
+  const [listofcards, setListofcards] = useState<GameCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [previewCard, setPreviewCard] = useState(null); // Track card to preview
@@ -54,7 +64,7 @@ const DeckbuilderCover = ({ onCoverSelect, onClose, tcg }) => {
     onCoverSelect(card.urlimage);
   };
 
-  const handleContextClick = (e, card: any) => {
+  const handleContextClick = (e: any, card: any) => {
     e.preventDefault();
     setPreviewCard(card);
   };

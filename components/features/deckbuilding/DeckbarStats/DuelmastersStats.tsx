@@ -1,17 +1,21 @@
+import { DuelmastersCard } from "../../../../model/card.model";
 import styles from "../../../../styles/Stats.module.css";
+import { GameCardStatsProps } from "../DeckbuilderStats";
 
-const DuelmastersStats = ({ cardlist }) => {
+const DuelmastersStats = ({ cardlist }: GameCardStatsProps) => {
   const maxTotal = 40;
 
-  const energyCounts = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
+  type EnergyKey = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8+";
+
+  const energyCounts: Record<EnergyKey, number> = {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8+": 0,
   };
 
@@ -19,18 +23,16 @@ const DuelmastersStats = ({ cardlist }) => {
     total: 0,
   };
 
-  // Count cards for each energy cost
   cardlist.forEach((card) => {
-        const { count, cost } = card;
+    const { count, cost } = card as DuelmastersCard;
 
     statsCounts.total += count;
 
-    if (cost >= 0 && cost <= 7) {
-      energyCounts[cost] += card.count;
-    } else if (cost >= 8) {
+    if (parseInt(cost) >= 0 && parseInt(cost) <= 7) {
+      energyCounts[cost as EnergyKey] += card.count;
+    } else if (parseInt(cost) >= 8) {
       energyCounts["8+"] += card.count;
     }
-
   });
 
   return (
@@ -50,7 +52,13 @@ const DuelmastersStats = ({ cardlist }) => {
       <div className={styles["extra-stats"]}>
         <div>
           <img src="/icons/TTOTAL.png" alt="total" />
-          <span className={`${maxTotal < statsCounts["total"] && styles['exceeded']}`}>{statsCounts["total"]}</span>
+          <span
+            className={`${
+              maxTotal < statsCounts["total"] && styles["exceeded"]
+            }`}
+          >
+            {statsCounts["total"]}
+          </span>
         </div>
       </div>
     </div>

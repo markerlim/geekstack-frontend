@@ -30,7 +30,7 @@ export async function initUser(): Promise<InitUserResponse> {
       gsMongoUser: response.data.userObject.gsMongoUser,
       gsSQLUser: response.data.userObject.gsSQLUser,
     };
-  } catch (error) {
+  } catch (error:any) {
     return {
       success: false,
       message: error.response?.data?.message || error.message,

@@ -16,7 +16,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
     try {
       await googleSignIn();
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       setLoginError(err.message);
       console.error("Google login failed:", err);
     }
@@ -27,7 +27,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
     try {
       await signIn(email, password);
       onClose();
-    } catch (err) {
+    } catch (err:any) {
       setLoginError(err.message);
       console.error("Email login failed:", err);
     }

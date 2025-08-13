@@ -11,12 +11,14 @@ import { useSearchCards } from "../contexts/SearchContext";
 import SearchContainer from "../components/features/search/SearchContainer";
 import HomeContent from "../components/HomeContent";
 
+export const runtime = 'experimental-edge';
+
 const IndexPage = () => {
-  const { searchResults } = useSearchCards();
+  const { searchTerm } = useSearchCards();
   const [expandedResults, setExpandedResults] = useState(false);
   const device = useDevice();
   const isDesktop = device === "desktop";
-
+  const isSearchActive = searchTerm.trim() !== "";
   const handleSearchResultsClosed = () => {
     setExpandedResults(false);
   };
@@ -38,7 +40,7 @@ const IndexPage = () => {
           </div>
         )}
         {/* Search Results Section */}
-        {searchResults ? (
+        {isSearchActive ? (
           <SearchContainer onOpen={handleSearchCardOpen}/>
         ) : (
           /* Default Homepage Content */

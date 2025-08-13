@@ -5,8 +5,13 @@ import cardNavEvent from "../../../services/eventBus/cardNavEvent";
 import styles from "../../../styles/IndexPage.module.css";
 import TcgImage from "../../TcgImage";
 import TcgImageDetails from "../../TcgImageDetails";
+import { TCGTYPE } from "../../../utils/constants";
 
-const SearchContainer = ({ onOpen }) => {
+interface SearchContainerProps {
+  onOpen: () => void;
+} 
+
+const SearchContainer = ({ onOpen }:SearchContainerProps) => {
   const { searchResults, isLoading } = useSearchCards();
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
@@ -25,13 +30,13 @@ const SearchContainer = ({ onOpen }) => {
       <div className={styles.inlineResults}>
         {isLoading ? (
           <div className={styles.loading}>Searching cards...</div>
-        ) : searchResults.length > 0 ? (
+        ) : searchResults && searchResults.length > 0 ? (
           <>
             {searchResults.slice(0, 5).map((card) => (
               <TcgImage
                 card={card}
                 key={card._id}
-                tcgtype={card.tcg}
+                tcgtype={card.tcg as TCGTYPE}
                 src={card.urlimage}
                 alt={card.cardName}
                 onClick={() => handleCardClick(card)}
@@ -52,7 +57,7 @@ const SearchContainer = ({ onOpen }) => {
         }}
         onClose={handleCloseModal}
       />
-      {searchResults.length > 5 && (
+      {searchResults && searchResults.length > 5 && (
         <button
           title="show more"
           className={styles.showMoreButton}

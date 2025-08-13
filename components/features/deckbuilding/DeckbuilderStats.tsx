@@ -5,8 +5,17 @@ import { TCGTYPE } from "../../../utils/constants";
 import CookieRunStats from "./DeckbarStats/CookieRunStats";
 import DuelmastersStats from "./DeckbarStats/DuelmastersStats";
 import GundamStats from "./DeckbarStats/GundamStats";
+import { GameCard } from "../../../model/card.model";
 
-const DeckbuilderStats = ({ tcg }) => {
+interface DeckbuilderStatsProps {
+  tcg: string;
+}
+
+export interface GameCardStatsProps {
+  cardlist: GameCard[];
+}
+
+const DeckbuilderStats = ({ tcg }:DeckbuilderStatsProps) => {
   const { cardlist } = useDeck();
 
   const renderStatsComponent = () => {

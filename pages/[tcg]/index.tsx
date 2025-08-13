@@ -6,31 +6,35 @@ import { useState } from "react";
 import SearchContainer from "../../components/features/search/SearchContainer";
 import SearchResModal from "../../components/features/search/SearchResModal";
 
+export const runtime = "experimental-edge";
+
 const BoosterListPage = () => {
   const { tcg } = useRouter().query;
-   const { searchResults } = useSearchCards();
-    const [expandedResults, setExpandedResults] = useState(false);
-  
-    const handleSearchResultsClosed = () => {
-      setExpandedResults(false);
-    };
-  
-    const handleSearchCardOpen = () => {
-      setExpandedResults(true);
-    };
-  
+  const { searchTerm } = useSearchCards();
+  const [expandedResults, setExpandedResults] = useState(false);
+  const isSearchActive = searchTerm.trim() !== "";
+
+  const handleSearchResultsClosed = () => {
+    setExpandedResults(false);
+  };
+
+  const handleSearchCardOpen = () => {
+    setExpandedResults(true);
+  };
+
   return (
-    <Layout title={`${tcg?.toString().toUpperCase()} Boosters`} scrollable={false}>
-      {searchResults ? (
+    <Layout
+      title={`${tcg?.toString().toUpperCase()} Boosters`}
+      scrollable={false}
+    >
+      {isSearchActive ? (
         <SearchContainer onOpen={handleSearchCardOpen} />
       ) : (
         <BoosterList />
       )}
       {expandedResults && (
-          <SearchResModal
-            onClose={handleSearchResultsClosed}
-          />
-        )}
+        <SearchResModal onClose={handleSearchResultsClosed} />
+      )}
     </Layout>
   );
 };

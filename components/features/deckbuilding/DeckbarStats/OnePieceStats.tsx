@@ -1,17 +1,21 @@
+import { CardOnePiece } from "../../../../model/card.model";
 import styles from "../../../../styles/Stats.module.css";
+import { GameCardStatsProps } from "../DeckbuilderStats";
 
-const OnePieceStats = ({ cardlist }) => {
+const OnePieceStats = ({ cardlist }: GameCardStatsProps) => {
   const maxTotal = 50;
 
-  const energyCounts = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
+  type LifecostKey = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8+";
+
+  const lifecostCounts: Record<LifecostKey, number> = {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
     "8+": 0,
   };
 
@@ -23,14 +27,15 @@ const OnePieceStats = ({ cardlist }) => {
   };
 
   cardlist.forEach((card) => {
-    const { count, category, lifecost } = card;
+    const { count, category, lifecost } = card as CardOnePiece;
     const normalizedType = category?.toLowerCase() || "";
+    const parsedLifecost = parseInt(lifecost);
 
     statsCounts.total += count;
-    if (lifecost >= 0 && lifecost <= 7) {
-      energyCounts[lifecost] += card.count;
-    } else if (lifecost >= 8) {
-      energyCounts["8+"] += card.count;
+    if (parsedLifecost >= 0 && parsedLifecost <= 7) {
+      lifecostCounts[lifecost as LifecostKey] += card.count;
+    } else if (parsedLifecost >= 8) {
+      lifecostCounts["8+"] += card.count;
     }
 
     switch (normalizedType) {
@@ -44,7 +49,7 @@ const OnePieceStats = ({ cardlist }) => {
 
   return (
     <div className={styles["cost-grid"]}>
-      {Object.entries(energyCounts).map(([cost, count]) => (
+      {Object.entries(lifecostCounts).map(([cost, count]) => (
         <div key={cost} className={styles["cost-item"]}>
           <div className={styles["cost-count"]}>{count}</div>
           <div className={styles["cost-bar-container"]}>

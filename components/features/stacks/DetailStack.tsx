@@ -5,10 +5,7 @@ import {
   MoveUp,
   Share2,
 } from "lucide-react";
-import {
-  DeckPost,
-  SubmitComment,
-} from "../../../model/deckpost.model";
+import { DeckPost, SubmitComment } from "../../../model/deckpost.model";
 import styles from "../../../styles/DetailStack.module.css";
 import { formatTimeAgo, formatTimestamp } from "../../../utils/FormatDate";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,9 +43,9 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
   };
 
   const cardlist = postDetails.listofcards;
-  const userId = sqlUser.userId;
+  const userId = sqlUser?.userId;
   const posteePic = postDetails.displaypic;
-  const posteeName = postDetails.name;
+  const posteeName = postDetails.name || "No Name";
 
   const emojiList = ["😀", "😂", "😍", "🔥", "👍", "💯", "🥳", "🤔", "🎉"];
 
@@ -64,13 +61,13 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
     try {
       const commentForSubmit: SubmitComment = {
         comment: commentText,
-        postId: postDetails.postId,
+        postId: postDetails.postId || "NO_POST_ID",
         posterId: postDetails.userId,
       };
 
       const commentRes = await userCommentPost(commentForSubmit);
-      commentRes.displaypic = sqlUser.displaypic;
-      commentRes.name = sqlUser.name;
+      commentRes.displaypic = sqlUser?.displaypic || "No Display Pic";
+      commentRes.name = sqlUser?.name || "No Name";
       commentList.push(commentRes);
       setCommentText("");
       setIsCommenting(false);
@@ -83,12 +80,12 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
   };
 
   const deleteComment = async (postId: string, commentId: string) => {
+    if (!(postId == "NO_POST_ID") || commentId == "NO_COMMENT_ID") return;
     try {
       await userDeleteComment(postId, commentId);
       setCommentList((prev) => prev.filter((c) => c.commentId !== commentId));
     } catch (error) {
       console.error("Delete failed:", error);
-      // Optionally show error to user
     }
   };
 
@@ -151,7 +148,10 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
                         <code
                           className={styles["delete-comment"]}
                           onClick={() =>
-                            deleteComment(postDetails.postId, comment.commentId)
+                            deleteComment(
+                              postDetails.postId || "NO_POST_ID",
+                              comment.commentId || "NO_COMMENT_ID"
+                            )
                           }
                         >
                           DELETE

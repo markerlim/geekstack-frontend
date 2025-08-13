@@ -1,6 +1,8 @@
 import AllDecks from "../../components/features/listofdecks/allDecks";
 import Layout from "../../components/Layout";
 
+export const runtime = 'experimental-edge';
+
 const DeckLib = () => {
     
   return (
