@@ -21,7 +21,6 @@ const titillium = Titillium_Web({
   variable: "--font-titillium", // This matches your CSS var
 });
 
-export const runtime = 'experimental-edge';
 
 function MyApp({
   Component,

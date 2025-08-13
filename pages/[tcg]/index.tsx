@@ -6,8 +6,6 @@ import { useState } from "react";
 import SearchContainer from "../../components/features/search/SearchContainer";
 import SearchResModal from "../../components/features/search/SearchResModal";
 
-export const runtime = "experimental-edge";
-
 const BoosterListPage = () => {
   const { tcg } = useRouter().query;
   const { searchTerm } = useSearchCards();
