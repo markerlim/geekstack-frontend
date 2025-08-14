@@ -80,8 +80,8 @@ const GundamStats = ({ cardlist }: GameCardStatsProps) => {
       <div className={styles["extra-stats"]}>
         {Object.entries(levelCounts).map(([cost, count]) => (
           <div>
-            <span>LV.{cost}</span>
-            <span>{count}</span>
+            <code>LV.{cost}</code>
+            <code>{count}</code>
           </div>
         ))}
       </div>
@@ -97,19 +97,19 @@ const GundamStats = ({ cardlist }: GameCardStatsProps) => {
           </span>
         </div>
         <div>
-          <span>pilot</span>
+          <code>Pilot</code>
           <span>{statsCounts["pilot"]}</span>
         </div>
         <div>
-          <span>command</span>
+          <code>Command</code>
           <span>{statsCounts["command"]}</span>
         </div>
         <div>
-          <span>unit</span>
+          <code>Unit</code>
           <span>{statsCounts["unit"]}</span>
         </div>
         <div>
-          <span>base</span>
+          <code>Base</code>
           <span>{statsCounts["base"]}</span>
         </div>
       </div>

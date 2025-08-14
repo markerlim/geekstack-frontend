@@ -6,7 +6,7 @@
   background: var(--gs-bgcolor-one);
   display: flex;
   justify-content: space-around;
-  padding: 12px 0;
+  align-items: center;
   border-top: var(--gs-border);
   z-index: 1000;
 }
@@ -32,7 +32,7 @@
 
 .cardGameOption {
   position: fixed;
-  bottom: calc(var(--bottom-nav-height) + 25px);/**/
+  bottom: calc(var(--bottom-nav-height) + 1px);/**/
   left: 0;
   right: 0;
   height: 60px;

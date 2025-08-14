@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../../styles/EffectTable.module.css";
 import { DuelmastersCard } from "../../model/card.model";
 import { useDualCardSide } from "./useDualToggle";
+import { useState } from "react";
 
 interface RTBProps {
   card: DuelmastersCard;
@@ -11,7 +12,12 @@ interface RTBProps {
 
 const RTB_Duelmasters = ({ card, onNext, onPrev }: RTBProps) => {
   const { showSecondSide, toggleSide } = useDualCardSide();
+  const [effectShow, setEffectShow] = useState(false);
 
+  const handleEffectToggle = () => {
+    setEffectShow(!effectShow);
+    toggleSide();
+  };
   const dualCard = card.cardName2 != null && card.cardName2 !== "";
   console.log("RTB_Duelmasters card:", card);
 
@@ -48,10 +54,10 @@ const RTB_Duelmasters = ({ card, onNext, onPrev }: RTBProps) => {
       {dualCard && (
         <div
           className={styles["dual-toggle"]}
-          onClick={toggleSide}
+          onClick={handleEffectToggle}
           style={{ cursor: "pointer", userSelect: "none" }}
         >
-          DUAL
+          {effectShow ? <>BOTTOM</>:<>TOP</>}
         </div>
       )}
       <div>Report error</div>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../../styles/DeckbuilderPage.module.css";
 import Layout from "../../../components/Layout";
 import CardList from "../../../components/features/CardList";
@@ -13,18 +13,33 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useDeck } from "../../../contexts/DeckContext";
+import { useUserStore } from "../../../services/store/user.store";
+import { Deck } from "../../../model/deck.model";
 
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
   const { tcg, setType } = router.query;
+  const { getDeckById } = useUserStore();
   const device = useDevice();
   const isDesktop = device === "desktop";
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentSetType, setCurrentSetType] = useState<string | null>(null);
   const [contentVisible, setContentVisible] = useState(false);
-  const { clearList, cardlist } = useDeck();
+  const { clearList, cardlist, setCardlist } = useDeck();
   const [confirmedTcg, setConfirmedTcg] = useState(tcg);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const deckuid = router.query.deckuid as string; // UUID from query params
+  useEffect(() => {
+    if (deckuid) {
+      const deck = getDeckById(deckuid)?.deck;
+      const currentCards = deck?.listofcards;
+
+      if (currentCards) {
+        setCardlist(currentCards);
+      }
+    }
+  }, []);
 
   // Initialize setType
   useEffect(() => {
@@ -79,7 +94,6 @@ const DeckbuilderBoosterPage = () => {
                 <ChevronUp width={30} height={30} />
               </button>
             </div>
-
 
             {/* Sliding content area */}
             <div

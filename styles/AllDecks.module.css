@@ -6,13 +6,26 @@
   flex-direction: row;
   width: calc(100% - 20px);
   padding-left: 10px;
-    padding-right: 10px;
+  padding-right: 10px;
   gap: 10px;
 }
 
-.deckCategory{
+.deckCategory {
   color: var(--gs-fontcolor-one);
-  padding:10px;
+  padding: 5px 15px 0px 10px;
+  align-items: center;
+  display: flex;
+  align-content: center;
+}
+
+.deckCategory:nth-child(2) {
+  border-top: var(--gs-border);
+  height: fit-content;
+}
+.deckCategory:nth-child(3) {
+  padding-bottom: 10px;
+    height: fit-content;
+
 }
 
 .deckItem img {
@@ -27,8 +40,7 @@
   flex-direction: column;
   overflow: hidden;
   width: 100%;
-  padding-bottom: 20px;
-  height: calc(100% - 20px);
+  height: 100%;
 }
 
 .deckCategoryContainer {
@@ -38,27 +50,39 @@
   height: calc(100% - 20px);
   padding-bottom: 10px;
   padding-top: 10px;
-  overflow-y:auto;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Add these to your existing CSS */
 .categorySelect {
   background: var(--gs-bgcolor-one);
   color: var(--gs-fontcolor-one);
-  border: none;
+  border: var(--gs-border);
+  border-radius: 10px;
   padding: 10px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   width: 100%;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .searchInput {
-  background: var(--gs-bgcolor-one);
+  background: var(--gs-bgcolor-two);
   color: var(--gs-fontcolor-one);
-  border: none;
+  border: var(--gs-border);
+  border-radius: 10px;
   padding: 10px;
-  font-size: 1rem;
-  width: 100%;
+  font-size: 0.7rem;
+    margin-top: 5px;
+  width: calc(100% - 20px);
 }
 
 .noDecks {
@@ -66,11 +90,6 @@
   padding: 10px;
   text-align: center;
 }
-.deckCategory{
+.deckCategory {
   height: 30px;
-}
-/* Ensure the dropdown and search input match your existing style */
-.deckCategory select, 
-.deckCategory input {
-  margin-bottom: 15px;
 }

@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "../../../services/store/user.store";
 import { TCGTYPE } from "../../../utils/constants";
 import styles from "../../../styles/AllDecks.module.css";
+import { useRouter } from "next/router";
 
 const AllDecks = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<TCGTYPE | "ALL">(
     "ALL"
@@ -11,6 +14,13 @@ const AllDecks = () => {
   const deckCategories = Object.values(TCGTYPE);
   const { getDecksByCategory } = useUserStore();
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return <div className={styles.loading}>Loading decks...</div>;
+  }
   // Get filtered decks for display
   const getDisplayDecks = () => {
     const decks =
@@ -23,14 +33,17 @@ const AllDecks = () => {
       .filter((deck) => deck.deckname.toLowerCase().includes(searchTerm));
   };
 
+  const handleDeckSelect = (tcg: string, deckuid: string) => {
+    router.push(`/deckbuilder/${tcg}?deckuid=${deckuid}`);
+  };
+
   const displayDecks = getDisplayDecks();
+  console.log("AllDecks displayDecks:", displayDecks);
 
   return (
     <div className={styles.deckLibrary}>
-      {/* Decks Display */}
       <div className={styles.deckCategoryContainer}>
         {selectedCategory === "ALL" ? (
-          /* Show all categories with their decks */
           deckCategories.map((category) => {
             const decks = getDecksByCategory(category)
               .filter((deck) => deck && deck.deckname)
@@ -48,6 +61,9 @@ const AllDecks = () => {
                 <div className={styles.deckItem}>
                   {decks.map((deck) => (
                     <img
+                      onClick={() =>
+                        handleDeckSelect(category, deck.deckuid)
+                      }
                       key={deck.deckuid}
                       src={deck.deckcover}
                       alt={deck.deckname}
@@ -58,11 +74,13 @@ const AllDecks = () => {
             );
           })
         ) : (
-          /* Show decks for selected category */
           <div className={styles.deckItem}>
             {displayDecks.length > 0 ? (
               displayDecks.map((deck) => (
                 <img
+                  onClick={() =>
+                    handleDeckSelect(selectedCategory, deck.deckuid)
+                  }
                   key={deck.deckuid}
                   src={deck.deckcover}
                   alt={deck.deckname}
@@ -78,7 +96,6 @@ const AllDecks = () => {
           </div>
         )}
       </div>
-      {/* Show message if no decks in any category when viewing ALL */}
       {selectedCategory === "ALL" &&
         deckCategories.every(
           (category) =>
@@ -95,8 +112,6 @@ const AllDecks = () => {
               </p>
             )
         )}
-
-      {/* Category Dropdown - Placed first as requested */}
       <div className={styles.deckCategory}>
         <select
           title="Select Deck Category"
@@ -114,8 +129,6 @@ const AllDecks = () => {
           ))}
         </select>
       </div>
-
-      {/* Search Bar - Placed below dropdown as requested */}
       <div className={styles.deckCategory}>
         <input
           type="text"

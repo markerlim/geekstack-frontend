@@ -11,8 +11,6 @@ import { useSearchCards } from "../contexts/SearchContext";
 import SearchContainer from "../components/features/search/SearchContainer";
 import HomeContent from "../components/HomeContent";
 
-export const runtime = 'experimental-edge';
-
 const IndexPage = () => {
   const { searchTerm } = useSearchCards();
   const [expandedResults, setExpandedResults] = useState(false);
