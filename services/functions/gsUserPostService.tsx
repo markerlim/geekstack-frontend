@@ -29,6 +29,37 @@ export async function fetchUserPost(page: number, limit: number) {
 }
 
 /**
+ * This functions return a Single post by the postId
+ * @param postId
+ * @returns
+ */
+export async function fetchUserPostById(postId: string): Promise<{
+  data?: DeckPost;
+  error?: string;
+}> {
+  try {
+    const res = await fetch(`${getApiBaseUrl()}/userpost/findpost/${postId}`);
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      const errorMessage = errorData.message || `Failed to fetch post (Status: ${res.status})`;
+      return { error: errorMessage };
+    }
+
+    const rawData = await res.json();
+
+    if (!rawData || !rawData.postId) {
+      return { error: "Invalid post data structure received" };
+    }
+
+    return { data: rawData as DeckPost };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error occurred";
+    return { error: `Failed to fetch post ${postId}: ${message}` };
+  }
+}
+
+/**
  * This function returns the user posts with parameters to limit and paginate
  * @param page
  * @param limit
@@ -63,8 +94,8 @@ export async function fetchUserPostByListing(page: number, limit: number) {
 
 /**
  * Ths function is used to create a user post
- * @param post 
- * @returns 
+ * @param post
+ * @returns
  */
 export async function userMakePost(post: DeckPost) {
   const response = await apiClient.post(`/userpost/post`, post);
@@ -75,8 +106,8 @@ export async function userMakePost(post: DeckPost) {
 
 /**
  * This function is used to delete post by postId
- * @param postId 
- * @returns 
+ * @param postId
+ * @returns
  */
 export async function userDeletePost(postId: string) {
   const response = await apiClient.delete(`/userpost/delete/${postId}`);
@@ -87,8 +118,8 @@ export async function userDeletePost(postId: string) {
 
 /**
  * This function allows user to comment on a post
- * @param payload 
- * @returns 
+ * @param payload
+ * @returns
  */
 export async function userCommentPost(payload: SubmitComment) {
   const response = await apiClient.post<CommentResponse>(
@@ -114,30 +145,28 @@ export async function userLikePost(postId: string, posterId: string) {
       `/userpost/like/${postId}/postedby/${posterId}`
     );
     return {
-      message: response.data?.message || 'Liked successfully', // Optional message
-      success: response.status >= 200 && response.status < 300 // Status-based success
+      message: response.data?.message || "Liked successfully", // Optional message
+      success: response.status >= 200 && response.status < 300, // Status-based success
     };
-  } catch (error:any) {
+  } catch (error: any) {
     return {
-      message: error.response?.data?.message || 'Failed to like post',
-      success: false
+      message: error.response?.data?.message || "Failed to like post",
+      success: false,
     };
   }
 }
 
 export async function userUnlikePost(postId: string) {
   try {
-    const response = await apiClient.delete(
-      `/userpost/unlike/${postId}`
-    );
+    const response = await apiClient.delete(`/userpost/unlike/${postId}`);
     return {
-      message: response.data?.message || 'Unliked successfully',
-      success: response.status >= 200 && response.status < 300
+      message: response.data?.message || "Unliked successfully",
+      success: response.status >= 200 && response.status < 300,
     };
-  } catch (error:any) {
+  } catch (error: any) {
     return {
-      message: error.response?.data?.message || 'Failed to unlike post',
-      success: false
+      message: error.response?.data?.message || "Failed to unlike post",
+      success: false,
     };
   }
 }

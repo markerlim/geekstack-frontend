@@ -4,7 +4,8 @@ import { auth } from './firebase';
 import { getApiBaseUrl } from './apiBase';
 
 const apiClient = axios.create({
-  baseURL: getApiBaseUrl()
+  baseURL: getApiBaseUrl(),
+  withCredentials: true // Add this line
 });
 
 apiClient.interceptors.request.use(
@@ -14,23 +15,19 @@ apiClient.interceptors.request.use(
       return config;
     }
 
-    const user = auth.currentUser;
+    // Wait for auth to initialize on refresh
+    await auth.authStateReady(); // <-- Key addition
     
-    if (!user) {
-      return config;
-    }
+    const user = auth.currentUser;
+    if (!user) return config;
 
     try {
       const token = await user.getIdToken();
       config.headers.Authorization = `Bearer ${token}`;
-      config.headers.Accept ='application/json';
-      config.headers['Content-Type'] ='application/json';
-      config.headers['X-Requested-With'] = 'XMLHttpRequest';
-      console.log(config)
       return config;
     } catch (error) {
-      console.error('Error getting auth token:', error);
-      return Promise.reject(error);
+      console.error('Token error:', error);
+      return config; // Continue request without token rather than failing
     }
   },
   (error) => Promise.reject(error)

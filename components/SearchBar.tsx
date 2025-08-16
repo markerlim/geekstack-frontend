@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Search, ChevronDown, X } from 'lucide-react';
 import styles from '../styles/Searchbar.module.css';
 import { TCGListItem } from '../data/tcgList';

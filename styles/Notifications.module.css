@@ -1,0 +1,127 @@
+.notificationsContainer {
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--gs-bgcolor-two);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.notificationsHeader {
+  padding: 16px;
+  background: var(--gs-bgcolor-two);
+  border-bottom: var(--gs-border);
+  color: white;
+}
+
+.notificationsHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.notificationsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+
+.component {
+  max-height: calc(70vh - 62.5px);
+}
+
+.nonComponent{
+    height: calc(100vh - var(--bottom-nav-height) - 62.5px);
+}
+
+.notificationItem {
+  padding: 16px;
+  border-bottom: var(--gs-border);
+  transition: background 0.2s ease;
+}
+
+.notificationItem:hover {
+  background: var(--gs-bgcolor-one);
+}
+
+.notificationItem.unread {
+  background: var(--gs-bgcolor-one);
+}
+
+.notificationContent {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.notificationDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.senderName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gs-fontcolor-three);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  color: #666;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.message {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 4px 0 0;
+  line-height: 1.4;
+}
+
+.postReference {
+  font-size: 0.75rem;
+  color: var(--gs-color-primary);
+  margin-top: 8px;
+}
+
+.unreadIndicator {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--gs-color-primary);
+  border-radius: 50%;
+}
+
+.loading,
+.emptyState {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+}
+
+.error {
+  padding: 16px;
+  text-align: center;
+  color: var(--gs-color-secondary);
+}

@@ -20,5 +20,24 @@
   overflow-y: hidden;
 }
 .mainContent {
+  position:relative;
   flex: 1;
+}
+
+.searchOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.searchComponentHolder {
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+  height: 100%;
+  background: var(--gs-bgcolor-three);
 }

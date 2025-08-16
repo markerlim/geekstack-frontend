@@ -150,7 +150,6 @@ import { TCGTYPE } from "../../../utils/constants";
           onSelectedDeck={handleSelectedDeck}
           onClose={handleDeckLoaderClose}
         />
-        <code className={styles.test}>[{tcg}]</code>
       </div>
     );
   };

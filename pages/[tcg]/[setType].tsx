@@ -8,29 +8,11 @@ import SearchResModal from "../../components/features/search/SearchResModal";
 
 const BoosterCardsPage = () => {
   const { setType } = useRouter().query;
-  const { searchResults } = useSearchCards();
-  const [expandedResults, setExpandedResults] = useState(false);
 
-  const handleSearchResultsClosed = () => {
-    setExpandedResults(false);
-  };
-
-  const handleSearchCardOpen = () => {
-    setExpandedResults(true);
-  };
 
   return (
     <Layout title={`${setType?.toString().toUpperCase()} Cards`} scrollable={false}>
-      {searchResults ? (
-        <SearchContainer onOpen={handleSearchCardOpen} />
-      ) : (
         <CardList />
-      )}
-      {expandedResults && (
-          <SearchResModal
-            onClose={handleSearchResultsClosed}
-          />
-        )}
     </Layout>
   );
 };

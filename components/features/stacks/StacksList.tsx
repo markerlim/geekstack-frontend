@@ -207,7 +207,7 @@ const StacksList = () => {
         ref={containerRef}
         initial={{ marginTop: -1 }}
         animate={{
-          marginTop: isFilterVisible ? -1 : -55, // Adjust this value to match your filter height
+          marginTop: isFilterVisible ? -1 : -65, // Adjust this value to match your filter height
         }}
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
       >

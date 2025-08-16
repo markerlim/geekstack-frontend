@@ -12,7 +12,7 @@ interface SearchContainerProps {
 } 
 
 const SearchContainer = ({ onOpen }:SearchContainerProps) => {
-  const { searchResults, isLoading } = useSearchCards();
+  const { searchResults, isLoading, searchTerm } = useSearchCards();
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
   const handleCardClick = (card: GameCard) => {
@@ -44,7 +44,7 @@ const SearchContainer = ({ onOpen }:SearchContainerProps) => {
             ))}
           </>
         ) : (
-          <p className={styles.noResults}>No cards found</p>
+          <p className={styles.noResults}>{searchTerm ? <>No cards found</>:<>Please input a search entry</>}</p>
         )}
       </div>
 
