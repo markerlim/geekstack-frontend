@@ -67,7 +67,9 @@ const TcgImageDetails = ({
 
   const RTBComponent = RTBComponentsMap[tcgtype] || null;
   const TBComponent = TBComponentsMap[tcgtype] || null;
-  const isCookieRun = initialIsCookieRun ?? tcgtype === TCGTYPE.COOKIERUN;
+  const allowedTypes = [TCGTYPE.COOKIERUN, TCGTYPE.DRAGONBALLZFW];
+
+  const showImageOnly = initialIsCookieRun ?? allowedTypes.includes(tcgtype as TCGTYPE);
 
   return (
     <AnimatePresence>
@@ -82,7 +84,7 @@ const TcgImageDetails = ({
             onClick={onClose}
           />
         )}
-        {isCookieRun ? (
+        {showImageOnly ? (
           <div className={styles.cookieRunModalContainer}>
             <motion.div
               className={styles.cookieRunModal}
@@ -114,7 +116,7 @@ const TcgImageDetails = ({
               const swipeThreshold = 50;
               if (info.offset.y > swipeThreshold) onClose();
             }}
-              {...swipeHandlers} 
+            {...swipeHandlers}
           >
             <div className={styles.puller} />
             {card && (

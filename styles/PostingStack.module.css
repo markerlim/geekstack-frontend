@@ -303,6 +303,10 @@
   resize: vertical;
 }
 
+.error-message{
+  color: var(--gs-color-secondary);
+}
+
 /* Placeholder styling */
 .form-input::placeholder,
 .form-textarea::placeholder {
