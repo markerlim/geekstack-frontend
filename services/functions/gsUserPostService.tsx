@@ -42,7 +42,8 @@ export async function fetchUserPostById(postId: string): Promise<{
 
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
-      const errorMessage = errorData.message || `Failed to fetch post (Status: ${res.status})`;
+      const errorMessage =
+        errorData.message || `Failed to fetch post (Status: ${res.status})`;
       return { error: errorMessage };
     }
 
@@ -54,7 +55,8 @@ export async function fetchUserPostById(postId: string): Promise<{
 
     return { data: rawData as DeckPost };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error occurred";
+    const message =
+      error instanceof Error ? error.message : "Unknown error occurred";
     return { error: `Failed to fetch post ${postId}: ${message}` };
   }
 }
@@ -166,6 +168,41 @@ export async function userUnlikePost(postId: string) {
   } catch (error: any) {
     return {
       message: error.response?.data?.message || "Failed to unlike post",
+      success: false,
+    };
+  }
+}
+
+/**
+ * Reporting of cards with errors
+ * @param cardUid 
+ * @param userId 
+ * @param errorMsg 
+ * @returns 
+ */
+export async function userReportError(
+  cardUid: string,
+  userId: string,
+  errorMsg: string
+) {
+  let userid = "NO_USER_ID";
+  if (userId){
+    userid = userId;
+  }
+  const payload = {
+    "cardUid": cardUid,
+    "userId": userid,
+    "errorMsg": errorMsg,
+  };
+  try {
+    const response = await apiClient.post("/user/report-error", payload);
+    return {
+      message: response.data?.message || "Error reported successfully",
+      success: response.status >= 200 && response.status < 300,
+    };
+  } catch (error: any) {
+    return {
+      message: error.response?.data?.message || "Failed to report error",
       success: false,
     };
   }

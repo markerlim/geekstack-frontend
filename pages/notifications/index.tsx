@@ -4,7 +4,7 @@ import Layout from "../../components/Layout";
 const DeckLib = () => {
     
   return (
-    <Layout title="Deck Library | GeekStack"  scrollable={false}>
+    <Layout title="Notifications | GeekStack"  scrollable={false}>
       <ListOfNotifications isComponent={false}/>
     </Layout>
   );

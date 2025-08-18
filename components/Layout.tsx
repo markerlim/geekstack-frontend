@@ -28,6 +28,7 @@ const Layout = ({
     "/stacks",
     "/decklib",
     "/notifications",
+    "/account"
   ];
 
   const { isOpen, closeSearch } = useSearchState();

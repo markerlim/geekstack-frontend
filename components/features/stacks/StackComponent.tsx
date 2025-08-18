@@ -10,6 +10,8 @@ import {
   userLikePost,
   userUnlikePost,
 } from "../../../services/functions/gsUserPostService";
+import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
+import ShareContent from "./ShareContent";
 
 interface StacksComponentProps {
   post: DeckPost;
@@ -17,60 +19,76 @@ interface StacksComponentProps {
 
 const StacksComponent = ({ post }: StacksComponentProps) => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [postUrl, setPostUrl] = useState("");
   const sqlUser = useUserStore((state) => state.sqlUser);
   const isOwner = sqlUser?.userId === post.userId;
   const [isLiked, setIsLiked] = useState(
     sqlUser?.userId ? post.listoflikes.includes(sqlUser.userId) : false
   );
 
+  // Set initial liked state based on post likes and current user
   useEffect(() => {
     setIsLiked(
       sqlUser?.userId ? post.listoflikes.includes(sqlUser.userId) : false
     );
   }, [post.listoflikes, sqlUser?.userId]);
 
-  const handleLike = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (!sqlUser?.userId) return; // Guard clause if no user
+  // Handle api call and state update for liking a post
+  const handleLike = async (e?: React.MouseEvent) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    if (!sqlUser?.userId || !post.postId) return;
 
     const previousState = isLiked;
-    setIsLiked(!previousState); // Optimistic update
+    setIsLiked(true); // Optimistic update
 
-    if (!post.postId) {
-      console.error("Post ID is missing");
-      return;
-    }
     try {
-      let success: boolean;
-
-      if (previousState) {
-        // Unlike the post
-        const response = await userUnlikePost(post.postId);
-        success = response.success;
+      const response = await userLikePost(post.postId, sqlUser.userId);
+      if (response.success) {
       } else {
-        // Like the post
-        const response = await userLikePost(post.postId, sqlUser.userId);
-        success = response.success;
-      }
-
-      if (!success) {
-        setIsLiked(previousState); // Revert if API call failed
+        setIsLiked(previousState);
       }
     } catch (error) {
-      setIsLiked(previousState); // Revert on network error
-      console.error("Error toggling like:", error);
+      setIsLiked(previousState);
+      console.error("Error liking post:", error);
     }
   };
+
+  // Handle api call and state update for unliking a post
+  const handleUnlike = async (e?: React.MouseEvent) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    if (!sqlUser?.userId || !post.postId) return;
+
+    const previousState = isLiked;
+    setIsLiked(false);
+
+    try {
+      const response = await userUnlikePost(post.postId);
+      if (response.success) {
+      } else {
+        setIsLiked(previousState);
+      }
+    } catch (error) {
+      setIsLiked(previousState);
+      console.error("Error unliking post:", error);
+    }
+  };
+
   const handleCommentPost = () => {
     console.log("comment clicked");
   };
 
-  const handleSharePost = (e: any) => {
-    e.stopPropagation();
-    console.log("share clicked");
+  const handleSharePost = (e?: React.MouseEvent) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    setPostUrl(
+      `${window.location.origin}/stacks/${post.postId}`
+    );
+    setIsShareOpen(true);
   };
 
+
+
+  // Handle post deletion api call
   const handleDeletingPost = (
     e: React.MouseEvent,
     postId: string | undefined
@@ -85,12 +103,43 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       // User clicked "OK"
       userDeletePost(postId);
-      console.log("Post deletion confirmed");
+      detailStackEvent.emit("post:deleted");
     } else {
       // User clicked "Cancel"
       console.log("Post deletion cancelled");
     }
   };
+
+  // Event listener for liking and unliking posts from detail stack
+  useEffect(() => {
+    const handleExternalLike = (eventPostId: string, userId: string) => {
+      if (eventPostId === post.postId && userId === sqlUser?.userId) {
+        handleLike({} as React.MouseEvent);
+      }
+    };
+
+    const handleExternalUnlike = (eventPostId: string, userId: string) => {
+      if (eventPostId === post.postId && userId === sqlUser?.userId) {
+        handleUnlike({} as React.MouseEvent);
+      }
+    };
+
+    const handleExternalShare = (eventPostId: string) => {
+      if (eventPostId === post.postId) {
+        handleSharePost({} as React.MouseEvent);
+      }
+    };
+
+    detailStackEvent.on("post:liked", handleExternalLike);
+    detailStackEvent.on("post:unliked", handleExternalUnlike);
+    detailStackEvent.on("post:share", handleExternalShare);
+
+    return () => {
+      detailStackEvent.off("post:liked", handleExternalLike);
+      detailStackEvent.off("post:unliked", handleExternalUnlike);
+      detailStackEvent.off("post:share", handleExternalShare);
+    };
+  }, [post.postId, sqlUser?.userId]);
 
   return (
     <>
@@ -113,7 +162,7 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
             <div className={styles["stacks-component-functions"]}>
               <div>
                 <Heart
-                  onClick={handleLike}
+                  onClick={isLiked ? handleUnlike : handleLike}
                   fill={isLiked ? "var(--gs-color-secondary)" : "none"}
                   stroke={
                     isLiked ? "var(--gs-color-secondary)" : "currentColor"
@@ -141,7 +190,7 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
         {isDetailOpen && (
           <motion.div
             className={styles.detailOverlay}
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsDetailOpen(false)}
@@ -152,20 +201,66 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{
-                type: "spring",
-                damping: 25, // Quick deceleration
-                stiffness: 400, // Snappy movement
-                mass: 0.5, // Lighter feeling
-                bounce: 0.2, // Minimal overshoot
+                type: "tween",
+                duration: 0.3,
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <DetailStack
                 postDetails={post}
+                isLiked={isLiked}
                 onClose={() => setIsDetailOpen(false)}
               />
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/**/}
+      <AnimatePresence>
+        {isShareOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              className={styles.shareOverlay}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: "fixed",
+                inset: 0,
+                background: "#000",
+                zIndex: 1002,
+              }}
+              onClick={() => setIsShareOpen(false)}
+            />
+            <motion.div
+              className={styles.shareContentModal}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{
+                type: "tween",
+                duration: 0.3,
+              }}
+              style={{
+                position: "fixed",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 1003,
+                borderTopLeftRadius: "1rem",
+                borderTopRightRadius: "1rem",
+                boxShadow: "0 -2px 16px rgba(0,0,0,0.1)",
+              }}
+            >
+              {/* ShareContent Modal */}
+              <ShareContent
+                postUrl={postUrl}
+                onClose={() => setIsShareOpen(false)}
+              />
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -1,0 +1,134 @@
+.container {
+  height: 100%;
+  background-color: var(--gs-bgcolor-one);
+  color: var(--gs-fontcolor-one);
+}
+
+.card {
+  margin: 0 auto;
+  background-color: var(--gs-bgcolor-darker);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 2px solid var(--gs-bordercolor);
+}
+
+.avatarEditButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: var(--gs-bgcolor-three);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avatarInput {
+  display: none;
+}
+
+.fieldGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gs-textcolor-muted);
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  width: calc(100% - 30px - 2px); /*30px for padding 2px for the border*/
+  background-color: var(--gs-bgcolor-one);
+  border: 1px solid var(--gs-bordercolor);
+  border-radius: 0.375rem;
+  padding: 12px 15px;
+  color: var(--gs-fontcolor-one);
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--gs-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.readOnlyField {
+  width: 100%;
+  background-color: var(--gs-bgcolor-one);
+  border-radius: 0.375rem;
+  padding: 0.625rem 0.75rem;
+  color: var(--gs-textcolor-muted);
+  font-size: 1rem;
+}
+
+.editControls {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.button {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  background-color: var(--gs-bgcolor-two);
+}
+
+.saveButton {
+  color: var(--gs-color-primary);
+}
+
+.cancelButton {
+  color: var(--gs-color-secondary);
+}
+
+.editButton {
+  color: var(--gs-color-primary);
+}
+
+.divider {
+  border-top: 1px solid var(--gs-bordercolor);
+  margin: 1.5rem 0;
+}
+
+.nameHolder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

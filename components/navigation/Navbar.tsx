@@ -122,7 +122,7 @@ const Navbar = () => {
               <div className={styles.menu}>
                 <button
                   className={styles.menuItem}
-                  onClick={() => navigateTo("account")}
+                  onClick={() => navigateTo("/account")}
                 >
                   <CircleUser /> Account
                 </button>

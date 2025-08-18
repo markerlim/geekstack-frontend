@@ -7,10 +7,12 @@ import DetailStack from "../../components/features/stacks/DetailStack";
 import styles from "../../styles/StacksPage.module.css";
 import { DeckPost } from "../../model/deckpost.model";
 import { fetchUserPostById } from "../../services/functions/gsUserPostService";
+import { useUserStore } from "../../services/store/user.store";
 
 const StacksPage = () => {
   const router = useRouter();
   const { deckuid } = router.query;
+  const {sqlUser} = useUserStore();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [post, setPost] = useState<DeckPost | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,6 +92,7 @@ const StacksPage = () => {
               ) : post ? (
                 <DetailStack
                   postDetails={post}
+                  isLiked={post.listoflikes.includes(sqlUser?.userId || "") || false} // Replace with actual user ID
                   onClose={handleClose}
                 />
               ) : (

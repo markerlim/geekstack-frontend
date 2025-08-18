@@ -373,3 +373,109 @@
 .closeButton:hover {
   background: #2563eb;
 }
+/* Sharing Content */
+/* Share Modal Styles */
+.shareModal {
+  background: var(--gs-bgcolor-three);
+  border-radius: 12px 12px 0 0;
+  padding: 20px;
+  width: calc(100% - 40px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.shareHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.shareHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--gs-fontcolor-one);
+}
+
+.closeShareButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+}
+
+.shareInputContainer {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.shareInput {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.copyButton {
+  padding: 10px 15px;
+  background: var(--gs-color-primary);
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.5s;
+}
+
+.copied {
+  filter: grayscale(100%);
+  background-color: var(--gs-bgcolor-one);
+}
+
+
+.socialShareButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.socialButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.socialButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.socialButton span {
+  font-size: 0.8rem;
+}
+
+/* Social brand colors */
+.x {
+  background: #000000;
+  color: white;
+}
+
+.whatsapp {
+  background: #25D366;
+  color: white;
+}
+
+.telegram {
+  background: #0088CC;
+  color: white;
+}

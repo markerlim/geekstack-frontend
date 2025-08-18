@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../../styles/EffectTable.module.css";
 import { CardOnePiece } from "../../model/card.model";
+import ErrorReportBtn from "./ErrorReportBtn";
 
 interface RTBProps {
   card: CardOnePiece;
@@ -33,7 +34,9 @@ const RTB_Onepiece = ({ card, onNext, onPrev }: RTBProps) => {
             </button>
           )}
       </div>
-      <div>Report error</div>
+            <div className={styles["rtb-func"]}>
+        <ErrorReportBtn id={card._id}/>
+      </div>
     </div>
   );
 };

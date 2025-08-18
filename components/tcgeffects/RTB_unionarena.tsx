@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../../styles/EffectTable.module.css";
 import { TBUnionArenaProps } from "./TB_unionarena";
 import { CardUnionArena } from "../../model/card.model";
+import ErrorReportBtn from "./ErrorReportBtn";
 
 interface RTBProps {
   card: CardUnionArena;
@@ -34,7 +35,9 @@ const RTB_UnionArena = ({ card, onNext, onPrev }: RTBProps) => {
           )}
         </div>
       </div>
-      <div>Report error</div>
+      <div className={styles["rtb-func"]}>
+        <ErrorReportBtn id={card._id}/>
+      </div>
     </div>
   );
 };

@@ -14,10 +14,11 @@ import PostingStack from "./PostingStack";
 import { TCGTYPE } from "../../../utils/constants";
 import { tcgList } from "../../../data/tcgList";
 import { formatFirstLetterCap } from "../../../utils/FormatText";
+import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 
 const StacksList = () => {
   const device = useDevice();
-  const all = "all" as TCGTYPE
+  const all = "all" as TCGTYPE;
   const [tcg, setTcg] = useState(all);
   const [leftColumn, setLeftColumn] = useState<DeckPost[]>([]);
   const [rightColumn, setRightColumn] = useState<DeckPost[]>([]);
@@ -32,8 +33,12 @@ const StacksList = () => {
   const filterRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const togglePostingStack = () => {
-    setIsPostingOpen(!isPostingOpen);
+  const handleOpenPosting = () => {
+    setIsPostingOpen(true);
+  };
+
+  const handleClosePosting = () => {
+    setIsPostingOpen(false);
   };
 
   const buttonClass =
@@ -122,6 +127,20 @@ const StacksList = () => {
     }
   };
 
+  useEffect(() => {
+    const reloadPosts = () => {
+      setCurrentPage(0);
+      setHasMore(true);
+      loadPosts(0, true);
+    };
+    detailStackEvent.on("post:created", reloadPosts);
+    detailStackEvent.on("post:deleted", reloadPosts);
+    return () => {
+      detailStackEvent.off("post:created", reloadPosts);
+      detailStackEvent.off("post:deleted", reloadPosts);
+    };
+  }, [loadPosts]);
+
   // Initial load only on first render
   useEffect(() => {
     loadPosts(0, true);
@@ -193,11 +212,18 @@ const StacksList = () => {
         }}
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
       >
-        <div className={`${all === tcg && styles['active']}`} onClick={() => handleSelectTCG(all)}>
+        <div
+          className={`${all === tcg && styles["active"]}`}
+          onClick={() => handleSelectTCG(all)}
+        >
           All
         </div>
         {tcgList.map((tcgItem) => (
-          <div key={tcgItem.tcg} className={`${tcgItem.tcg === tcg && styles['active']}`} onClick={() => handleSelectTCG(tcgItem.tcg)}>
+          <div
+            key={tcgItem.tcg}
+            className={`${tcgItem.tcg === tcg && styles["active"]}`}
+            onClick={() => handleSelectTCG(tcgItem.tcg)}
+          >
             <code>{formatFirstLetterCap(tcgItem.tcg)}</code>
           </div>
         ))}
@@ -213,7 +239,7 @@ const StacksList = () => {
       >
         <LeftStackCol items={leftColumn} />
         <RightStackCol items={rightColumn} />
-        <button className={buttonClass} onClick={togglePostingStack}>
+        <button className={buttonClass} onClick={handleOpenPosting}>
           <DiamondPlus />
           {device === "desktop" && <span>Create Post</span>}
         </button>
@@ -226,7 +252,7 @@ const StacksList = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className={styles.backdrop}
-              onClick={togglePostingStack}
+              onClick={handleOpenPosting}
             />
 
             <motion.div
@@ -236,7 +262,7 @@ const StacksList = () => {
               transition={{ type: "spring", damping: 25 }}
               className={styles.postingStackWrapper}
             >
-              <PostingStack onClose={togglePostingStack} />
+              <PostingStack onClose={handleClosePosting} />
             </motion.div>
           </>
         )}

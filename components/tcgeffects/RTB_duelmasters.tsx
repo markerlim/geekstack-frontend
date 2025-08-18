@@ -3,6 +3,7 @@ import styles from "../../styles/EffectTable.module.css";
 import { DuelmastersCard } from "../../model/card.model";
 import { useDualCardSide } from "./useDualToggle";
 import { useState } from "react";
+import ErrorReportBtn from "./ErrorReportBtn";
 
 interface RTBProps {
   card: DuelmastersCard;
@@ -57,10 +58,12 @@ const RTB_Duelmasters = ({ card, onNext, onPrev }: RTBProps) => {
           onClick={handleEffectToggle}
           style={{ cursor: "pointer", userSelect: "none" }}
         >
-          {effectShow ? <>BOTTOM</>:<>TOP</>}
+          {effectShow ? <>BOTTOM</> : <>TOP</>}
         </div>
       )}
-      <div>Report error</div>
+      <div className={styles["rtb-func"]}>
+        <ErrorReportBtn id={card._id}/>
+      </div>
     </div>
   );
 };

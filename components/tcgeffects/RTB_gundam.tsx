@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../../styles/EffectTable.module.css";
 import { TBGundamProps } from "./TB_gundam";
 import { GundamCard } from "../../model/card.model";
+import ErrorReportBtn from "./ErrorReportBtn";
 
 interface RTBProps {
   card: GundamCard;
@@ -34,7 +35,9 @@ const RTB_Gundam = ({ card, onNext, onPrev }: RTBProps) => {
             </button>
           )}
       </div>
-      <div>Report error</div>
+            <div className={styles["rtb-func"]}>
+        <ErrorReportBtn id={card._id}/>
+      </div>
     </div>
   );
 };

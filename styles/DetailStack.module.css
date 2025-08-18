@@ -158,11 +158,15 @@
   background-color: var(--gs-bgcolor-one);
   color: var(--gs-bordercolor);
   width: 100%;
-  padding: 20px;
-  vertical-align: center;
+  height: 40px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding-left: 10px;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  font-family: var(--gs-font-family-noto);
   box-sizing: border-box;
 }
 

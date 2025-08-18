@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { userMakePost } from "../../../services/functions/gsUserPostService";
 import { DeckPost } from "../../../model/deckpost.model";
+import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 
 interface PostingStackProps {
   onClose: () => void;
@@ -90,6 +91,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     userMakePost(postObject)
       .then(() => {
         console.log("Deck posted successfully:", postObject);
+        detailStackEvent.emit("post:created");
         onClose();
       })
       .catch((error) => {
@@ -145,7 +147,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
           modules={[Navigation]}
           spaceBetween={15}
           slidesPerView={"auto"}
-          onSwiper={(swiper:any) => (swiperRef.current = swiper)}
+          onSwiper={(swiper: any) => (swiperRef.current = swiper)}
           className={styles["swiper-container"]}
           slidesOffsetBefore={30}
           slidesOffsetAfter={30}

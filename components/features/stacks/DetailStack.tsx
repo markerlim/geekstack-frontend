@@ -15,20 +15,22 @@ import {
   userDeleteComment,
 } from "../../../services/functions/gsUserPostService";
 import { useUserStore } from "../../../services/store/user.store";
+import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 
 interface DetailStackProps {
   onClose: () => void;
+  isLiked: boolean;
   postDetails: DeckPost;
 }
 
-const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
+const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
   const { sqlUser } = useUserStore();
+  const userId = sqlUser?.userId;
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState(postDetails.listofcomments);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Focus the textarea when isCommenting becomes true
   useEffect(() => {
     if (isCommenting && textareaRef.current) {
       textareaRef.current.focus();
@@ -43,7 +45,6 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
   };
 
   const cardlist = postDetails.listofcards;
-  const userId = sqlUser?.userId;
   const posteePic = postDetails.displaypic;
   const posteeName = postDetails.name || "No Name";
 
@@ -88,6 +89,19 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
       console.error("Delete failed:", error);
     }
   };
+
+  const handleHeartClick = () => {
+    if (!userId || !postDetails.postId) return;
+    if (isLiked) {
+      detailStackEvent.emit("post:unliked", postDetails.postId, userId);
+    } else {
+      detailStackEvent.emit("post:liked", postDetails.postId, userId);
+    }
+  };
+
+  const handleShareClick = () =>{
+    detailStackEvent.emit("post:share", postDetails.postId);
+  }
 
   return (
     <>
@@ -173,9 +187,16 @@ const DetailStack = ({ postDetails, onClose }: DetailStackProps) => {
             What is on your mind?
           </div>
           <div className={styles["comment-func"]}>
-            <Heart width={"30px"} height={"30px"} />
+            <Heart
+              width={"30px"}
+              height={"30px"}
+              fill={isLiked ? "var(--gs-color-secondary)" : "none"}
+              stroke={isLiked ? "var(--gs-color-secondary)" : "currentColor"}
+              style={{ cursor: "pointer" }}
+              onClick={handleHeartClick}
+            />
             <MessageSquareText width={"30px"} height={"30px"} />
-            <Share2 width={"30px"} height={"30px"} />
+            <Share2 width={"30px"} height={"30px"} onClick={handleShareClick}/>
           </div>
         </div>
       </div>
