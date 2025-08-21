@@ -8,17 +8,20 @@ import { useDevice } from "../../contexts/DeviceContext";
 import { useRouter } from "next/router";
 import ListOfNotifications from "../features/notifications/ListOfNotifications";
 import { useSearchState } from "../features/search/useSearchState";
+import CardLoader from "../loader/CardLoader";
+import CardSpinner from "../loader/CardSpinner";
 
 const Navbar = () => {
   const router = useRouter();
-  const { sqlUser, signOut } = useUserStore();
+  const { sqlUser, signOut, loading } = useUserStore();
   const { openSearch } = useSearchState();
   const device = useDevice();
   const isDesktop = device === "desktop";
   const [menuOpen, setMenuOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const [loaderTimer, setLoaderTimer] = useState<NodeJS.Timeout | null>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -44,11 +47,6 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // When sqlUser is loaded (either user object or null), mark auth as checked
-    setAuthChecked(true);
-  }, [sqlUser]);
-
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         notificationsRef.current &&
@@ -66,6 +64,29 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [notificationsOpen]);
+
+  useEffect(() => {
+    if (loading) {
+      setShowLoader(true);
+      
+      if (loaderTimer) {
+        clearTimeout(loaderTimer);
+        setLoaderTimer(null);
+      }
+    } else {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
+      
+      setLoaderTimer(timer);
+    }
+    
+    return () => {
+      if (loaderTimer) {
+        clearTimeout(loaderTimer);
+      }
+    };
+  }, [loading]);
 
   return (
     <nav className={styles.navbar}>
@@ -94,8 +115,8 @@ const Navbar = () => {
         )}
       </div>
       <div className={styles.login}>
-        {!authChecked ? (
-          <div className={styles.loading}>Loading...</div>
+        {showLoader ? ( // Use showLoader instead of loading directly
+          <div className={styles.loading}><CardSpinner/></div>
         ) : sqlUser ? (
           <>
             <div

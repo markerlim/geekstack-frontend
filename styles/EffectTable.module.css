@@ -126,6 +126,7 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
+  flex: 0 0 auto;
 }
 
 .rtb-nav button {
@@ -133,9 +134,14 @@
   border: none;
   color: var(--gs-fontcolor-one);
   cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-  width: 40px;
+  flex: 0 0 auto;
+  width: 30px;
+  padding: 0px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
 }
 
@@ -239,4 +245,41 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+.rtb-duelmasters {
+  font-size: 14px;
+  flex: 0 0 auto;
+  line-height: 1rem;
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:5px;
+  /* Fix for long words and slashes */
+  word-break: break-word; /* Breaks at any character */
+  overflow-wrap: anywhere; /* More aggressive than break-word */
+}
+
+.dual-toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% - 10px);
+  background-color: var(--gs-color-primary-light);
+  border-radius: 8px;
+  padding: 5px;
+  color: var(--gs-fontcolor-two);
+  gap: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rtb-duelmasters svg{
+  background-color: var(--gs-color-primary);
+  border-radius: 50%;
+  padding: 5px;
+  border: 1px solid var(--gs-color-primary);
 }

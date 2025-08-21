@@ -68,7 +68,7 @@ export const useUserStore = create<UserStore>()(
       currentUser: null,
       mongoUser: null,
       sqlUser: null,
-      loading: false,
+      loading: true,
       error: null,
       _lastUpdated: null,
 
@@ -79,6 +79,7 @@ export const useUserStore = create<UserStore>()(
           loading ||
           (_lastUpdated && Date.now() - _lastUpdated < CACHE_DURATION)
         ) {
+          set({ loading: false });
           return;
         }
 
@@ -86,6 +87,7 @@ export const useUserStore = create<UserStore>()(
 
         if (!user) {
           get().clearUserStore();
+              set({ loading: false, _lastUpdated: Date.now() });
           return;
         }
 
@@ -116,7 +118,6 @@ export const useUserStore = create<UserStore>()(
           currentUser: null,
           mongoUser: null,
           sqlUser: null,
-          loading: false,
           error: null,
           _lastUpdated: null,
         });

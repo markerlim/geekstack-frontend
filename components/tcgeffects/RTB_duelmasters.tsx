@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "../../styles/EffectTable.module.css";
 import { DuelmastersCard } from "../../model/card.model";
 import { useDualCardSide } from "./useDualToggle";
@@ -25,6 +25,8 @@ const RTB_Duelmasters = ({ card, onNext, onPrev }: RTBProps) => {
   const displayedCardUid = card.cardUid;
   const displayedRace =
     (showSecondSide && card.race2 ? card.race2 : card.race) ?? [];
+  const displayedType =
+    (showSecondSide && card.type2 ? card.type2 : card.type) ?? [];
 
   return (
     <div className={styles["rtb"]}>
@@ -39,30 +41,35 @@ const RTB_Duelmasters = ({ card, onNext, onPrev }: RTBProps) => {
             {displayedRace.length > 0 ? displayedRace.join(" / ") : "-"}
           </div>
         </div>
+                <div className={styles["rtb-section"]}>
+          <div className={styles["rtb-header"]}>Type</div>
+          <div className={styles["rtb-info"]}>
+            {displayedType.length > 0 ? displayedType : "-"}
+          </div>
+        </div>
       </div>
       <div className={styles["rtb-nav"]}>
         {onPrev && (
           <button title="Prev" onClick={onPrev}>
-            <ChevronLeft />
+            <ChevronLeft/>
           </button>
         )}
         {onNext && (
           <button title="Next" onClick={onNext}>
-            <ChevronRight />
+            <ChevronRight/>
           </button>
         )}
       </div>
       {dualCard && (
         <div
-          className={styles["dual-toggle"]}
+          className={styles["rtb-duelmasters"]}
           onClick={handleEffectToggle}
-          style={{ cursor: "pointer", userSelect: "none" }}
         >
-          {effectShow ? <>BOTTOM</> : <>TOP</>}
+          <ArrowLeftRight size={18}/>
         </div>
       )}
       <div className={styles["rtb-func"]}>
-        <ErrorReportBtn id={card._id}/>
+        <ErrorReportBtn id={card._id} />
       </div>
     </div>
   );
