@@ -13,3 +13,4 @@ export enum TCGTYPE {
 
 export const DEFAULT_BASE_CURRENCY = "SGD";
 export const DEFAULT_TARGET_CURRENCY = "JPY";
+export const DEFAULT_DECKCOVER = "/gsdeckimage.jpg";

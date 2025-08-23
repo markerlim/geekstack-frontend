@@ -14,8 +14,11 @@ import TcgImage from "../../TcgImage";
 import { TCGTYPE } from "../../../utils/constants";
 import { sortCards } from "../../../utils/cardSorting";
 
-const DeckbuildList = () => {
-  const { tcg } = useRouter().query;
+interface DeckbuildListProps {
+  confirmedTcg?: string;
+}
+
+const DeckbuildList = ({confirmedTcg}:DeckbuildListProps) => {
   const { sqlUser } = useUserStore();
   const { cardlist } = useDeck();
   const [isBarCollapsed, setIsBarCollapsed] = useState(false);
@@ -24,7 +27,8 @@ const DeckbuildList = () => {
   const userId = sqlUser?.userId || "";
   const [currentCard, setCurrentCard] = useState<GameCard | null>(null);
 
-  const tcgType = (Array.isArray(tcg) ? tcg[0] : tcg || TCGTYPE.UNIONARENA) as TCGTYPE;
+  const tcgType = confirmedTcg as TCGTYPE;
+  console.log("DeckbuildList Rendered with TCG:", tcgType);
 
   const handleCardClick = (card: GameCard) => {
     setCurrentCard(card);
@@ -98,7 +102,7 @@ const DeckbuildList = () => {
       </div>
       <TcgImageDetails
         card={currentCard}
-        tcgtype={Array.isArray(tcg) ? tcg[0] : tcg || ""}
+        tcgtype={tcgType}
         imgProps={{
           src: currentCard?.urlimage,
           alt: currentCard?.cardName,

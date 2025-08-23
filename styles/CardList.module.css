@@ -23,6 +23,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-item:focus {
+  outline: none;
+}
+
+.card-item img {
+  pointer-events: none;
 }
 
 .card-container {

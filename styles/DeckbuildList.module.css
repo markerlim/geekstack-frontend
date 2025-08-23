@@ -17,9 +17,7 @@
   );
 }
 .c-height-desktop {
-  height: calc(
-    100vh - var(--top-nav-height) - var(--db-main-collapsed) - 40px
-  );
+  height: calc(100vh - var(--top-nav-height) - var(--db-main-collapsed) - 40px);
 }
 .uc-height-desktop {
   height: calc(
@@ -47,6 +45,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-item:focus {
+  outline: none;
+}
+
+.card-item img {
+  pointer-events: none;
 }
 
 .iconbg {
@@ -65,4 +74,46 @@
 
 .empty {
   color: var(--gs-bgcolor-three);
+}
+
+/* Decklist Preview Style */
+.decklistPreviewContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.decklistPreviewContainer code {
+  font-size: 0.75rem;
+  padding: 6px 9px;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-color: var(--gs-bgcolor-three);
+  border: var(--gs-border);
+  color: var(--gs-color-primary);
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.decklistPreviewContent {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: calc(100% - 40px);
+  height: 100%;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 8px;
+}
+
+.decklistPreviewContent div:nth-child(2) {
+  background-color: var(--gs-bgcolor-three);
+  border: var(--gs-border);
+  border-radius: 10px;
+  color: var(--gs-fontcolor-one);
+  text-align: center;
+  font-size: 18px;
 }

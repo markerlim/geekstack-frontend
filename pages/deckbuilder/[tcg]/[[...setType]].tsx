@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import { useDeck } from "../../../contexts/DeckContext";
 import { useUserStore } from "../../../services/store/user.store";
-import { Deck } from "../../../model/deck.model";
+import DecklistPreview from "../../../components/features/deckbuilding/DecklistPreview";
+import { TCGTYPE } from "../../../utils/constants";
 
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
@@ -25,9 +26,14 @@ const DeckbuilderBoosterPage = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentSetType, setCurrentSetType] = useState<string | null>(null);
   const [contentVisible, setContentVisible] = useState(false);
-  const { clearList, cardlist, setCardlist } = useDeck();
+  const {
+    clearList,
+    cardlist,
+    setCardlist,
+    isPreFilterRequired,
+    preFilterList,
+  } = useDeck();
   const [confirmedTcg, setConfirmedTcg] = useState(tcg);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const deckuid = router.query.deckuid as string; // UUID from query params
   useEffect(() => {
@@ -41,28 +47,25 @@ const DeckbuilderBoosterPage = () => {
     }
   }, []);
 
-  // Initialize setType
   useEffect(() => {
     const normalized = Array.isArray(setType) ? setType[0] : setType;
     setCurrentSetType(normalized || null);
   }, [setType]);
 
-  // Intercept route changes
   useEffect(() => {
     const handleRouteChange = async (url: string) => {
       const newTcg = url.split("/")[2];
       if (newTcg === confirmedTcg) return;
 
       if (cardlist.length > 0) {
-        setIsTransitioning(true);
         try {
           await new Promise((resolve) => {
             clearList();
             setTimeout(resolve, 0);
           });
           setConfirmedTcg(newTcg);
-        } finally {
-          setIsTransitioning(false);
+        } catch (error: any) {
+          console.error("Error clearing card list:", error);
         }
       } else {
         setConfirmedTcg(newTcg);
@@ -85,7 +88,7 @@ const DeckbuilderBoosterPage = () => {
           <>
             {/* Always visible DeckbuildList */}
             <div className={styles.deckbuildListMobile}>
-              <DeckbuildList />
+              <DeckbuildList confirmedTcg={confirmedTcg as string}/>
               <button
                 title="Show decklist"
                 className={styles.openingSlider}
@@ -111,12 +114,23 @@ const DeckbuilderBoosterPage = () => {
               <div className={styles.mainMobileContent}>
                 {currentSetType ? (
                   <>
-                    <CardList />
+                    <CardList
+                      isDeckbuilding={true}
+                      preFilter={isPreFilterRequired}
+                      preFilterList={preFilterList}
+                    />
                   </>
                 ) : (
                   <BoosterList />
                 )}
               </div>
+            </div>
+            <div
+              className={`${styles.decklistPreview} ${
+                contentVisible ? styles.showPreview : styles.doNotShowPreview
+              }`}
+            >
+              <DecklistPreview tcg={confirmedTcg as TCGTYPE} />
             </div>
             {contentVisible && (
               <div
@@ -129,7 +143,7 @@ const DeckbuilderBoosterPage = () => {
         {isDesktop && (
           <>
             <div className={styles.mainContent}>
-              <DeckbuildList />
+              <DeckbuildList confirmedTcg={confirmedTcg as string}/>
             </div>
             <div
               className={`${styles.sidebar} ${
@@ -147,7 +161,11 @@ const DeckbuilderBoosterPage = () => {
                 <div className={styles.listofbc}>
                   {currentSetType ? (
                     <>
-                      <CardList />
+                      <CardList
+                        isDeckbuilding={true}
+                        preFilter={isPreFilterRequired}
+                        preFilterList={preFilterList}
+                      />
                     </>
                   ) : (
                     <BoosterList />

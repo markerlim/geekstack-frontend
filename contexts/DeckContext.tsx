@@ -18,8 +18,12 @@ type DeckContextType = {
   deckCards: DeckCard[];
   cardlist: GameCard[];
   selectedDeck: Deck;
+  isPreFilterRequired?: boolean;
+  preFilterList?: Record<string, string[]>;
   setCardlist: (gameCards: GameCard[]) => void;
   setSelectedDeck: (deck: Deck) => void;
+  setPreFilterList: (filters: Record<string, string[]>) => void;
+  setIsPreFilterRequired: (required: boolean) => void;
   updateDeckName: (name: string) => void;
   addCard: (card: GameCard, tcgGame?: string) => void;
   removeCard: (cardId: string) => void;
@@ -38,6 +42,8 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     deckcover: "/gsdeckimage.jpg",
     listofcards: [],
   });
+  const [preFilterList, setPreFilterList] = useState<Record<string, string[]>>();
+  const [isPreFilterRequired, setIsPreFilterRequired] = useState(false);
 
   const addCard = (card: GameCard, tcgGame?: string) => {
     // Determine max copies
@@ -167,6 +173,10 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
       deckCards,
       cardlist,
       selectedDeck: currentDeck,
+      preFilterList,
+      isPreFilterRequired,
+      setIsPreFilterRequired,
+      setPreFilterList,
       setCardlist,
       setSelectedDeck,
       updateDeckName,
@@ -176,7 +186,7 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
       getCardData,
       clearList,
     }),
-    [currentDeck, deckCards]
+    [currentDeck, deckCards, preFilterList]
   );
 
   return <DeckContext.Provider value={value}>{children}</DeckContext.Provider>;

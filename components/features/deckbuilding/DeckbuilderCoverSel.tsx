@@ -4,7 +4,7 @@ import styles from "../../../styles/DeckbuilderCover.module.css";
 import { fetchOnePieceLeaders } from "../../../services/functions/gsBoosterService";
 import { TCGTYPE } from "../../../utils/constants";
 import LeaderPreviewModal from "./LeaderPreviewModal";
-import { GameCard } from "../../../model/card.model";
+import { CardOnePiece, GameCard } from "../../../model/card.model";
 
 interface DeckbuilderCoverProps {
   onCoverSelect: (coverUrl: string) => void;
@@ -17,7 +17,7 @@ const DeckbuilderCover = ({
   onClose,
   tcg,
 }: DeckbuilderCoverProps) => {
-  const { deckCards } = useDeck();
+  const { deckCards, setPreFilterList, setIsPreFilterRequired } = useDeck();
   const [listofcards, setListofcards] = useState<GameCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,9 +45,11 @@ const DeckbuilderCover = ({
           if (tcg === TCGTYPE.ONEPIECE) {
             const leaders = await fetchOnePieceLeaders(0, 50, searchTerm);
             setListofcards(leaders);
+            setIsPreFilterRequired(true);
           }
         } else {
           setListofcards(deckCards.map((dc) => dc.card));
+          setIsPreFilterRequired(false);
         }
       } catch (error) {
         console.error("Error loading cards:", error);
@@ -61,7 +63,20 @@ const DeckbuilderCover = ({
   }, [tcg, deckCards, isLeaderBased, triggerSearch]); // Removed searchTerm from dependencies
 
   const handleSingleClick = (card: any) => {
+    console.log(card);
     onCoverSelect(card.urlimage);
+    if (isLeaderBased) {
+      const colors = String(card.color)
+        .split("/")
+        .map((c) => c.trim().toLowerCase());
+
+      setPreFilterList({
+        color: colors,
+        category: ["leader"],
+      });
+      setSearchTerm("");
+      setTriggerSearch(false);
+    }
   };
 
   const handleContextClick = (e: any, card: any) => {
