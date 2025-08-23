@@ -29,7 +29,7 @@ type DeckContextType = {
   removeCard: (cardId: string) => void;
   getCardCount: (cardId: string) => number;
   getCardData: (cardId: string) => GameCard | undefined;
-  clearList: () => void;
+  clearList: () => Promise<boolean>;
 };
 
 const DeckContext = createContext<DeckContextType | undefined>(undefined);
@@ -141,10 +141,8 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const clearList = () => {
+  const clearList = (): Promise<boolean> => {
     return new Promise((resolve) => {
-      setIsPreFilterRequired(false);
-      setPreFilterList(undefined);
       if (cardlist.length > 0) {
         if (window.confirm("Are you sure you want to clear all cards?")) {
           setDeckCards([]);
@@ -160,6 +158,8 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
           resolve(false); // Cancelled
         }
       } else {
+        setIsPreFilterRequired(false);
+        setPreFilterList(undefined);
         resolve(true); // No cards to clear
       }
     });

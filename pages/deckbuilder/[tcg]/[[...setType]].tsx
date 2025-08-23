@@ -53,20 +53,18 @@ const DeckbuilderBoosterPage = () => {
     const handleRouteChange = async (url: string) => {
       const newTcg = url.split("/")[2];
       if (newTcg === confirmedTcg) return;
-      if (cardlist.length >= 0) {
-        try {
-          await new Promise((resolve) => {
-            clearList();
-            setTimeout(resolve, 0);
-          });
-          setConfirmedTcg(newTcg);
-        } catch (error: any) {
-          console.error("Error clearing card list:", error);
-        }
-      } else {
-        setConfirmedTcg(newTcg);
-      }
 
+      try {
+        const shouldProceed = await clearList();
+        if (!shouldProceed) {
+          console.log("Navigation cancelled by user.");
+          router.replace(`/deckbuilder/${confirmedTcg}`);
+          return;
+        }
+        setConfirmedTcg(newTcg);
+      } catch (error: any) {
+        console.error("Error clearing card list:", error);
+      }
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
