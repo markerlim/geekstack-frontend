@@ -45,7 +45,6 @@ const Layout = ({
       (game) => routeSegments.some((segment) => segment === game.tcg) // Check if any segment matches game.tcg
     );
     setInitialGame(matchedGame || tcgList[0]);
-    console.log("Matched Game: ", matchedGame);
   }, [router.asPath]);
 
   return (

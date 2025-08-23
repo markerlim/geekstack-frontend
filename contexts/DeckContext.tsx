@@ -42,7 +42,8 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     deckcover: "/gsdeckimage.jpg",
     listofcards: [],
   });
-  const [preFilterList, setPreFilterList] = useState<Record<string, string[]>>();
+  const [preFilterList, setPreFilterList] =
+    useState<Record<string, string[]>>();
   const [isPreFilterRequired, setIsPreFilterRequired] = useState(false);
 
   const addCard = (card: GameCard, tcgGame?: string) => {
@@ -142,6 +143,8 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
 
   const clearList = () => {
     return new Promise((resolve) => {
+      setIsPreFilterRequired(false);
+      setPreFilterList(undefined);
       if (cardlist.length > 0) {
         if (window.confirm("Are you sure you want to clear all cards?")) {
           setDeckCards([]);

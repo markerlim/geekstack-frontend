@@ -30,7 +30,6 @@ const DeckbuilderBoosterPage = () => {
   const {
     clearList,
     cardlist,
-    setCardlist,
     setSelectedDeck,
     isPreFilterRequired,
     preFilterList,
@@ -54,8 +53,7 @@ const DeckbuilderBoosterPage = () => {
     const handleRouteChange = async (url: string) => {
       const newTcg = url.split("/")[2];
       if (newTcg === confirmedTcg) return;
-
-      if (cardlist.length > 0) {
+      if (cardlist.length >= 0) {
         try {
           await new Promise((resolve) => {
             clearList();
@@ -68,11 +66,12 @@ const DeckbuilderBoosterPage = () => {
       } else {
         setConfirmedTcg(newTcg);
       }
+
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
     return () => router.events.off("routeChangeStart", handleRouteChange);
-  }, [confirmedTcg, cardlist.length, clearList]);
+  }, [confirmedTcg, cardlist.length]);
 
   const handleSlider = () => {
     setContentVisible((prev) => !prev);
@@ -86,7 +85,7 @@ const DeckbuilderBoosterPage = () => {
           <>
             {/* Always visible DeckbuildList */}
             <div className={styles.deckbuildListMobile}>
-              <DeckbuildList confirmedTcg={confirmedTcg as string}/>
+              <DeckbuildList confirmedTcg={confirmedTcg as string} />
               <button
                 title="Show decklist"
                 className={styles.openingSlider}
@@ -141,7 +140,7 @@ const DeckbuilderBoosterPage = () => {
         {isDesktop && (
           <>
             <div className={styles.mainContent}>
-              <DeckbuildList confirmedTcg={confirmedTcg as string}/>
+              <DeckbuildList confirmedTcg={confirmedTcg as string} />
             </div>
             <div
               className={`${styles.sidebar} ${

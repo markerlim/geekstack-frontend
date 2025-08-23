@@ -4,7 +4,6 @@
   border-radius: 8px;
   color: var(--gs-fontcolor-three);
   position: relative;
-  /* This container must not have any overflow restrictions */
 }
 
 .filterBar {
@@ -54,10 +53,9 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
-    font-family: var(--gs-font-family-titillium);
+  font-family: var(--gs-font-family-titillium);
   font-weight: 600;
   font-style: var(--gs-font-style);
-  
 }
 
 .filterPill:hover {
@@ -90,10 +88,9 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--gs-bordercolor);
-    font-family: var(--gs-font-family-titillium);
+  font-family: var(--gs-font-family-titillium);
   font-weight: 600;
   font-style: var(--gs-font-style);
-  /* Position will be set via JavaScript */
 }
 
 .dropdownItem {

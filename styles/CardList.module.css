@@ -32,9 +32,6 @@
   outline: none;
 }
 
-.card-item img {
-  pointer-events: none;
-}
 
 .card-container {
   display: flex;
@@ -51,7 +48,7 @@
   align-items: center;
   justify-content: center;
   line-height: 0;
-  z-index: 1000;
+  z-index: 800;
 }
 .desktop-back {
   top: calc(var(--top-nav-height) + 20px);

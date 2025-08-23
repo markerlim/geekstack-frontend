@@ -53,8 +53,9 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
       const pillElement = pillRefs.current[title];
       if (pillElement) {
         const rect = pillElement.getBoundingClientRect();
+        
         setDropdownPosition({
-          top: rect.bottom + 4,
+          top: rect.top + 4,
           left: rect.left,
         });
       }
@@ -72,17 +73,8 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
 
   useEffect(() => {
     setRefreshKey((prev) => prev + 1);
-    console.log(refreshKey);
-    sections.forEach((section) => {
-      console.group
-      console.log(section.title);
-      console.log(section.active);
-      console.log(section.options);
-      console.groupEnd
-    });
   }, [sections]);
 
-  // Replace your current useEffect with this:
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!openDropdown) return;
@@ -110,7 +102,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
         if (pillElement) {
           const rect = pillElement.getBoundingClientRect();
           setDropdownPosition({
-            top: rect.bottom + 4,
+            top: rect.top + 4,
             left: rect.left,
           });
         }
@@ -158,13 +150,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ sections }) => {
           </button>
         )}
       </div>
-
-      {/* Render dropdown outside the scrolling container */}
       {openDropdown && (
         <div
           className={styles.dropdownMenu}
           style={{
-            top: `${dropdownPosition.top}px`,
             left: `${dropdownPosition.left}px`,
           }}
         >
