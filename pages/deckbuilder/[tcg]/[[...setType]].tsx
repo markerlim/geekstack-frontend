@@ -16,6 +16,7 @@ import { useDeck } from "../../../contexts/DeckContext";
 import { useUserStore } from "../../../services/store/user.store";
 import DecklistPreview from "../../../components/features/deckbuilding/DecklistPreview";
 import { TCGTYPE } from "../../../utils/constants";
+import { Deck } from "../../../model/deck.model";
 
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const DeckbuilderBoosterPage = () => {
     clearList,
     cardlist,
     setCardlist,
+    setSelectedDeck,
     isPreFilterRequired,
     preFilterList,
   } = useDeck();
@@ -39,11 +41,7 @@ const DeckbuilderBoosterPage = () => {
   useEffect(() => {
     if (deckuid) {
       const deck = getDeckById(deckuid)?.deck;
-      const currentCards = deck?.listofcards;
-
-      if (currentCards) {
-        setCardlist(currentCards);
-      }
+      setSelectedDeck(deck as Deck);
     }
   }, []);
 

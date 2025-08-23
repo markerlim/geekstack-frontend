@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../../styles/DeckbuilderBar.module.css";
 import { BrushCleaning, ChevronDown, ChevronUp, Menu } from "lucide-react";
 import DeckbuilderMenu from "./DeckbuilderMenu";
@@ -40,7 +40,7 @@ const DeckbuilderBar = ({
     setIsCoverSelOpen(false);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     handleCoverSelect(DEFAULT_DECKCOVER);
   }, [tcg]);
 

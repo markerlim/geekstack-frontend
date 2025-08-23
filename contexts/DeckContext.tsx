@@ -125,6 +125,7 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
 
   const setSelectedDeck = (deck: Deck) => {
     setCurrentDeck(deck);
+    setCardlist(deck.listofcards || []);
   };
 
   const updateDeckName = useCallback((name: string) => {

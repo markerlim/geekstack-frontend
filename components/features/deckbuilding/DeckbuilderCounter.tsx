@@ -5,11 +5,11 @@ import { useDeck } from "../../../contexts/DeckContext";
 import { GameCard } from "../../../model/card.model";
 
 interface DeckbuilderCounterProps {
-  card: GameCard
+  card: GameCard;
 }
-const DeckbuilderCounter = ({card}:DeckbuilderCounterProps) => {
+const DeckbuilderCounter = ({ card }: DeckbuilderCounterProps) => {
   const device = useDevice();
-  const { addCard, removeCard, getCardCount} = useDeck();
+  const { addCard, removeCard, getCardCount } = useDeck();
 
   const sizeClass =
     device === "desktop"
@@ -23,14 +23,18 @@ const DeckbuilderCounter = ({card}:DeckbuilderCounterProps) => {
 
   return (
     <div className={`${styles.counterContainer} ${contSizeClass}`}>
-      <div className={`${styles.counterButton} ${sizeClass}`} onClick={() => addCard(card)}>
-        <CirclePlus
-          color="var(--gs-color-primary)"
-        />
+      <div
+        className={`${styles.counterButton} ${sizeClass}`}
+        onClick={() => addCard(card)}
+      >
+        <CirclePlus size={25} color="var(--gs-color-primary)" />
       </div>
       <div className={styles.counterValue}>{getCardCount(card._id)}</div>
-      <div className={`${styles.counterButton} ${sizeClass}`} onClick={() => removeCard(card._id)}>
-        <CircleMinus color="var(--gs-color-primary)" />
+      <div
+        className={`${styles.counterButton} ${sizeClass}`}
+        onClick={() => removeCard(card._id)}
+      >
+        <CircleMinus size={25} color="var(--gs-color-primary)" />
       </div>
     </div>
   );
