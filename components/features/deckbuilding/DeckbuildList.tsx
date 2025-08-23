@@ -12,6 +12,7 @@ import { GameCard } from "../../../model/card.model";
 import cardNavEvent from "../../../services/eventBus/cardNavEvent";
 import TcgImage from "../../TcgImage";
 import { TCGTYPE } from "../../../utils/constants";
+import { sortCards } from "../../../utils/cardSorting";
 
 const DeckbuildList = () => {
   const { tcg } = useRouter().query;
@@ -34,6 +35,7 @@ const DeckbuildList = () => {
     setCurrentCard(null);
     cardNavEvent.emit("card:close");
   };
+
 
   return (
     <>
@@ -68,7 +70,7 @@ const DeckbuildList = () => {
         </div>
         <div className={styles.cardlistscroll}>
           {Array.isArray(cardlist) && cardlist.length > 0 ? (
-            cardlist.map((card) => {
+            sortCards(cardlist,tcgType).map((card) => {
               if (!card?._id || !card?.urlimage) {
                 console.warn("Invalid card data:", card);
                 return null;

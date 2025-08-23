@@ -75,19 +75,22 @@ export const useUserStore = create<UserStore>()(
       initializeUserStore: async () => {
         const { loading, _lastUpdated } = get();
 
-        if (
-          loading ||
-          (_lastUpdated && Date.now() - _lastUpdated < CACHE_DURATION)
-        ) {
-          set({ loading: false });
-          return;
-        }
-
         const user = auth.currentUser;
 
         if (!user) {
+          console.log("No user, clearing store");
           get().clearUserStore();
-              set({ loading: false, _lastUpdated: Date.now() });
+          set({ loading: false, _lastUpdated: Date.now() });
+          return;
+        }
+
+        const isCacheValid =
+          _lastUpdated && Date.now() - _lastUpdated < CACHE_DURATION;
+
+        console.log("isCacheValid:", isCacheValid);
+        if (loading && isCacheValid) {
+          console.log("User store is fresh, skipping init");
+          set({ loading: false });
           return;
         }
 
@@ -282,12 +285,14 @@ export const useUserStore = create<UserStore>()(
         _lastUpdated: state._lastUpdated,
       }),
       onRehydrateStorage: () => (state) => {
-        if (
-          state &&
-          state._lastUpdated &&
-          Date.now() - state._lastUpdated > CACHE_DURATION
-        ) {
-          state.clearUserStore();
+        if (state) {
+          if (
+            state.currentUser &&
+            state._lastUpdated &&
+            Date.now() - state._lastUpdated > CACHE_DURATION
+          ) {
+            state.initializeUserStore();
+          }
         }
       },
     }

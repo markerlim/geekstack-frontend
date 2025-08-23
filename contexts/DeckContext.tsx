@@ -3,7 +3,6 @@ import {
   useContext,
   useState,
   useMemo,
-  useEffect,
   useCallback,
 } from "react";
 import { GameCard } from "../model/card.model";
