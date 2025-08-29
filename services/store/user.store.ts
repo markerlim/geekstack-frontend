@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { initUser } from "../functions/gsUserDetailsService";
 import { gsMongoUser, gsSQLUser } from "../../model/user.model";
-import { Deck } from "../../model/deck.model";
+import { Deck, DeckRecord } from "../../model/deck.model";
 import { TCGTYPE } from "../../utils/constants";
 
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
@@ -44,22 +44,22 @@ interface UserStore {
   updateMongoUser: (updates: Partial<gsMongoUser>) => void;
 
   // Deck management actions
-  addDeckToCategory: (category: DeckCategory, deck: Deck) => void;
-  removeDeckFromCategory: (category: DeckCategory, deckId: string) => void;
+  addDeckToCategory: (category: TCGTYPE, deck: DeckRecord) => void;
+  removeDeckFromCategory: (category: TCGTYPE, deckId: string) => void;
   updateDeckInCategory: (
     category: DeckCategory,
     deckId: string,
     updates: Partial<Deck>
   ) => void;
-  setDecksForCategory: (category: DeckCategory, decks: Deck[]) => void;
+  setDecksForCategory: (category: DeckCategory, decks: DeckRecord[]) => void;
   clearDecksForCategory: (category: DeckCategory) => void;
 
   // Getter helpers
-  getDecksByCategory: (category: string) => Deck[];
-  getAllDecks: () => Deck[];
+  getDecksByCategory: (category: string) => DeckRecord[];
+  getAllDecks: () => DeckRecord[];
   getDeckById: (
     deckId: string
-  ) => { deck: Deck; category: DeckCategory } | null;
+  ) => { deck: DeckRecord; category: DeckCategory } | null;
 }
 
 export const useUserStore = create<UserStore>()(
@@ -156,9 +156,11 @@ export const useUserStore = create<UserStore>()(
       },
 
       // Deck management actions
-      addDeckToCategory: (category: DeckCategory, deck: Deck) => {
+      addDeckToCategory: (tcg: TCGTYPE, deck: DeckRecord) => {
         const { mongoUser } = get();
         if (!mongoUser) return;
+
+        const category = deckFieldMap[tcg];
 
         set({
           mongoUser: {
@@ -169,9 +171,11 @@ export const useUserStore = create<UserStore>()(
         });
       },
 
-      removeDeckFromCategory: (category: DeckCategory, deckId: string) => {
+      removeDeckFromCategory: (tcg: TCGTYPE, deckId: string) => {
         const { mongoUser } = get();
         if (!mongoUser) return;
+
+        const category = deckFieldMap[tcg];
 
         set({
           mongoUser: {
@@ -203,7 +207,7 @@ export const useUserStore = create<UserStore>()(
         });
       },
 
-      setDecksForCategory: (category: DeckCategory, decks: Deck[]) => {
+      setDecksForCategory: (category: DeckCategory, decks: DeckRecord[]) => {
         const { mongoUser } = get();
         if (!mongoUser) return;
 
@@ -230,10 +234,10 @@ export const useUserStore = create<UserStore>()(
       },
 
       // Getter helpers
-      getDecksByCategory: (category: string): Deck[] => {
+      getDecksByCategory: (category: string): DeckRecord[] => {
         const { mongoUser } = get();
         const deckField = deckFieldMap[category as TCGTYPE];
-        return [...(mongoUser?.[deckField] || EMPTY_DECKS)];
+        return [...(mongoUser?.[deckField] || EMPTY_DECKS)].reverse();
       },
 
       getAllDecks: () => {
@@ -241,13 +245,13 @@ export const useUserStore = create<UserStore>()(
         if (!mongoUser) return [];
 
         return [
-          ...mongoUser.crbdecks,
-          ...mongoUser.uadecks,
-          ...mongoUser.opdecks,
-          ...mongoUser.dbzfwdecks,
-          ...mongoUser.dmdecks,
-          ...mongoUser.gcgdecks,
-          ...mongoUser.hocgdecks,
+          ...mongoUser.crbdecks.reverse(),
+          ...mongoUser.uadecks.reverse(),
+          ...mongoUser.opdecks.reverse(),
+          ...mongoUser.dbzfwdecks.reverse(),
+          ...mongoUser.dmdecks.reverse(),
+          ...mongoUser.gcgdecks.reverse(),
+          ...mongoUser.hocgdecks.reverse(),
         ];
       },
 

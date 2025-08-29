@@ -16,7 +16,7 @@ const bottoms = [
     alt: "Deckbuilder",
     path: "/deckbuilder",
   },
-  { src: "/icons/bottomnav/NewsSelected.svg", alt: "Stacks", path: "/stacks" },
+  { src: "/icons/bottomnav/NewsSelected.svg", alt: "Stacks", path: "/stack" },
   {
     src: "/icons/bottomnav/BellSelected.svg",
     alt: "Notifications",

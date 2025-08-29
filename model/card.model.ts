@@ -9,12 +9,15 @@ export type GameCard =
   | HololiveCard
   | GundamCard;
 
-export interface BaseGameCard {
+export interface DeckCard {
   _id: string;
-  imageSrc: string;
   cardName: string;
-  banRatio: number;
+  imageSrc: string;
   count: number;
+}
+
+export interface BaseGameCard extends DeckCard {
+  banRatio: number;
 }
 
 export interface CardUnionArena extends BaseGameCard {

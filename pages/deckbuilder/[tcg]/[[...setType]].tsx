@@ -17,11 +17,11 @@ import { useUserStore } from "../../../services/store/user.store";
 import DecklistPreview from "../../../components/features/deckbuilding/DecklistPreview";
 import { TCGTYPE } from "../../../utils/constants";
 import { Deck } from "../../../model/deck.model";
+import { loadOneDeck } from "../../../services/functions/gsDeckbuildingFunctions";
 
 const DeckbuilderBoosterPage = () => {
   const router = useRouter();
   const { tcg, setType } = router.query;
-  const { getDeckById } = useUserStore();
   const device = useDevice();
   const isDesktop = device === "desktop";
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -37,11 +37,20 @@ const DeckbuilderBoosterPage = () => {
   const [confirmedTcg, setConfirmedTcg] = useState(tcg);
 
   const deckuid = router.query.deckuid as string; // UUID from query params
-  useEffect(() => {
+
+  const loadDeckByDeckuid = async () => {
     if (deckuid) {
-      const deck = getDeckById(deckuid)?.deck;
-      setSelectedDeck(deck as Deck);
+      try {
+        const deck = await loadOneDeck(tcg as string, deckuid);
+        setSelectedDeck(deck as Deck);
+      } catch (error) {
+        console.error("Failed to load deck:", error);
+      }
     }
+  };
+
+  useEffect(() => {
+    loadDeckByDeckuid();
   }, []);
 
   useEffect(() => {

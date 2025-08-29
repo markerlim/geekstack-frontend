@@ -3,18 +3,19 @@
   flex: 0 0 auto;
   height: fit-content;
   overflow: hidden;
-  border-radius: 15px;
-  background-color: var(--gs-bgcolor-three);
+  border-radius: 10px;
+  background-color: var(--gs-bgcolor-two-a);
   width: 180px;
 }
 .stacks-component-cover {
   height: fit-content;
   overflow: hidden;
+  border-radius: 10px;
 }
 
 .stacks-component-cover img {
   width: 100%;
-  height: 150px;
+  height: 160px;
   object-fit: cover;
   object-position: 0% 35%;
 }
@@ -23,10 +24,13 @@
   display: flex;
   flex-direction: column;
   height: fit-content;
+  width: calc(100% - 13px);
   position: relative;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 13px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  gap: 5px;
 }
 
 .stacks-component-content div {
@@ -34,40 +38,40 @@
 }
 
 .user-info {
-  position: absolute;
-  top: -23px; /*basing it of the height of the dp including the border*/
   display: flex;
   flex-direction: row;
+  gap: 4px;
   color: var(--gs-fontcolor-one);
+  min-width: 0;
+  flex: 1; /* This allows it to grow and shrink */
+  max-width: calc(100% - 45px); /* ← ADD THIS: Reserve space for the icons */
 }
 
 .user-info img {
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 25px;
   object-fit: cover;
-  border: 3px solid var(--gs-bgcolor-three);
 }
 
 .user-info span {
-  font-size: 15px;
-  align-self: flex-end;
-  margin-bottom: 10px;
+  font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  align-content: center;
 }
 .stacks-component-headline {
-  /* Modern browsers */
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-
-  /* Fallback for non-WebKit */
   max-height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
-  /*Required */
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 20px;
 }
 
@@ -75,25 +79,28 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.stacks-component-functions div:nth-child(1) {
+.stacks-component-functions div:nth-child(2) {
   display: flex;
   flex: 0 0 auto;
   flex-direction: row;
+  justify-content: flex-end;
   gap: 5px;
-}
-
-.holder {
-  height: calc(100% - 30px);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 27px;
-  padding: 3px;
 }
 .del-func {
   color: var(--gs-color-secondary);
+}
+
+.date {
+  font-size: 10px;
+  color: var(--gs-fontcolor-three);
+  height: 10px;
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
 }
 /*Col Styling*/
 .stack-col {
@@ -114,7 +121,7 @@
 }
 
 .create-post-mobile {
-  bottom: 70px;
+  bottom: 80px;
   right: 20px;
   width: 56px;
   height: 56px;
@@ -253,24 +260,27 @@
   flex-direction: column;
 }
 
-/* Filter Select Bar - Sticky Header (simplified for Framer Motion control) */
 .stacks-filter-select {
   display: flex;
-  flex: 0 0 auto; /* Prevent growing/shrinking */
+  flex: 0 0 auto;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
   overflow-x: auto;
-  width: calc(100% - 45px);
-  padding: 10px 20px 10px 25px;
+  overflow-y: hidden;
+  width: calc(100% - 25px);
+  padding: 0px 10px 0px 15px;
   gap: 5px;
   position: sticky;
   top: 0;
   z-index: 10;
   background-color: var(--gs-bgcolor-one);
   border-bottom: var(--gs-border);
-    font-family: var(--gs-font-family-titillium);
+  font-family: var(--gs-font-family-titillium);
   font-weight: 600;
   font-style: var(--gs-font-style);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 /* Filter items (unchanged) */
@@ -298,21 +308,33 @@
 /* Main Scrollable Content Area - now with will-change for smoother animations */
 .stacks-list {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
   background-color: var(--gs-bgcolor-one);
   overflow-y: auto;
   overflow-x: hidden;
   width: calc(100% - 40px);
   min-height: 0;
   padding: 10px 20px 20px 20px; /* Top padding now animated via Framer Motion */
-  gap: 10px;
   line-height: 0;
   position: relative;
   will-change: padding-top; /* Optimize for padding animation */
-    font-family: var(--gs-font-family-titillium);
+  font-family: var(--gs-font-family-titillium);
   font-weight: 600;
   font-style: var(--gs-font-style);
+}
+
+.stacks-list-loader {
+  padding-top: 20px;
+  padding-bottom: 100px;
+}
+
+.stacks-column {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
 }
 
 /* Column styling (unchanged) */
@@ -323,7 +345,6 @@
   width: 50%;
   min-height: min-content; /* Ensure columns respect content height */
 }
-
 
 /*For detail stack when in stacks page*/
 .loadingState {
@@ -345,10 +366,13 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.errorState, .emptyState {
+.errorState,
+.emptyState {
   padding: 2rem;
   text-align: center;
   display: flex;
@@ -434,7 +458,6 @@
   background-color: var(--gs-bgcolor-one);
 }
 
-
 .socialShareButtons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -471,11 +494,11 @@
 }
 
 .whatsapp {
-  background: #25D366;
+  background: #25d366;
   color: white;
 }
 
 .telegram {
-  background: #0088CC;
+  background: #0088cc;
   color: white;
 }

@@ -26,10 +26,12 @@ const Layout = ({
   const hideNavbarPaths = [
     "/deckbuilder",
     "/stacks",
+    "/stack",
     "/decklib",
     "/notifications",
     "/account"
   ];
+
 
   const { isOpen, closeSearch } = useSearchState();
   const [initialGame, setInitialGame] = useState(tcgList[0]); // State for dynamic game

@@ -1,10 +1,10 @@
-.deckItem {
+.deckItemContainer {
   background: var(--gs-bgcolor-one);
   overflow-x: auto;
-  margin-bottom: 15px;
   display: flex;
   flex-direction: row;
   width: calc(100% - 20px);
+  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
   gap: 10px;
@@ -24,7 +24,44 @@
 }
 .deckCategory:nth-child(3) {
   padding-bottom: 10px;
-    height: fit-content;
+  height: fit-content;
+}
+.deckItem {
+  position: relative;
+  line-height: 0;
+}
+
+.deckItemScrollContainer {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: calc(100% - 20px);
+  padding-left: 10px;
+  padding-right: 10px;
+  gap: 10px;
+}
+.deckItemName {
+  position: absolute;
+  bottom: 10px;
+  left: 6px;
+  color: #f2f3f8;
+  width: calc(100% - 22px);
+  font-size: 12px;
+  height: 20px;
+  background-color: #2d1682;
+  border: 1px solid var(--gs-color-primary-light);
+  border-radius: 10px;
+  font-weight: 500;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
 }
 
@@ -32,6 +69,8 @@
   width: 100px;
   height: auto;
   object-fit: cover;
+  border: 2px solid var(--gs-color-primary-light);
+  border-radius: 7px;
   object-position: 0% 10%;
 }
 
@@ -47,18 +86,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100% - 20px);
-  padding-bottom: 10px;
-  padding-top: 10px;
+  height: calc(100% - 40px);
+  padding-bottom: 20px;
+  padding-top: 20px;
   overflow-y: auto;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
-  
+
   /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Add these to your existing CSS */
@@ -81,7 +120,7 @@
   border-radius: 10px;
   padding: 10px;
   font-size: 0.7rem;
-    margin-top: 5px;
+  margin-top: 5px;
   width: calc(100% - 20px);
 }
 

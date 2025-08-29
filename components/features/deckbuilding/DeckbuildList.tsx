@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useDeck } from "../../../contexts/DeckContext";
 import styles from "../../../styles/DeckbuildList.module.css";
 import DeckbuilderCounter from "./DeckbuilderCounter";

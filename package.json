@@ -9,6 +9,7 @@
   "dependencies": {
     "@firebase/auth": "^1.10.7",
     "axios": "^1.10.0",
+    "dexie": "^4.2.0",
     "firebase": "^11.9.1",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.516.0",

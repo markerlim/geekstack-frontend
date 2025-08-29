@@ -8,6 +8,7 @@ import { DeckProvider } from "../contexts/DeckContext";
 import { AuthProvider } from "../services/auth";
 import { SearchProvider } from "../contexts/SearchContext";
 import { Noto_Sans, Titillium_Web } from "next/font/google";
+import { ToastProvider } from "../contexts/ToastManager";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -20,7 +21,6 @@ const titillium = Titillium_Web({
   weight: ["200", "300", "400", "600", "700", "900"],
   variable: "--font-titillium", // This matches your CSS var
 });
-
 
 function MyApp({
   Component,
@@ -82,7 +82,9 @@ function MyApp({
           <AuthProvider>
             <SearchProvider>
               <DeckProvider>
-                <Component {...pageProps} />
+                <ToastProvider>
+                  <Component {...pageProps} />
+                </ToastProvider>
               </DeckProvider>
             </SearchProvider>
           </AuthProvider>

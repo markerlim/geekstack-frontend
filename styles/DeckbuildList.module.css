@@ -54,10 +54,6 @@
   outline: none;
 }
 
-.card-item img {
-  pointer-events: none;
-}
-
 .iconbg {
   position: absolute;
   top: 50%;

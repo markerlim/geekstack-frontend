@@ -5,11 +5,12 @@ import DeckbuilderMenu from "./DeckbuilderMenu";
 import DeckbuilderCover from "./DeckbuilderCoverSel";
 import DeckbuilderLoad from "./DeckbuilderLoad";
 import { useDeck } from "../../../contexts/DeckContext";
-import { Deck } from "../../../model/deck.model";
+import { Deck, LightDeck } from "../../../model/deck.model";
 import { useDevice } from "../../../contexts/DeviceContext";
 import DeckbuilderStats from "./DeckbuilderStats";
+import { DEFAULT_DECKCOVER } from "../../../utils/constants";
+import { loadDeck } from "../../../services/functions/gsDeckbuildingFunctions";
 import { useUserStore } from "../../../services/store/user.store";
-import { DEFAULT_DECKCOVER, TCGTYPE } from "../../../utils/constants";
 
 interface DeckbuilderBarProps {
   tcg: string;
@@ -26,14 +27,24 @@ const DeckbuilderBar = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCoverSelOpen, setIsCoverSelOpen] = useState(false);
   const [isDeckcoverLoad, setIsDeckcoverLoad] = useState(false);
-  const { getDecksByCategory } = useUserStore();
+  const [listofdecks, setListofdecks] = useState<LightDeck[]>([]);
   const device = useDevice();
   const isDesktop = device === "desktop";
-
-  const listofdecks = getDecksByCategory(tcg as TCGTYPE);
-  console.log("COUNT");
   const { clearList, selectedDeck, setSelectedDeck, updateDeckName } =
     useDeck();
+  const {getDecksByCategory} = useUserStore()
+
+  const loadDecks = async () => {
+    try {
+      //const decks: LightDeck[] = await loadDeck(tcg);
+      const decks = getDecksByCategory(tcg);
+      setListofdecks(decks);
+      console.log(decks);
+    } catch (error) {
+      console.error("Failed to load decks:", error);
+      setListofdecks([]); // Set empty array on error
+    }
+  };
 
   const handleCoverSelect = (coverUrl: string) => {
     selectedDeck.deckcover = coverUrl;
@@ -50,6 +61,7 @@ const DeckbuilderBar = ({
 
   const handleLoad = () => {
     setIsDeckcoverLoad(true);
+    loadDecks();
   };
 
   const handleDeckNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +78,10 @@ const DeckbuilderBar = ({
     setIsCollapsed(newState);
     onCollapseChange?.(newState); // Call the callback if provided
   };
+  
+  useEffect(() => {
+    console.log("Selected deck updated:", selectedDeck);
+  }, [selectedDeck]);
 
   return (
     <div
@@ -114,7 +130,6 @@ const DeckbuilderBar = ({
           {isMenuOpen && (
             <DeckbuilderMenu
               tcg={tcg}
-              userId={userId}
               selectedDeck={selectedDeck}
               onClose={() => setIsMenuOpen(false)}
               onLoad={handleLoad}

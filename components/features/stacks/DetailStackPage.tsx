@@ -6,7 +6,7 @@ import {
   Share2,
 } from "lucide-react";
 import { DeckPost, SubmitComment } from "../../../model/deckpost.model";
-import styles from "../../../styles/DetailStack.module.css";
+import styles from "../../../styles/DetailStackPage.module.css";
 import { formatTimeAgo, formatTimestamp } from "../../../utils/FormatDate";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -24,13 +24,17 @@ interface DetailStackProps {
   postDetails: DeckPost;
 }
 
-const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
+const DetailStackPage = ({
+  postDetails,
+  isLiked,
+  onClose,
+}: DetailStackProps) => {
   const { sqlUser } = useUserStore();
   const userId = sqlUser?.userId;
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState(postDetails?.listofcomments);
-    const isOwner = sqlUser?.userId === postDetails?.userId;
+  const isOwner = sqlUser?.userId === postDetails?.userId;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -114,6 +118,16 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
     }
   };
 
+  const handleJumpToComment = () => {
+    const commentSection = document.getElementById("commentJump");
+    if (commentSection) {
+      commentSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   const handleHeartClick = () => {
     if (!userId || !postDetails.postId) return;
     if (isLiked) {
@@ -123,9 +137,9 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
     }
   };
 
-  const handleShareClick = () =>{
+  const handleShareClick = () => {
     detailStackEvent.emit("post:share", postDetails.postId);
-  }
+  };
 
   return (
     <>
@@ -144,17 +158,18 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
         </div>
         <div className={styles["scroll-cont"]}>
           <div className={styles["listofcard"]}>
-            { cardlist?.length > 0 && cardlist.map((card) => (
-              <div key={card._id} className={styles["card-item-holder"]}>
-                <img
-                  src={card.imageSrc}
-                  alt=""
-                  className={styles["card-item"]}
-                  loading="lazy"
-                />
-                <span className={styles["card-count"]}>{card.count}</span>
-              </div>
-            ))}
+            {cardlist?.length > 0 &&
+              cardlist.map((card) => (
+                <div key={card._id} className={styles["card-item-holder"]}>
+                  <img
+                    src={card.imageSrc}
+                    alt=""
+                    className={styles["card-item"]}
+                    loading="lazy"
+                  />
+                  <span className={styles["card-count"]}>{card.count}</span>
+                </div>
+              ))}
           </div>
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
@@ -163,44 +178,45 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
               {formatTimestamp(postDetails?.timestamp)}
             </div>
             <div className={styles["comment-list"]}>
-              <div>{commentList?.length} comment</div>
-              {commentList?.length >0 && commentList.map((comment) => (
-                <div
-                  className={styles["comment-holder"]}
-                  key={comment.commentId}
-                >
-                  <img
-                    className={styles["comment-dp"]}
-                    src={comment.displaypic}
-                    alt=""
-                  />
-                  <div className={styles["comment-holder-text"]}>
-                    <div className={styles["comment-holder-name"]}>
-                      {" "}
-                      {comment.name}
-                    </div>
-                    <span className={styles["comment-holder-comment"]}>
-                      {comment.comment}
-                    </span>
-                    <div className={styles["comment-holder-func"]}>
-                      <code>{formatTimeAgo(comment.timestamp)}</code>
-                      {comment.userId == userId && (
-                        <code
-                          className={styles["delete-comment"]}
-                          onClick={() =>
-                            deleteComment(
-                              postDetails.postId || "NO_POST_ID",
-                              comment.commentId || "NO_COMMENT_ID"
-                            )
-                          }
-                        >
-                          DELETE
-                        </code>
-                      )}
+              <div id="commentJump">{commentList?.length} comment</div>
+              {commentList?.length > 0 &&
+                commentList.map((comment) => (
+                  <div
+                    className={styles["comment-holder"]}
+                    key={comment.commentId}
+                  >
+                    <img
+                      className={styles["comment-dp"]}
+                      src={comment.displaypic}
+                      alt=""
+                    />
+                    <div className={styles["comment-holder-text"]}>
+                      <div className={styles["comment-holder-name"]}>
+                        {" "}
+                        {comment.name}
+                      </div>
+                      <span className={styles["comment-holder-comment"]}>
+                        {comment.comment}
+                      </span>
+                      <div className={styles["comment-holder-func"]}>
+                        <code>{formatTimeAgo(comment.timestamp)}</code>
+                        {comment.userId == userId && (
+                          <code
+                            className={styles["delete-comment"]}
+                            onClick={() =>
+                              deleteComment(
+                                postDetails.postId || "NO_POST_ID",
+                                comment.commentId || "NO_COMMENT_ID"
+                              )
+                            }
+                          >
+                            DELETE
+                          </code>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>
@@ -221,8 +237,12 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
               style={{ cursor: "pointer" }}
               onClick={handleHeartClick}
             />
-            <MessageSquareText width={"30px"} height={"30px"} />
-            <Share2 width={"30px"} height={"30px"} onClick={handleShareClick}/>
+            <MessageSquareText
+              width={"30px"}
+              height={"30px"}
+              onClick={handleJumpToComment}
+            />
+            <Share2 width={"30px"} height={"30px"} onClick={handleShareClick} />
           </div>
         </div>
       </div>
@@ -283,4 +303,4 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
   );
 };
 
-export default DetailStack;
+export default DetailStackPage;

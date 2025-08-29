@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useUserStore } from "../../../services/store/user.store";
 import { TCGTYPE } from "../../../utils/constants";
 import styles from "../../../styles/AllDecks.module.css";
@@ -18,27 +18,55 @@ const AllDecks = () => {
     setIsLoading(false);
   }, []);
 
-  if (isLoading) {
-    return <div className={styles.loading}>Loading decks...</div>;
-  }
-  // Get filtered decks for display
-  const getDisplayDecks = () => {
+  // Memoize filtered decks to prevent unnecessary recalculations
+  const displayDecks = useMemo(() => {
     const decks =
       selectedCategory === "ALL"
         ? deckCategories.flatMap((category) => getDecksByCategory(category))
         : getDecksByCategory(selectedCategory);
 
+    const search = searchTerm.toLowerCase();
+
     return decks
       .filter((deck) => deck && deck.deckname)
-      .filter((deck) => deck.deckname.toLowerCase().includes(searchTerm));
-  };
+      .filter((deck) => {
+        const matchesDeckName = deck.deckname.toLowerCase().includes(search);
+        const matchesCardName = deck.listofcards?.some((card: any) =>
+          card.cardName?.toLowerCase().includes(search)
+        );
+
+        return matchesDeckName || matchesCardName;
+      });
+  }, [selectedCategory, searchTerm, getDecksByCategory, deckCategories]);
 
   const handleDeckSelect = (tcg: string, deckuid: string) => {
     router.push(`/deckbuilder/${tcg}?deckuid=${deckuid}`);
   };
 
-  const displayDecks = getDisplayDecks();
-  console.log("AllDecks displayDecks:", displayDecks);
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value as TCGTYPE | "ALL");
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
+
+  if (isLoading) {
+    return <div className={styles.loading}>Loading decks...</div>;
+  }
+
+  // Check if all categories are empty when "ALL" is selected
+  const allCategoriesEmpty =
+    selectedCategory === "ALL" &&
+    deckCategories.every(
+      (category) =>
+        getDecksByCategory(category).filter(
+          (deck) =>
+            deck &&
+            deck.deckname &&
+            deck.deckname.toLowerCase().includes(searchTerm)
+        ).length === 0
+    );
 
   return (
     <div className={styles.deckLibrary}>
@@ -48,7 +76,7 @@ const AllDecks = () => {
             const decks = getDecksByCategory(category)
               .filter((deck) => deck && deck.deckname)
               .filter((deck) =>
-                deck.deckname.toLowerCase().includes(searchTerm)
+                deck.deckname.toLowerCase().includes(searchTerm.toLowerCase())
               );
 
             if (decks.length === 0) return null;
@@ -58,33 +86,41 @@ const AllDecks = () => {
                 <div className={styles.deckCategory}>
                   {category.toUpperCase()}
                 </div>
-                <div className={styles.deckItem}>
+                <div className={styles.deckItemContainer}>
                   {decks.map((deck) => (
-                    <img
-                      onClick={() =>
-                        handleDeckSelect(category, deck.deckuid)
-                      }
-                      key={deck.deckuid}
-                      src={deck.deckcover}
-                      alt={deck.deckname}
-                    />
+                    <div key={deck.deckuid} className={styles.deckItem}>
+                      <img
+                        onClick={() => handleDeckSelect(category, deck.deckuid)}
+                        src={deck.deckcover}
+                        alt={deck.deckname}
+                        onError={(e) => {
+                          e.currentTarget.src = "/gsdeckimage.jpg";
+                        }}
+                      />
+                      <div className={styles.deckItemName}>{deck.deckname}</div>
+                    </div>
                   ))}
                 </div>
               </div>
             );
           })
         ) : (
-          <div className={styles.deckItem}>
+          <div className={styles.deckItemScrollContainer}>
             {displayDecks.length > 0 ? (
               displayDecks.map((deck) => (
-                <img
-                  onClick={() =>
-                    handleDeckSelect(selectedCategory, deck.deckuid)
-                  }
-                  key={deck.deckuid}
-                  src={deck.deckcover}
-                  alt={deck.deckname}
-                />
+                <div key={deck.deckuid} className={styles.deckItem}>
+                  <img
+                    onClick={() =>
+                      handleDeckSelect(selectedCategory, deck.deckuid)
+                    }
+                    src={deck.deckcover}
+                    alt={deck.deckname}
+                    onError={(e) => {
+                      e.currentTarget.src = "/gsdeckimage.jpg";
+                    }}
+                  />
+                  <div className={styles.deckItemName}>{deck.deckname}</div>
+                </div>
               ))
             ) : (
               <p className={styles.noDecks}>
@@ -95,30 +131,20 @@ const AllDecks = () => {
             )}
           </div>
         )}
-      </div>
-      {selectedCategory === "ALL" &&
-        deckCategories.every(
-          (category) =>
-            getDecksByCategory(category).filter(
-              (deck) =>
-                deck &&
-                deck.deckname &&
-                deck.deckname.toLowerCase().includes(searchTerm)
-            ).length === 0 && (
-              <p className={styles.noDecks}>
-                {searchTerm
-                  ? "No matching decks found in any category"
-                  : "No decks found in any category"}
-              </p>
-            )
+        {allCategoriesEmpty && (
+          <p className={styles.noDecks}>
+            {searchTerm
+              ? "No matching decks found"
+              : "No decks"}
+          </p>
         )}
+      </div>
+
       <div className={styles.deckCategory}>
         <select
           title="Select Deck Category"
           value={selectedCategory}
-          onChange={(e) =>
-            setSelectedCategory(e.target.value as TCGTYPE | "ALL")
-          }
+          onChange={handleCategoryChange}
           className={styles.categorySelect}
         >
           <option value="ALL">All Categories</option>
@@ -134,7 +160,7 @@ const AllDecks = () => {
           type="text"
           placeholder="Search decks by name..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          onChange={handleSearchChange}
           className={styles.searchInput}
         />
       </div>

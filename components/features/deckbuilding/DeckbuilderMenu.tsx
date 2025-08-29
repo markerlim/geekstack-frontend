@@ -7,10 +7,12 @@ import {
 import { ArrowRightFromLine, PackageOpen, Save } from "lucide-react";
 import { useDeck } from "../../../contexts/DeckContext";
 import { Deck } from "../../../model/deck.model";
+import { useToast } from "../../../contexts/ToastManager";
+import { useUserStore } from "../../../services/store/user.store";
+import { TCGTYPE } from "../../../utils/constants";
 
 interface DeckbuilderMenuProps {
   tcg: string;
-  userId: string;
   selectedDeck: Deck;
   onClose: () => void;
   onLoad: () => void;
@@ -18,35 +20,52 @@ interface DeckbuilderMenuProps {
 
 const DeckbuilderMenu = ({
   tcg,
-  userId,
   selectedDeck,
   onClose,
   onLoad,
 }: DeckbuilderMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
-  const { cardlist } = useDeck();
+  const { cardlist, clearListBypass } = useDeck();
+  const {addDeckToCategory} = useUserStore();
+  const { showToast } = useToast();
 
   const onSave = () => {
-    // Calculate the total count of cards
     const totalCount = cardlist.reduce(
       (sum, card) => sum + (card.count || 0),
       0
     );
 
     if (totalCount !== 50) {
-      // If count is not 50, show confirmation dialog
       const shouldSave = window.confirm(
         `Your deck has ${totalCount} cards (recommended is 50). Do you want to save anyway?`
       );
 
       if (!shouldSave) {
-        return; // Don't proceed with saving if user cancels
+        return;
       }
     }
-    selectedDeck.listofcards = cardlist
-    // Proceed with saving
-    saveDeck(selectedDeck, tcg);
-    onClose();
+    selectedDeck.listofcards = cardlist;
+    saveDeck(selectedDeck, tcg)
+      .then((res) => {
+        if (res?.status) {
+          showToast("✅ Deck saved successfully!", "success");
+          console.log()
+          if(!selectedDeck.deckuid){
+            selectedDeck.deckuid = res.data.deckuid;
+            addDeckToCategory(tcg as TCGTYPE,selectedDeck)
+          }
+          clearListBypass()
+          onClose();
+        } else {
+          showToast("⚠️ Failed to save deck. Please try again.", "error");
+        }
+      })
+      .catch(() => {
+        showToast(
+          "❌ An error occurred while saving. Please try again.",
+          "error"
+        );
+      });
   };
 
   const handleLoad = () => {

@@ -3,12 +3,17 @@ import styles from "../../../styles/DeckbuilderLoad.module.css";
 import { useDeck } from "../../../contexts/DeckContext";
 import { Share, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Deck } from "../../../model/deck.model";
-import { deleteDeck } from "../../../services/functions/gsDeckbuildingFunctions";
+import { Deck, DeckRecord, LightDeck } from "../../../model/deck.model";
+import {
+  deleteDeck,
+  loadOneDeck,
+} from "../../../services/functions/gsDeckbuildingFunctions";
+import { useUserStore } from "../../../services/store/user.store";
+import { TCGTYPE } from "../../../utils/constants";
 
 interface DeckbuilderLoadProps {
   tcg: string;
-  decks: readonly Deck[];
+  decks: DeckRecord[];
   onClose: () => void;
   onSelectedDeck: (deck: Deck) => void;
   isOpen: boolean;
@@ -22,21 +27,27 @@ const DeckbuilderLoad = ({
   isOpen,
 }: DeckbuilderLoadProps) => {
   const { setCardlist } = useDeck();
+  const { removeDeckFromCategory } = useUserStore();
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredDecks = useMemo(() => {
-    return decks.filter(
-      (deck) =>
-        deck.deckname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deck.listofcards?.some((card) =>
-          card.cardName?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
+    return decks.filter((deck) => {
+      const search = searchTerm.toLowerCase();
+
+      const matchesDeckName = deck.deckname?.toLowerCase().includes(search);
+
+      const matchesCardName = deck.listofcards?.some((card: any) =>
+        card.cardName?.toLowerCase().includes(search)
+      );
+
+      return matchesDeckName || matchesCardName;
+    });
   }, [decks, searchTerm]);
 
-  const handleDeckSelect = (deck : Deck) => {
-    onSelectedDeck(deck);
-    setCardlist(deck.listofcards);
+  const handleDeckSelect = async (deck: DeckRecord) => {
+    const res = await loadOneDeck(tcg, deck.deckuid);
+    onSelectedDeck(res);
+    setCardlist(res.listofcards);
     onClose();
   };
 
@@ -44,6 +55,7 @@ const DeckbuilderLoad = ({
     e.stopPropagation();
     try {
       const response = await deleteDeck(tcg, deckuid);
+      removeDeckFromCategory(tcg as TCGTYPE, deckuid);
       console.log("Deletion successful:", response);
       onClose();
     } catch (error) {
@@ -97,7 +109,13 @@ const DeckbuilderLoad = ({
                     whileHover={{ scale: 1.02 }}
                     onClick={() => handleDeckSelect(deck)}
                   >
-                    <img src={deck.deckcover} alt={deck.deckname} />
+                    <img
+                      src={deck.deckcover}
+                      alt={deck.deckname}
+                      onError={(e) => {
+                        e.currentTarget.src = "/gsdeckimage.jpg";
+                      }}
+                    />
                     <div className={styles.deckInfo}>
                       <h3>{deck.deckname}</h3>
                       <div className={styles.deckInfoFunc}>

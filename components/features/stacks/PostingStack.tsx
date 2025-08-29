@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useUserStore } from "../../../services/store/user.store";
 import { useState, useRef, useEffect } from "react";
 import { TCGTYPE } from "../../../utils/constants";
-import { Deck } from "../../../model/deck.model";
+import { Deck, DeckRecord } from "../../../model/deck.model";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -18,7 +18,7 @@ interface PostingStackProps {
 
 const PostingStack = ({ onClose }: PostingStackProps) => {
   const [deckType, setDeckType] = useState(TCGTYPE.UNIONARENA);
-  const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
+  const [selectedDeck, setSelectedDeck] = useState<DeckRecord | null>(null);
   const [selectedPostCover, setSelectedPostCover] = useState<string>("");
 
   const { sqlUser, getDecksByCategory } = useUserStore();
@@ -60,7 +60,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const handlePosting = (deck: Deck | null) => {
+  const handlePosting = (deck: DeckRecord | null) => {
     if (!deck) {
       console.error("No deck selected for posting");
       return;
@@ -74,7 +74,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       selectedCards: [{ imageSrc: selectedPostCover || "" }],
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
-        imageSrc: card.urlimage,
+        imageSrc: card.imageSrc,
         cardName: card.cardName,
         count: card.count,
       })),
@@ -205,13 +205,13 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
                 key={card._id}
                 className={
                   styles["image-selection"] +
-                  (selectedPostCover === card.urlimage
+                  (selectedPostCover === card.imageSrc
                     ? " " + styles["selected"]
                     : "")
                 }
-                src={card.urlimage}
+                src={card.imageSrc}
                 alt={card.cardName}
-                onClick={() => handlePostCover(card.urlimage)}
+                onClick={() => handlePostCover(card.imageSrc)}
               />
             ))}
           </div>

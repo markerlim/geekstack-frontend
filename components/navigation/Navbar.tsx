@@ -8,8 +8,7 @@ import { useDevice } from "../../contexts/DeviceContext";
 import { useRouter } from "next/router";
 import ListOfNotifications from "../features/notifications/ListOfNotifications";
 import { useSearchState } from "../features/search/useSearchState";
-import CardLoader from "../loader/CardLoader";
-import CardSpinner from "../loader/CardSpinner";
+import CardSpinner from "../genericComponent/CardSpinner";
 
 const Navbar = () => {
   const router = useRouter();

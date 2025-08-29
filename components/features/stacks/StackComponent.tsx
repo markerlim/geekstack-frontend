@@ -1,28 +1,27 @@
-import { Heart, MessageSquareText, Share2, X } from "lucide-react";
+import { Heart, Share2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import styles from "../../../styles/StacksPage.module.css";
-import DetailStack from "./DetailStack";
 import { DeckPost } from "../../../model/deckpost.model";
 import { useUserStore } from "../../../services/store/user.store";
 import {
-  userDeletePost,
   userLikePost,
   userUnlikePost,
 } from "../../../services/functions/gsUserPostService";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import ShareContent from "./ShareContent";
+import { useRouter } from "next/router";
+import { formatTimestamp } from "../../../utils/FormatDate";
 
 interface StacksComponentProps {
   post: DeckPost;
 }
 
 const StacksComponent = ({ post }: StacksComponentProps) => {
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const router = useRouter();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [postUrl, setPostUrl] = useState("");
   const sqlUser = useUserStore((state) => state.sqlUser);
-  const isOwner = sqlUser?.userId === post.userId;
   const [isLiked, setIsLiked] = useState(
     sqlUser?.userId ? post.listoflikes.includes(sqlUser.userId) : false
   );
@@ -74,40 +73,15 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     }
   };
 
-  const handleCommentPost = () => {
-    console.log("comment clicked");
-  };
-
   const handleSharePost = (e?: React.MouseEvent) => {
     if (e && typeof e.stopPropagation === "function") e.stopPropagation();
-    setPostUrl(
-      `${window.location.origin}/stacks/${post.postId}`
-    );
+    setPostUrl(`${window.location.origin}/stacks/${post.postId}`);
     setIsShareOpen(true);
   };
 
-
-
-  // Handle post deletion api call
-  const handleDeletingPost = (
-    e: React.MouseEvent,
-    postId: string | undefined
-  ) => {
-    e.stopPropagation();
-    if (!postId) {
-      console.error("Post ID is missing for deletion");
-      return;
-    }
-
-    // Show confirmation dialog
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      // User clicked "OK"
-      userDeletePost(postId);
-      detailStackEvent.emit("post:deleted");
-    } else {
-      // User clicked "Cancel"
-      console.log("Post deletion cancelled");
-    }
+  const handleOpenPost = () => {
+    detailStackEvent.emit("post:opened", post.postId);
+    router.push(`/stack/${post.postId}`, undefined, { shallow: true });
   };
 
   // Event listener for liking and unliking posts from detail stack
@@ -145,78 +119,37 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     <>
       <div
         className={styles["stacks-component"]}
-        onClick={() => setIsDetailOpen(true)}
+        data-post-id={post.postId}
+        onClick={handleOpenPost}
       >
         <div className={styles["stacks-component-cover"]}>
           <img src={post.selectedCards[0].imageSrc} alt="deck" />
         </div>
         <div className={styles["stacks-component-content"]}>
-          <div className={styles["user-info"]}>
-            <img src={post.displaypic} alt="display picture" />
-            <span>{post.name}</span>
+          <div className={styles["stacks-component-headline"]}>
+            <span>{post.headline}</span>
           </div>
-          <div className={styles["holder"]}>
-            <div className={styles["stacks-component-headline"]}>
-              <span>{post.headline}</span>
+          <div className={styles["stacks-component-functions"]}>
+            <div className={styles["user-info"]}>
+              <img src={post.displaypic} alt="display picture" />
+              <span>{post.name}</span>
             </div>
-            <div className={styles["stacks-component-functions"]}>
-              <div>
-                <Heart
-                  onClick={isLiked ? handleUnlike : handleLike}
-                  fill={isLiked ? "var(--gs-color-secondary)" : "none"}
-                  stroke={
-                    isLiked ? "var(--gs-color-secondary)" : "currentColor"
-                  }
-                  className={styles["likes-btn"]}
-                />
-                <MessageSquareText onClick={handleCommentPost} />
-                <Share2 onClick={handleSharePost} />
-              </div>
-              {isOwner && (
-                <div
-                  className={styles["del-func"]}
-                  onClick={(e) => handleDeletingPost(e, post.postId)}
-                >
-                  <X />
-                </div>
-              )}
+            <div>
+              <Heart
+                size={20}
+                onClick={isLiked ? handleUnlike : handleLike}
+                fill={isLiked ? "var(--gs-color-secondary)" : "none"}
+                stroke={isLiked ? "var(--gs-color-secondary)" : "currentColor"}
+                className={styles["likes-btn"]}
+              />
+              <Share2 size={20} onClick={handleSharePost} />
             </div>
+          </div>
+          <div className={styles["date"]}>
+            <span>{formatTimestamp(post.timestamp)}</span>
           </div>
         </div>
       </div>
-
-      {/* Detail Stack with Framer Motion */}
-      <AnimatePresence>
-        {isDetailOpen && (
-          <motion.div
-            className={styles.detailOverlay}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsDetailOpen(false)}
-          >
-            <motion.div
-              className={styles.detailContainer}
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{
-                type: "tween",
-                duration: 0.3,
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <DetailStack
-                postDetails={post}
-                isLiked={isLiked}
-                onClose={() => setIsDetailOpen(false)}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/**/}
       <AnimatePresence>
         {isShareOpen && (
           <>

@@ -1,4 +1,4 @@
-import { Deck } from "./deck.model";
+import { Deck, DeckRecord, LightDeck } from "./deck.model";
 
 export interface gsUser {
   userId: string;
@@ -10,13 +10,13 @@ export interface gsSQLUser extends gsUser {
 }
 
 export interface gsMongoUser extends gsUser {
-  crbdecks: Deck[];
-  uadecks: Deck[];
-  opdecks: Deck[];
-  dbzfwdecks: Deck[];
-  dmdecks: Deck[];
-  gcgdecks: Deck[];
-  hocgdecks: Deck[];
+  crbdecks: DeckRecord[];
+  uadecks: DeckRecord[];
+  opdecks: DeckRecord[];
+  dbzfwdecks: DeckRecord[];
+  dmdecks: DeckRecord[];
+  gcgdecks: DeckRecord[];
+  hocgdecks: DeckRecord[];
 }
 
 export interface Notification {

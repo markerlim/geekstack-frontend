@@ -95,6 +95,19 @@ export async function fetchUserPostByListing(page: number, limit: number) {
 }
 
 /**
+ * This function is to return search result of postings with param for pagination and limit
+ * @param term 
+ * @param page
+ * @param limit
+ * @returns
+ */
+export async function fetchUserPostBySearch(term:string ,page: number, limit: number) {
+  const urlPath = `${getApiBaseUrl()}/userpost/search/${term}?page=${page}&limit=${limit}`;
+  const response = await apiClient.get<DeckPost[]>(urlPath);
+  return response.data;
+}
+
+/**
  * Ths function is used to create a user post
  * @param post
  * @returns

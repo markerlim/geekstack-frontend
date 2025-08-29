@@ -30,6 +30,7 @@ type DeckContextType = {
   getCardCount: (cardId: string) => number;
   getCardData: (cardId: string) => GameCard | undefined;
   clearList: () => Promise<boolean>;
+  clearListBypass: () => Promise<boolean>;
 };
 
 const DeckContext = createContext<DeckContextType | undefined>(undefined);
@@ -165,6 +166,20 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const clearListBypass = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+          setDeckCards([]);
+          setCardlist([]);
+          setSelectedDeck({
+            deckuid: "",
+            deckname: "DeckName",
+            deckcover: "/gsdeckimage.jpg",
+            listofcards: [],
+          });
+          resolve(true)
+    });
+  };
+
   const cardlist = useMemo(() => {
     return deckCards.map((deckCard) => ({
       ...deckCard.card,
@@ -189,6 +204,7 @@ export function DeckProvider({ children }: { children: React.ReactNode }) {
       getCardCount,
       getCardData,
       clearList,
+      clearListBypass
     }),
     [currentDeck, deckCards, preFilterList]
   );

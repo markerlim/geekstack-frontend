@@ -5,11 +5,13 @@ import {
   CardUnionArena,
   CookieRunCard,
   DuelmastersCard,
+  GameCard,
   GundamCard,
   HololiveCard,
 } from "../../model/card.model";
 import { getApiBaseUrl } from "../../utils/apiBase";
 import { TCGTYPE } from "../../utils/constants";
+import { db } from "../../services/indexdb/carddatabase"; // adjust path to your CardDatabase file
 
 /**
  * /data -> for datas
@@ -25,11 +27,33 @@ import { TCGTYPE } from "../../utils/constants";
  * @returns
  */
 export async function fetchBoosters(tcg: string) {
-  const res = await fetch(`${getApiBaseUrl()}/boosterlist/${tcg}`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch boosters");
+  /*const cachedData = await db.boosters.get(tcg);
+  if (cachedData) {
+    return cachedData.data;
+  }*/
+
+  try {
+    const res = await fetch(`${getApiBaseUrl()}/boosterlist/${tcg}`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch boosters");
+    }
+    const data = await res.json();
+
+    /*const boosterData = {
+      tcg, // This will be the primary key (e.g., "unionarena", "onepiece")
+      data,
+      timestamp: new Date().toISOString(),
+    };
+
+    // put() will automatically update if the tcg already exists, or add if new
+    await db.boosters.put(boosterData);
+
+    console.log(`✅ Saved boosters for ${tcg} to IndexedDB`);*/
+    return data;
+  } catch (error) {
+    console.error(`❌ Error saving boosters for ${tcg}:`, error);
+    throw error;
   }
-  return res.json();
 }
 
 /**
@@ -39,11 +63,30 @@ export async function fetchBoosters(tcg: string) {
  * @returns
  */
 export async function fetchCardsByTcg(tcg: string, setType: string) {
+  /*const cached = await db.cards.where({ tcg, setType }).toArray();
+  if (cached.length > 0) {
+    console.log("✅ Loaded from IndexedDB");
+    return cached;
+  }
+    */
+
   const res = await fetch(`${getApiBaseUrl()}/data/${tcg}/${setType}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch ${setType} from ${tcg}`);
   }
   const rawData = await res.json();
+
+  /*const cards: GameCard[] = rawData.map((rawCard: any) => {
+    const mapped = mapToGameCard(rawCard, tcg);
+    return {
+      ...mapped,
+      id: `${mapped._id}`,
+      tcg,
+      setType,
+    };
+  });
+
+  await db.cards.bulkPut(cards);*/
 
   return rawData.map((rawCard: any) => mapToGameCard(rawCard, tcg));
 }
@@ -77,9 +120,7 @@ export async function searchForCard(term: string, tcg: string) {
   }
   console.log(res);
   const rawData = await res.json();
-  return rawData.map((rawCard: any) =>
-    mapToGameCard(rawCard, tcg)
-  );
+  return rawData.map((rawCard: any) => mapToGameCard(rawCard, tcg));
 }
 
 function mapToGameCard(rawCard: any, tcgType: string) {

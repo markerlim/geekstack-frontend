@@ -7,13 +7,14 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ onClose }: LoginModalProps) => {
-  const { googleSignIn, signIn, loading, error } = useAuth();
+  const { googleSignIn, signIn, loading, error, logOut} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const handleGoogleLogin = async () => {
     try {
+      logOut();
       await googleSignIn();
       onClose();
     } catch (err: any) {
@@ -25,6 +26,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      logOut();
       await signIn(email, password);
       onClose();
     } catch (err:any) {

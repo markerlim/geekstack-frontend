@@ -5,6 +5,7 @@
   --gs-color-secondary: #e33c58;
   --gs-bgcolor-one: rgb(16, 20, 24);
   --gs-bgcolor-two: #121212;
+  --gs-bgcolor-two-a: #1c1c1c;
   --gs-bgcolor-three: #26262d;
   --gs-fontcolor-one: #f2f3f8;
   --gs-fontcolor-two: #121212;
@@ -41,8 +42,8 @@ body.light {
 
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {

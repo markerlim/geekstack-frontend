@@ -1,4 +1,4 @@
-type stackEventTypes = "post:created" | "post:deleted" | "post:commented" | "post:liked" | "post:unliked" | "post:share";
+type stackEventTypes = "post:created" | "post:deleted" | "post:commented" | "post:liked" | "post:unliked" | "post:share" | "post:opened" | "post:closed";
 type Handler = (...args: any[]) => void;
 
 const listeners: { [K in stackEventTypes]?: Handler[] } = {};
