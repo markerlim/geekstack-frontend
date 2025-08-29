@@ -5,7 +5,7 @@ import DeckbuilderMenu from "./DeckbuilderMenu";
 import DeckbuilderCover from "./DeckbuilderCoverSel";
 import DeckbuilderLoad from "./DeckbuilderLoad";
 import { useDeck } from "../../../contexts/DeckContext";
-import { Deck, LightDeck } from "../../../model/deck.model";
+import { Deck, DeckRecord, LightDeck } from "../../../model/deck.model";
 import { useDevice } from "../../../contexts/DeviceContext";
 import DeckbuilderStats from "./DeckbuilderStats";
 import { DEFAULT_DECKCOVER } from "../../../utils/constants";
@@ -27,7 +27,7 @@ const DeckbuilderBar = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCoverSelOpen, setIsCoverSelOpen] = useState(false);
   const [isDeckcoverLoad, setIsDeckcoverLoad] = useState(false);
-  const [listofdecks, setListofdecks] = useState<LightDeck[]>([]);
+  const [listofdecks, setListofdecks] = useState<DeckRecord[]>([]);
   const device = useDevice();
   const isDesktop = device === "desktop";
   const { clearList, selectedDeck, setSelectedDeck, updateDeckName } =

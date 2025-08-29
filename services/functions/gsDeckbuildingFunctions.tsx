@@ -17,6 +17,7 @@ export async function saveDeck(deck: Deck, tcg: string) {
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
         cardName: card.cardName,
+        imageSrc: card.urlimage,
         count: card.count,
       })),
     };
