@@ -70,11 +70,16 @@ export async function fetchUserPostById(postId: string): Promise<{
 export async function fetchUserPostByType(
   tcg: string,
   page: number,
-  limit: number
+  limit: number,
+  code?: string
 ) {
-  const res = await fetch(
-    `${getApiBaseUrl()}/userpost/type/${tcg}?page=${page}&limit=${limit}`
-  );
+  let url = `${getApiBaseUrl()}/userpost/type/${tcg}?page=${page}&limit=${limit}`;
+
+  if (code) {
+    url += `&code=${code}`;
+  }
+  const res = await fetch(url);
+
   if (!res.ok) {
     throw new Error(`Failed to fetch userpost`);
   }
@@ -96,13 +101,27 @@ export async function fetchUserPostByListing(page: number, limit: number) {
 
 /**
  * This function is to return search result of postings with param for pagination and limit
- * @param term 
+ * @param term
  * @param page
  * @param limit
  * @returns
  */
-export async function fetchUserPostBySearch(term:string ,page: number, limit: number) {
-  const urlPath = `${getApiBaseUrl()}/userpost/search/${term}?page=${page}&limit=${limit}`;
+export async function fetchUserPostBySearch(
+  term: string,
+  page: number,
+  limit: number,
+  type?: string,
+  code?: string
+) {
+  let urlSegment = "search";
+  if (type) {
+    urlSegment = `type/${type}/search`;
+  }
+  let urlPath = `${getApiBaseUrl()}/userpost/${urlSegment}/${term}?page=${page}&limit=${limit}`;
+  if (code) {
+    urlPath += `&code=${code}`;
+  }
+  console.log(urlPath)
   const response = await apiClient.get<DeckPost[]>(urlPath);
   return response.data;
 }
@@ -188,10 +207,10 @@ export async function userUnlikePost(postId: string) {
 
 /**
  * Reporting of cards with errors
- * @param cardUid 
- * @param userId 
- * @param errorMsg 
- * @returns 
+ * @param cardUid
+ * @param userId
+ * @param errorMsg
+ * @returns
  */
 export async function userReportError(
   cardUid: string,
@@ -199,13 +218,13 @@ export async function userReportError(
   errorMsg: string
 ) {
   let userid = "NO_USER_ID";
-  if (userId){
+  if (userId) {
     userid = userId;
   }
   const payload = {
-    "cardUid": cardUid,
-    "userId": userid,
-    "errorMsg": errorMsg,
+    cardUid: cardUid,
+    userId: userid,
+    errorMsg: errorMsg,
   };
   try {
     const response = await apiClient.post("/user/report-error", payload);

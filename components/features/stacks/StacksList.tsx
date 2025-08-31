@@ -18,7 +18,7 @@ import { DiamondPlus } from "lucide-react";
 import { useDevice } from "../../../contexts/DeviceContext";
 import PostingStack from "./PostingStack";
 import { TCGTYPE } from "../../../utils/constants";
-import { tcgList } from "../../../data/tcgList";
+import { tcgList, TCGSETList } from "../../../data/tcgList";
 import { formatFirstLetterCap } from "../../../utils/FormatText";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import { useRouter } from "next/router";
@@ -31,7 +31,7 @@ interface StacksScrollState {
   rightColumn: DeckPost[];
   currentPage: number;
   hasMore: boolean;
-  tcg: TCGTYPE;
+  tcg: TCGTYPE | null;
   isStateRestored: boolean;
   searchTerm: string;
 }
@@ -39,8 +39,7 @@ interface StacksScrollState {
 const StacksList = () => {
   const router = useRouter();
   const device = useDevice();
-  const all = "all" as TCGTYPE;
-  const [tcg, setTcg] = useState(all);
+  const [tcg, setTcg] = useState<TCGTYPE | null>(null);
   const [leftColumn, setLeftColumn] = useState<DeckPost[]>([]);
   const [rightColumn, setRightColumn] = useState<DeckPost[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -52,6 +51,7 @@ const StacksList = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [savedLastViewedId, setSavedLastViewedId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [secondFilter, setSecondFilter] = useState("");
 
   const filterRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,9 +111,9 @@ const StacksList = () => {
     async (
       page: number,
       isInitial = false,
-      targetTcg: TCGTYPE = tcg,
+      targetTcg: TCGTYPE | null = tcg,
       targetSearchTerm: string = searchTerm,
-      skipIfExists = false
+      skipIfExists: boolean = false
     ) => {
       if (paginationLock.current || isRestoringState.current) {
         return;
@@ -122,7 +122,6 @@ const StacksList = () => {
       if (skipIfExists && (leftColumn.length > 0 || rightColumn.length > 0)) {
         return;
       }
-
       paginationLock.current = true;
       setLoading(true);
 
@@ -132,17 +131,25 @@ const StacksList = () => {
           posts = await fetchUserPostBySearch(
             targetSearchTerm,
             page,
-            POSTS_PER_PAGE
+            POSTS_PER_PAGE,
+            tcg as TCGTYPE,
+            secondFilter
+          );
+        } else if (secondFilter) {
+          posts = await fetchUserPostByType(
+            tcg as TCGTYPE,
+            page,
+            POSTS_PER_PAGE,
+            secondFilter
           );
         } else {
           posts =
-            targetTcg === all
+            targetTcg === null
               ? await fetchUserPost(page, POSTS_PER_PAGE)
               : await fetchUserPostByType(targetTcg, page, POSTS_PER_PAGE);
         }
 
         if (Array.isArray(posts)) {
-          // Check if we have more data
           if (posts.length < POSTS_PER_PAGE) {
             setHasMore(false);
           }
@@ -158,7 +165,7 @@ const StacksList = () => {
               right.push(item);
             }
           });
-          
+
           await new Promise((resolve) => setTimeout(resolve, 500));
           if (isInitial) {
             setLeftColumn(left);
@@ -178,7 +185,6 @@ const StacksList = () => {
     [tcg, searchTerm, leftColumn.length, rightColumn.length]
   );
 
-  // Initialize component - handle state restoration or fresh load
   useEffect(() => {
     if (isInitialized) return;
 
@@ -193,7 +199,6 @@ const StacksList = () => {
             isRestoringState.current = true;
             hasRestoredState.current = true;
 
-            // Restore all state except scroll position
             setTcg(state.tcg);
             setLeftColumn(state.leftColumn);
             setRightColumn(state.rightColumn);
@@ -224,8 +229,10 @@ const StacksList = () => {
     };
 
     initializeComponent();
-  }, [loadPosts, tcg, isInitialized]);
+    console.log("INIT");
+  }, [tcg, isInitialized]);
 
+  // For jumping to post straight
   useEffect(() => {
     if (isInitialized && containerRef.current && savedLastViewedId) {
       console.log("Now jumping to", savedLastViewedId);
@@ -272,7 +279,15 @@ const StacksList = () => {
       container.removeEventListener("scroll", handleScroll);
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [currentPage, hasMore, loading, loadPosts, tcg, isInitialized, searchTerm]);
+  }, [
+    currentPage,
+    hasMore,
+    loading,
+    loadPosts,
+    tcg,
+    isInitialized,
+    searchTerm,
+  ]);
 
   const handleOpenPosting = () => {
     setIsPostingOpen(true);
@@ -287,21 +302,32 @@ const StacksList = () => {
       ? styles["create-post-desktop"]
       : styles["create-post-mobile"];
 
-  const handleSelectTCG = async (tcgItem: TCGTYPE) => {
-    // Clear saved state when filter changes
-    sessionStorage.removeItem("stacksScrollState");
-    hasRestoredState.current = false;
-
-    setTcg(tcgItem);
+  const handleSelectTCG = async (tcgItem: TCGTYPE | null) => {
+    const newTcg = tcg === tcgItem ? null : tcgItem;
+    setTcg(newTcg);
     setCurrentPage(0);
     setLeftColumn([]);
     setRightColumn([]);
     setSearchTerm("");
     setHasMore(true);
-
-    await loadPosts(0, true, tcgItem, "");
+    setSecondFilter("");
   };
 
+  const handleUnionArenaFilter = async (unionarenacode: string) => {
+    const newFilter = secondFilter === unionarenacode ? "" : unionarenacode;
+    setCurrentPage(0);
+    setLeftColumn([]);
+    setRightColumn([]);
+    setSearchTerm("");
+    setHasMore(true);
+    setSecondFilter(newFilter);
+  };
+
+  useEffect(() => {
+    loadPosts(0, true, tcg, "");
+  }, [secondFilter, tcg]);
+
+  // Setting post in session
   useEffect(() => {
     const handleDetailStack = (post: string) => {
       console.log("POST: ", post);
@@ -324,6 +350,7 @@ const StacksList = () => {
     };
   }, [leftColumn, rightColumn, currentPage, hasMore, tcg, searchTerm]);
 
+  // Function to jump to last clicked post if clicked from stacks
   const handleJumpToContent = (postId: string) => {
     console.log("jumping to ", postId);
     const contentSection = document.querySelector(
@@ -366,15 +393,15 @@ const StacksList = () => {
     };
   }, [tcg, loadPosts]);
 
-  // Fixed search handling with debounce
+  // For data loading when search term is not empty
   useEffect(() => {
-    if (!isInitialized) return;
-    
+    if (!isInitialized || !searchTerm.trim()) return;
+
     // Clear previous timeout
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
-    
+
     // Set new timeout for search
     searchTimeoutRef.current = setTimeout(() => {
       // Reset before search
@@ -382,11 +409,11 @@ const StacksList = () => {
       setRightColumn([]);
       setCurrentPage(0);
       setHasMore(true);
-      
+
       // Trigger new search with current searchTerm
       loadPosts(0, true, tcg, searchTerm, false);
     }, 300); // 300ms debounce
-    
+
     return () => {
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current);
@@ -457,12 +484,6 @@ const StacksList = () => {
         }}
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
       >
-        <div
-          className={`${all === tcg && styles["active"]}`}
-          onClick={() => handleSelectTCG(all)}
-        >
-          All
-        </div>
         {tcgList.map((tcgItem) => (
           <div
             key={tcgItem.tcg}
@@ -473,6 +494,30 @@ const StacksList = () => {
           </div>
         ))}
       </motion.div>
+      <motion.div
+        className={styles["unionarena-filter-select"]}
+        initial={{ height: 0, borderBottom: "none" }}
+        animate={{
+          height: tcg === TCGTYPE.UNIONARENA && isFilterVisible ? 50 : 0,
+          borderBottom:
+            tcg === TCGTYPE.UNIONARENA && isFilterVisible ? "var(--gs-border)" : "none",
+        }}
+        transition={{ type: "spring", stiffness: 200, damping: 30 }}
+      >
+        {tcg === TCGTYPE.UNIONARENA &&
+          Object.entries(TCGSETList.unionarenaList).reverse().map(
+            ([animeName, animeCode]) => (
+              <div
+                key={animeCode}
+                className={`${animeCode === secondFilter && styles["active"]}`}
+                onClick={() => handleUnionArenaFilter(animeCode)}
+              >
+                <code>{animeName}</code>
+              </div>
+            )
+          )}
+      </motion.div>
+
       <div className={styles["stacks-list"]} ref={containerRef}>
         <div className={styles["stacks-column"]}>
           <LeftStackCol items={leftColumn} />

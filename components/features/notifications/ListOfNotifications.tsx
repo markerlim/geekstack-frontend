@@ -16,7 +16,7 @@ const ListOfNotifications = ({isComponent}:ListOfNotificationsProps) => {
     const [error, setError] = useState<string | null>(null);
 
     const navigateToPost = (postId: string) => {
-        router.push(`/stacks/${postId}`);
+        router.push(`/stack/${postId}`);
     }
     useEffect(() => {
         const fetchNotifications = async () => {

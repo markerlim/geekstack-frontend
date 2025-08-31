@@ -279,8 +279,9 @@
   font-family: var(--gs-font-family-titillium);
   font-weight: 600;
   font-style: var(--gs-font-style);
-  scrollbar-width: thin;
   scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
 }
 
 /* Filter items (unchanged) */
@@ -302,6 +303,52 @@
 }
 
 .stacks-filter-select div::first-letter {
+  text-transform: uppercase;
+}
+
+.unionarena-filter-select {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: calc(100% - 25px);
+  padding: 0px 10px 0px 15px;
+  gap: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--gs-bgcolor-one);
+  border-bottom: var(--gs-border);
+  font-family: var(--gs-font-family-titillium);
+  font-weight: 600;
+  font-style: var(--gs-font-style);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+/* Filter items (unchanged) */
+.unionarena-filter-select div {
+  color: var(--gs-fontcolor-three);
+  background-color: var(--gs-bgcolor-three);
+  padding: 0px 12px;
+  height: 34px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Prevent text wrapping */
+  transition: all 0.3s ease-in-out;
+}
+
+.unionarena-filter-select div.active {
+  background-color: var(--gs-color-primary);
+  color: var(--gs-fontcolor-one);
+}
+
+.unionarena-filter-select div::first-letter {
   text-transform: uppercase;
 }
 
