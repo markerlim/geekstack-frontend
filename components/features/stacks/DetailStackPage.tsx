@@ -1,9 +1,14 @@
 import {
   ChevronLeft,
+  Delete,
+  Ellipsis,
   Heart,
   MessageSquareText,
   MoveUp,
+  Share,
   Share2,
+  Trash,
+  X,
 } from "lucide-react";
 import { DeckPost, SubmitComment } from "../../../model/deckpost.model";
 import styles from "../../../styles/DetailStackPage.module.css";
@@ -17,6 +22,7 @@ import {
 } from "../../../services/functions/gsUserPostService";
 import { useUserStore } from "../../../services/store/user.store";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
+import ShareContent from "./ShareContent";
 
 interface DetailStackProps {
   onClose: () => void;
@@ -34,6 +40,8 @@ const DetailStackPage = ({
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState(postDetails?.listofcomments);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isShareOpen,setIsShareOpen] = useState(false);
   const isOwner = sqlUser?.userId === postDetails?.userId;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -53,7 +61,7 @@ const DetailStackPage = ({
   const cardlist = postDetails?.listofcards;
   const posteePic = postDetails?.displaypic;
   const posteeName = postDetails?.name || "No Name";
-
+  const postUrl = `${window.location.origin}/stacks/${postDetails.postId}`;
   const emojiList = ["😀", "😂", "😍", "🔥", "👍", "💯", "🥳", "🤔", "🎉"];
 
   const addEmoji = (emoji: string, event: React.MouseEvent) => {
@@ -137,24 +145,52 @@ const DetailStackPage = ({
     }
   };
 
-  const handleShareClick = () => {
-    detailStackEvent.emit("post:share", postDetails.postId);
+  const handleSharePost = (e?: React.MouseEvent) => {
+    if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+    setIsShareOpen(true);
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
   };
 
   return (
     <>
       <div className={styles["detail-main"]}>
-        <ChevronLeft className={styles["back-btn"]} onClick={onClose} />
-        <div className={styles["postee-info"]}>
-          <img
-            className={styles["display-pic"]}
-            src={posteePic}
-            alt={posteeName}
-            loading="lazy"
-          />{" "}
-          {posteeName.length > 20
-            ? posteeName.slice(0, 17) + "..."
-            : posteeName}
+        <div className={styles["detail-top"]}>
+          <ChevronLeft className={styles["top-btn"]} onClick={onClose} />
+          <div className={styles["postee-info"]}>
+            <img
+              className={styles["display-pic"]}
+              src={posteePic}
+              alt={posteeName}
+              loading="lazy"
+            />{" "}
+            {posteeName.length > 20
+              ? posteeName.slice(0, 17) + "..."
+              : posteeName}
+          </div>
+          <div>
+            <Ellipsis className={styles["top-btn"]} onClick={toggleMenu} />
+            {menuOpen && (
+              <div className={styles["dropdown-menu"]}>
+                {isOwner && (
+                  <button
+                    className={styles["dropdown-menu-item"]}
+                    onClick={(e) => handleDeletingPost(e, postDetails.postId)}
+                  >
+                    <Trash size={16} /> Delete
+                  </button>
+                )}
+                <button
+                  className={styles["dropdown-menu-item"]}
+                  onClick={handleSharePost}
+                >
+                  <Share size={16} /> Share
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles["scroll-cont"]}>
           <div className={styles["listofcard"]}>
@@ -242,7 +278,7 @@ const DetailStackPage = ({
               height={"30px"}
               onClick={handleJumpToComment}
             />
-            <Share2 width={"30px"} height={"30px"} onClick={handleShareClick} />
+            <Share2 width={"30px"} height={"30px"} onClick={handleSharePost} />
           </div>
         </div>
       </div>
@@ -295,6 +331,50 @@ const DetailStackPage = ({
                   <MoveUp />
                 </motion.button>
               </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isShareOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: "fixed",
+                inset: 0,
+                background: "#000",
+                zIndex: 1002,
+              }}
+              onClick={() => setIsShareOpen(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{
+                type: "tween",
+                duration: 0.3,
+              }}
+              style={{
+                position: "fixed",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 1003,
+                borderTopLeftRadius: "1rem",
+                borderTopRightRadius: "1rem",
+                boxShadow: "0 -2px 16px rgba(0,0,0,0.1)",
+              }}
+            >
+              <ShareContent
+                postUrl={postUrl}
+                onClose={() => setIsShareOpen(false)}
+              />
             </motion.div>
           </>
         )}

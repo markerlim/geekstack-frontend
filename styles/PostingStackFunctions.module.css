@@ -1,0 +1,36 @@
+.function-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  background-color: var(--gs-bgcolor-one);
+  border-top: 1px solid var(--gs-formgrey);
+  z-index: 5;
+}
+
+.attach-deck-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--gs-bgcolor-two);
+  border: 1px solid var(--gs-formgrey);
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: var(--gs-fontcolor-three);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.format-btn{
+background-color: var(--gs-bgcolor-two);
+  border: 1px solid var(--gs-formgrey);
+    border-radius: 20px;
+  padding: 8px 16px;
+    color: var(--gs-fontcolor-three);
+
+}

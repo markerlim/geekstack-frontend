@@ -7,6 +7,12 @@
   background-color: var(--gs-bgcolor-two-a);
   width: 180px;
 }
+@media (max-width:380px) {
+  .stacks-component{
+    width: 160px;
+  }
+}
+
 .stacks-component-cover {
   height: fit-content;
   overflow: hidden;

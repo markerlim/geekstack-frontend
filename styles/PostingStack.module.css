@@ -1,7 +1,8 @@
 .posting-main {
-  height: 100%;
+  height: calc(100% - 69px);
   background-color: var(--gs-bgcolor-one);
   position: relative;
+  overflow: hidden;
 }
 
 .close-btn {
@@ -11,8 +12,8 @@
   background-color: var(--gs-bgcolor-one);
   border: 2px solid var(--gs-color-secondary);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +21,7 @@
   transition: all 0.2s ease;
   color: var(--gs-color-secondary);
   padding: 8px;
-  z-index: 2;
+  z-index: 10;
 }
 
 .close-btn:hover {
@@ -30,29 +31,25 @@
 
 .post-btn {
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 10px;
-  background-color: var(--gs-bgcolor-one);
-  border: 2px solid var(--gs-color-primary);
+  background-color: var(--gs-color-primary);
+  border: none;
   border-radius: 24px;
-  min-width: 80px;
-  height: 40px;
+  min-width: 60px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--gs-color-primary);
-  padding: 0 16px;
+  color: var(--gs-fontcolor-one);
+  padding: 0 8px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 0.9rem;
-  z-index: 2;
-}
-
-.post-btn:hover {
-  background-color: var(--gs-bgcolor-two);
+  z-index: 10;
 }
 
 .post-btn:disabled {
@@ -61,7 +58,7 @@
 }
 
 .posting-header {
-  height: 65px;
+  height: 60px;
   text-align: center;
 }
 
@@ -71,13 +68,58 @@
   font-size: 1.4rem;
 }
 
+/* Deck selector overlay styles */
+.deck-selector-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: var(--gs-bgcolor-one);
+  z-index: 1000;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.deck-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--gs-formgrey);
+}
+
+.deck-selector-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--gs-color-primary);
+}
+
+.close-overlay-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gs-fontcolor-three);
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-overlay-btn:hover {
+  background: var(--gs-bgcolor-two);
+  color: var(--gs-color-secondary);
+}
+
 .deck-type-selector {
   display: flex;
   gap: 8px;
-  margin: 0 auto 0px;
-  padding-left: 10px;
+  margin: 0 auto;
   padding-bottom: 15px;
-  padding-right: 10px;
   overflow-x: scroll;
   max-width: 100%;
   scrollbar-width: thin;
@@ -94,24 +136,21 @@
 
 .type-btn {
   background: var(--gs-bgcolor-two);
-  color: var(--gs-color-primary);
-  border: 1px solid var(--gs-color-primary);
+  color: var(--gs-fontcolor-three);
+  border: 1px solid var(--gs-fontcolor-three);
   padding: 6px 14px;
   border-radius: 18px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
   font-size: 0.8rem;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
-.type-btn:hover {
-  background: var(--gs-bgcolor-three);
-}
-
 .type-btn.active {
-  background: var(--gs-color-primary);
-  color: var(--gs-bgcolor-one);
+  background: #2d1280;
+  color: var(--gs-fontcolor-one);
   border-color: var(--gs-color-primary);
 }
 
@@ -119,6 +158,7 @@
 .swiper {
   padding: 10px 0px;
 }
+
 .swiper-wrapper {
   position: relative;
   width: 100%;
@@ -139,7 +179,7 @@
   width: fit-content;
   height: fit-content;
   background-color: var(--gs-bgcolor-two);
-  border: 3px solid var(--gs-color-primary);
+  border: 2px solid var(--gs-color-primary);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -172,6 +212,7 @@
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
+  line-height: 0;
   transition: all 0.25s ease;
 }
 
@@ -192,25 +233,25 @@
 
 .deck-name {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: white;
-  padding: 10px 8px 8px;
-  text-align: center;
-  font-size: 0.85rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Number of lines */
-  -webkit-box-orient: vertical;
+  bottom: 10px;
+  left: 6px;
+  color: #f2f3f8;
+  width: calc(100% - 22px);
+  font-size: 12px;
+  height: 20px;
+  background-color: #2d1682;
+  border: 1px solid var(--gs-color-primary-light);
+  border-radius: 10px;
+  font-weight: 500;
+  justify-content: center;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal; /* Reset if using multi-line */
-
-  -webkit-text-stroke: 3px var(--gs-color-primary); /* For WebKit browsers */
-  text-stroke: 3px var(--gs-color-primary); /* Standard property */
-  paint-order: stroke fill; /* Ensures outline appears behind fill */
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .deck-name code {
@@ -248,11 +289,22 @@
 .image-selection {
   width: 70px;
   border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.code-font {
+.image-selection:hover {
+  transform: scale(1.05);
+}
+
+.cover-headline {
   color: var(--gs-color-primary);
   padding-left: 20px;
+  font-weight: 600;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Form Styles */
@@ -260,13 +312,17 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 70px; /* Increased padding to account for function bar */
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  padding-top: 20px;
   gap: 8px;
 }
 
@@ -276,45 +332,186 @@
   font-size: 0.9rem;
 }
 
-.form-input,
 .form-textarea {
-  padding: 12px 16px;
-  border: 1px solid var(--gs-color-primary);
-  border-radius: 8px;
-  background-color: var(--gs-bgcolor-two);
-  color: var(--gs-color-primary);
-  font-size: 0.95rem;
+  caret-color: var(--gs-color-primary);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.5rem;
   transition: border-color 0.2s ease;
+  font-weight: 700;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.5rem; 
+  max-height: calc(1.5rem * 3);
+  padding: 0; 
+  margin: 0;
 }
 
-.form-input:focus,
-.form-textarea:focus {
+.form-textarea::selection{
+  background-color: #6a0dad;
+  color: #ffffff;
+}
+
+.form-textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--gs-bgcolor-one) inset !important;
+  -webkit-text-fill-color: var(--gs-fontcolor-one) !important;
+  caret-color: var(--gs-color-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.5rem;
+  border: none;
+  height: auto;
+}
+
+.form-textarea:focus,
+.form-textarea:valid,
+.form-textarea:not(:placeholder-shown) {
+  border: none;
+  background-color: var(--gs-bgcolor-one);
+  color: var(--gs-fontcolor-one);
   outline: none;
-  border-color: var(--gs-color-primary);
-  box-shadow: 0 0 0 2px rgba(var(--gs-color-primary-rgb), 0.1);
-}
-
-.form-input {
-  height: 24px;
 }
 
 .form-textarea {
-  min-height: 120px;
-  resize: vertical;
+  height: 26px;
 }
 
-.error-message{
+.error-message {
   color: var(--gs-color-secondary);
+  font-size: 0.8rem;
+  margin-top: 4px;
 }
 
-/* Placeholder styling */
-.form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--gs-color-primary);
-  opacity: 0.7;
+  color: var(--gs-fontcolor-three);
+  opacity: 0.8;
 }
-
 
 .image-selection.selected {
   border: 2px solid var(--gs-color-primary);
+}
+
+/* Selected deck header */
+.selected-deck-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--gs-bgcolor-two);
+}
+
+.remove-deck-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+    background-color: #2d1682;
+  border: 1px solid var(--gs-color-primary-light);
+  color: var(--gs-fontcolor-one);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-deck-btn:hover {
+  background: var(--gs-bgcolor-three);
+  color: var(--gs-color-secondary);
+}
+
+.deck-selector-container {
+  height: 80%;
+  padding-top: 20px;
+  border-radius: 20px;
+  background-color: var(--gs-bgcolor-three);
+}
+
+.card-selector-container {
+  background: white;
+  padding: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.deck-cover-preview {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  justify-self: center;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.deck-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  transition: transform 0.3s ease;
+  -webkit-user-drag: none; /* Prevent dragging in Chrome/Safari */
+  -webkit-user-select: none; /* Prevent text selection in Safari */
+  -moz-user-select: none; /* Prevent text selection in Firefox */
+  -ms-user-select: none; /* Prevent text selection in IE/Edge */
+  user-select: none;
+}
+.deck-cover-deckname {
+  color: #f2f3f8;
+  width: fit-content;
+  padding: 2px 6px;
+  font-size: 12px;
+  height: 20px;
+  background-color: #2d1682;
+  border: 1px solid var(--gs-color-primary-light);
+  border-radius: 10px;
+  font-weight: 500;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.deck-cover-func {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  bottom: 0;
+  justify-content: space-between;
+  width: calc(100% - 16px);
+  height: 60%;
+  padding: 8px;
+}
+
+.rich-text-editor {
+  color: var(--gs-fontcolor-one);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.rich-text-editor::selection {
+  background-color: #6a0dad;
+  color: #ffffff;
+}
+
+.rich-text-editor[data-placeholder]:empty:before {
+  content: attr(data-placeholder);
+  color: #818690;
+}
+
+.rich-text-editor[data-placeholder]:empty:focus:before {
+  color: var(--gs-fontcolor-one);
+}
+.rich-text-editor:empty:before {
+  content: attr(data-placeholder);
+  color: #818690;
+  pointer-events: none;
+}
+
+.posting-space {
+  padding-top: 20px;
+  height: calc(100% - 80px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }

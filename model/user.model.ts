@@ -4,9 +4,21 @@ export interface gsUser {
   userId: string;
 }
 
+export interface UserPreferences {
+  unionarenaOffline: boolean;
+  onepieceOffline: boolean;
+  cookierunbraverseOffline: boolean;
+  duelmastersOffline: boolean;
+  dragonballzfwOffline: boolean;
+  gundamOffline: boolean;
+  hololiveOffline: boolean;
+}
+
 export interface gsSQLUser extends gsUser {
   name: string;
   displaypic: string;
+  membershipType?: string;
+  preferences?: UserPreferences;
 }
 
 export interface gsMongoUser extends gsUser {

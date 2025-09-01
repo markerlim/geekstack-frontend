@@ -42,12 +42,33 @@ export async function initUser(): Promise<InitUserResponse> {
  * @param base - Base currency (default: 'SGD')
  * @param symbol - Target currency (default: 'JPY')
  */
-export async function getExcRate(base = "SGD", symbol = "JPY"): Promise<string> {
+export async function getExcRate(
+  base = "SGD",
+  symbol = "JPY"
+): Promise<string> {
   return apiClient
     .get(`${getApiBaseUrl()}/user/getExcRate`, {
       params: { base, symbol },
     })
     .then((response) => response.data);
+}
+
+export async function updatePreference(payload: Record<string, any>) {
+  try {
+    const response = await apiClient.post(
+      `${getApiBaseUrl()}/user/upd/preference`,
+      payload
+    );
+    return {
+      success: true,
+      message: response.data.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message,
+    };
+  }
 }
 
 export async function getNotifications(limit = 10): Promise<Notification[]> {
