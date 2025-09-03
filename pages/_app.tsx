@@ -9,6 +9,7 @@ import { AuthProvider } from "../services/auth";
 import { SearchProvider } from "../contexts/SearchContext";
 import { Noto_Sans, Titillium_Web } from "next/font/google";
 import { ToastProvider } from "../contexts/ToastManager";
+import AdvancedRouteGuard from "../services/auth/RouteGuard";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -78,12 +79,15 @@ function MyApp({
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
       </Head>
       <main className={`${notoSans.variable} ${titillium.variable}`}>
+    
         <DeviceContext.Provider value={deviceType}>
           <AuthProvider>
             <SearchProvider>
               <DeckProvider>
                 <ToastProvider>
+                  <AdvancedRouteGuard>
                   <Component {...pageProps} />
+                  </AdvancedRouteGuard>
                 </ToastProvider>
               </DeckProvider>
             </SearchProvider>

@@ -8,8 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { userMakePost } from "../../../services/functions/gsUserPostService";
-import { DeckPost } from "../../../model/deckpost.model";
+import { updateImage, userMakePost } from "../../../services/functions/gsUserPostService";
+import { DeckPost, MongoDBDeckPost } from "../../../model/deckpost.model";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import { formatFirstLetterCap } from "../../../utils/FormatText";
 import { motion, AnimatePresence } from "framer-motion";
@@ -53,9 +53,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       if (value.length < 5) return "Minimum 5 characters";
     }
     if (name === "content") {
-      // Strip HTML tags for validation
       const textContent = value.replace(/<[^>]*>/g, "");
-      if (textContent.length > 500) return "Maximum 500 characters";
       if (textContent.length < 20) return "Minimum 20 characters";
     }
     return "";
@@ -130,8 +128,6 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         isTournamentDeck: false,
         selectedCards: [],
         listofcards: [],
-        listoflikes: [],
-        listofcomments: [],
         name: sqlUser?.name || "Anonymous",
         displaypic: sqlUser?.displaypic || "/images/default-avatar.png",
       };
@@ -144,7 +140,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         .then(() => {
           console.log("Post created successfully without deck:", postObject);
           detailStackEvent.emit("post:created");
-          onClose();
+          setTimeout(() => onClose(), 2000);
         })
         .catch((error) => {
           console.error("Error posting:", error);
@@ -152,7 +148,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       return;
     }
 
-    const postObject: DeckPost = {
+    const postObject: MongoDBDeckPost = {
       postType: deckType,
       userId: sqlUser?.userId || "",
       deckName: deck.deckname || "Untitled Deck",
@@ -164,8 +160,6 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         cardName: card.cardName,
         count: card.count,
       })),
-      listoflikes: [],
-      listofcomments: [],
       name: sqlUser?.name || "Anonymous",
       displaypic: sqlUser?.displaypic || "/images/default-avatar.png",
     };
@@ -177,7 +171,6 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     userMakePost(postObject)
       .then(() => {
         console.log("Deck posted successfully:", postObject);
-        detailStackEvent.emit("post:created");
         onClose();
       })
       .catch((error) => {
@@ -193,8 +186,17 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     setShowDeckSelector(!showDeckSelector);
   };
 
-  const removeDeck = (e:any) => {
-    e.stopPropagation()
+  const handleImageUpload = async (file: File) => {
+    try {
+      const result = await updateImage("test", file);
+      console.log('Image uploaded successfully:', result);
+    } catch (error) {
+      console.error('Image upload failed:', error);
+    }
+  };
+
+  const removeDeck = (e: any) => {
+    e.stopPropagation();
     setSelectedDeck(null);
     setSelectedPostCover("");
   };
@@ -202,6 +204,12 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   const handleDeckSelect = (deck: DeckRecord) => {
     setSelectedDeck(deck);
   };
+
+  const canPost =
+    !errors.headline &&
+    !errors.content &&
+    formData.headline.trim().length > 0 &&
+    formData.content.trim().length > 0;
 
   useEffect(() => {
     if (
@@ -231,6 +239,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         title="posting"
         onClick={() => handlePosting(selectedDeck)}
         className={styles["post-btn"]}
+        disabled={!canPost}
       >
         <code>Post</code>
       </button>
@@ -269,7 +278,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
                       {selectedDeck.deckname}
                     </span>
                     <button
-                      onClick={(e)=>removeDeck(e)}
+                      onClick={(e) => removeDeck(e)}
                       className={styles["remove-deck-btn"]}
                       title="Remove deck"
                     >
@@ -328,6 +337,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         toggleDeckSelector={toggleDeckSelector}
         selectedDeck={selectedDeck}
         handleFormat={handleFormat}
+        handleImageUpload={handleImageUpload}
         isBold={isBold}
         isItalic={isItalic}
         isUnderline={isUnderline}

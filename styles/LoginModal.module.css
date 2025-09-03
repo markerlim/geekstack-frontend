@@ -4,19 +4,40 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7); /* Darker overlay for glass effect */
+  color: var(--gs-fontcolor-one);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
+  backdrop-filter: blur(5px); /* Glass blur effect */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: var(--gs-fontcolor-one);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px); /* Glass blur effect */
 }
 
 .modalContent {
-  background: white;
+  background: rgba(30, 30, 30, 0.25); /* Semi-transparent dark background */
   padding: 2rem;
-  border-radius: 8px;
-  width: 100%;
+  border-radius: 16px; /* Larger radius for glassmorphism */
+  width: calc(100% - 2rem);
   max-width: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle glass border */
+  backdrop-filter: blur(12px); /* Main glass blur effect */
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4), /* Deeper shadow */
+    inset 0 1px 1px rgba(255, 255, 255, 0.1); /* Inner glass highlight */
 }
 
 .loginForm {
@@ -26,10 +47,15 @@
   margin-bottom: 1.5rem;
 }
 
-.loginForm input {
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.loginForm input::placeholder {
+  color: rgba(255, 255, 255, 0.6); /* Semi-transparent placeholder */
+}
+
+.loginForm input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15); /* Lighter focus state */
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .divider {
@@ -41,32 +67,141 @@
 .divider::before, .divider::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle glass divider */
 }
 
 .divider span {
   padding: 0 1rem;
+  color: rgba(255, 255, 255, 0.7); /* Muted text for divider */
 }
 
-.googleButton {
+.loginButton, .googleButton {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 0.75rem;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  font-size: 16px;
+  padding: 0.75rem; /* Slightly more padding */
+  background: rgba(var(--gs-color-primary-dark-rgb), 0.2); /* Transparent glass background */
+  border: 1px solid rgba(var(--gs-color-primary-rgb), 0.3); /* Semi-transparent border */
+  color: var(--gs-fontcolor-one);
+  border-radius: 8px; /* Rounded corners */
   cursor: pointer;
+  backdrop-filter: blur(5px); /* Glass effect on buttons */
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* If you don't have RGB variables, you can use fallbacks */
+.loginButton, .googleButton {
+  background: rgba(66, 133, 244, 0.2); /* Fallback blue transparent */
+  border: 1px solid rgba(66, 133, 244, 0.3); /* Fallback blue border */
+}
+
+.loginButton:hover, .googleButton:hover {
+  background: rgba(var(--gs-color-primary-dark-rgb), 0.3);
+  border-color: rgba(var(--gs-color-primary-rgb), 0.5);
+  transform: translateY(-1px); /* Subtle lift effect */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.loginButton:active, .googleButton:active {
+  transform: translateY(0);
+}
+
+/* Optional: Add a subtle gradient overlay for better glass effect */
+.loginButton::before, .googleButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  z-index: -1;
+  border-radius: 8px;
 }
 
 .googleIcon {
   width: 20px;
   height: 20px;
+  filter: brightness(0.9); /* Slightly dimmed icon for glass effect */
 }
 
 .errorMessage {
-  color: red;
+  color: var(--gs-color-secondary);
   margin-top: 1rem;
+  background: rgba(255, 82, 82, 0.1); /* Transparent error background */
+  padding: 0.75rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--gs-color-secondary);
+  backdrop-filter: blur(5px); /* Glass effect on error message */
+}
+
+.inputContainer {
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  z-index: 1;
+}
+
+.inputWithIcon {
+  background: rgba(255, 255, 255, 0.1); /* Glass input background */
+  border: var(--gs-border);
+  border-radius: 8px; /* Rounded corners */
+  color: var(--gs-fontcolor-one);
+  backdrop-filter: blur(5px); /* Subtle blur on inputs */
+  transition: all 0.3s ease;
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.15rem;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+
+
+/* Add subtle animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalContent {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .modalContent {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .inputWithIcon{
+  padding: 0.65rem 0.65rem 0.65rem 2.50rem;
+
+  }
+
+  .loginButton,
+  .googleButton {
+    padding: 0.65rem;
+  }
 }

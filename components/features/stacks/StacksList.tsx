@@ -386,7 +386,6 @@ const StacksList = () => {
 
     detailStackEvent.on("post:created", reloadPosts);
     detailStackEvent.on("post:deleted", reloadPosts);
-
     return () => {
       detailStackEvent.off("post:created", reloadPosts);
       detailStackEvent.off("post:deleted", reloadPosts);

@@ -23,6 +23,7 @@ import {
 import { useUserStore } from "../../../services/store/user.store";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import ShareContent from "./ShareContent";
+import { useRouter } from "next/router";
 
 interface DetailStackProps {
   onClose: () => void;
@@ -35,13 +36,15 @@ const DetailStackPage = ({
   isLiked,
   onClose,
 }: DetailStackProps) => {
+  const router = useRouter();
   const { sqlUser } = useUserStore();
   const userId = sqlUser?.userId;
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState(postDetails?.listofcomments);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isShareOpen,setIsShareOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const isOwner = sqlUser?.userId === postDetails?.userId;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -51,7 +54,6 @@ const DetailStackPage = ({
     }
   }, [isCommenting]);
 
-  // Close comment input when clicking on overlay
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setIsCommenting(false);
@@ -61,7 +63,7 @@ const DetailStackPage = ({
   const cardlist = postDetails?.listofcards;
   const posteePic = postDetails?.displaypic;
   const posteeName = postDetails?.name || "No Name";
-  const postUrl = `${window.location.origin}/stacks/${postDetails.postId}`;
+  const postUrl = `${router.basePath}/stacks/${postDetails.postId}`;
   const emojiList = ["😀", "😂", "😍", "🔥", "👍", "💯", "🥳", "🤔", "🎉"];
 
   const addEmoji = (emoji: string, event: React.MouseEvent) => {
@@ -80,14 +82,19 @@ const DetailStackPage = ({
       return;
     }
 
-    // Show confirmation dialog
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      // User clicked "OK"
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      setIsDeleting(true);
       userDeletePost(postId);
-      detailStackEvent.emit("post:deleted");
-    } else {
-      // User clicked "Cancel"
-      console.log("Post deletion cancelled");
+      toggleMenu();
+      sessionStorage.removeItem("stacksScrollState");
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+      alert("Failed to delete post. Please try again.");
+    } finally {
+      setIsDeleting(false);
+      setTimeout(()=>onClose(),500);
     }
   };
 
@@ -105,24 +112,11 @@ const DetailStackPage = ({
       const commentRes = await userCommentPost(commentForSubmit);
       commentRes.displaypic = sqlUser?.displaypic || "No Display Pic";
       commentRes.name = sqlUser?.name || "No Name";
-      commentList.push(commentRes);
+      commentList?.push(commentRes);
       setCommentText("");
       setIsCommenting(false);
-
-      //fetchComments();
     } catch (error) {
       console.error("Failed to post comment:", error);
-      // Handle error (show toast/message)
-    }
-  };
-
-  const deleteComment = async (postId: string, commentId: string) => {
-    if (!(postId == "NO_POST_ID") || commentId == "NO_COMMENT_ID") return;
-    try {
-      await userDeleteComment(postId, commentId);
-      setCommentList((prev) => prev.filter((c) => c.commentId !== commentId));
-    } catch (error) {
-      console.error("Delete failed:", error);
     }
   };
 
@@ -148,6 +142,17 @@ const DetailStackPage = ({
   const handleSharePost = (e?: React.MouseEvent) => {
     if (e && typeof e.stopPropagation === "function") e.stopPropagation();
     setIsShareOpen(true);
+    toggleMenu();
+  };
+
+  const handleDelete = (postId: string, commentId: string) => {
+    if (postId === "NO_POST_ID" || commentId === "NO_COMMENT_ID") return;
+    try {
+      userDeleteComment(postId, commentId);
+      setCommentList((prev) => prev?.filter((c) => c.commentId !== commentId));
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
   };
 
   const toggleMenu = () => {
@@ -193,20 +198,22 @@ const DetailStackPage = ({
           </div>
         </div>
         <div className={styles["scroll-cont"]}>
-          <div className={styles["listofcard"]}>
-            {cardlist?.length > 0 &&
-              cardlist.map((card) => (
-                <div key={card._id} className={styles["card-item-holder"]}>
-                  <img
-                    src={card.imageSrc}
-                    alt=""
-                    className={styles["card-item"]}
-                    loading="lazy"
-                  />
-                  <span className={styles["card-count"]}>{card.count}</span>
-                </div>
-              ))}
-          </div>
+          {cardlist && cardlist?.length > 0 && (
+            <div className={styles["listofcard"]}>
+              {cardlist?.length > 0 &&
+                cardlist.map((card) => (
+                  <div key={card._id} className={styles["card-item-holder"]}>
+                    <img
+                      src={card.imageSrc}
+                      alt=""
+                      className={styles["card-item"]}
+                      loading="lazy"
+                    />
+                    <span className={styles["card-count"]}>{card.count}</span>
+                  </div>
+                ))}
+            </div>
+          )}
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
             <p>{postDetails?.content}</p>
@@ -215,7 +222,8 @@ const DetailStackPage = ({
             </div>
             <div className={styles["comment-list"]}>
               <div id="commentJump">{commentList?.length} comment</div>
-              {commentList?.length > 0 &&
+              {commentList &&
+                commentList?.length > 0 &&
                 commentList.map((comment) => (
                   <div
                     className={styles["comment-holder"]}
@@ -240,7 +248,7 @@ const DetailStackPage = ({
                           <code
                             className={styles["delete-comment"]}
                             onClick={() =>
-                              deleteComment(
+                              handleDelete(
                                 postDetails.postId || "NO_POST_ID",
                                 comment.commentId || "NO_COMMENT_ID"
                               )
@@ -335,7 +343,6 @@ const DetailStackPage = ({
           </>
         )}
       </AnimatePresence>
-
       <AnimatePresence>
         {isShareOpen && (
           <>

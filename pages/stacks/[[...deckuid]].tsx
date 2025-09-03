@@ -10,7 +10,13 @@ import { fetchUserPostById } from "../../services/functions/gsUserPostService";
 import { useUserStore } from "../../services/store/user.store";
 
 const StacksPage = () => {
-  const router = useRouter();
+  useEffect(() => {
+    console.warn("StacksPage is deprecated. Do not use.");
+  }, []);
+
+  // Render nothing for users
+  return null;
+  /*const router = useRouter();
   const { deckuid } = router.query;
   const {sqlUser} = useUserStore();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -92,7 +98,7 @@ const StacksPage = () => {
               ) : post ? (
                 <DetailStack
                   postDetails={post}
-                  isLiked={post.listoflikes.includes(sqlUser?.userId || "") || false} // Replace with actual user ID
+                  isLiked={post.listoflikes?.includes(sqlUser?.userId || "") || false} // Replace with actual user ID
                   onClose={handleClose}
                 />
               ) : (
@@ -103,7 +109,11 @@ const StacksPage = () => {
         )}
       </AnimatePresence>
     </Layout>
-  );
+  );*/
 };
+
+export async function getServerSideProps() {
+  return { notFound: true };
+}
 
 export default StacksPage;

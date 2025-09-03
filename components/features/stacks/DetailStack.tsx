@@ -93,7 +93,7 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
       const commentRes = await userCommentPost(commentForSubmit);
       commentRes.displaypic = sqlUser?.displaypic || "No Display Pic";
       commentRes.name = sqlUser?.name || "No Name";
-      commentList.push(commentRes);
+      commentList?.push(commentRes);
       setCommentText("");
       setIsCommenting(false);
 
@@ -108,7 +108,7 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
     if (!(postId == "NO_POST_ID") || commentId == "NO_COMMENT_ID") return;
     try {
       await userDeleteComment(postId, commentId);
-      setCommentList((prev) => prev.filter((c) => c.commentId !== commentId));
+      setCommentList((prev) => prev?.filter((c) => c.commentId !== commentId));
     } catch (error) {
       console.error("Delete failed:", error);
     }
@@ -144,7 +144,7 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
         </div>
         <div className={styles["scroll-cont"]}>
           <div className={styles["listofcard"]}>
-            { cardlist?.length > 0 && cardlist.map((card) => (
+            {cardlist && cardlist?.length > 0 && cardlist.map((card) => (
               <div key={card._id} className={styles["card-item-holder"]}>
                 <img
                   src={card.imageSrc}
@@ -164,7 +164,7 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
             </div>
             <div className={styles["comment-list"]}>
               <div>{commentList?.length} comment</div>
-              {commentList?.length >0 && commentList.map((comment) => (
+              {commentList && commentList?.length >0 && commentList.map((comment) => (
                 <div
                   className={styles["comment-holder"]}
                   key={comment.commentId}

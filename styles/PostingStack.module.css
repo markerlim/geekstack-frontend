@@ -60,6 +60,7 @@
 .posting-header {
   height: 60px;
   text-align: center;
+  border-bottom: 1px solid var(--gs-bordercolor);
 }
 
 .posting-header h2 {
@@ -501,7 +502,7 @@
 }
 
 .rich-text-editor[data-placeholder]:empty:focus:before {
-  color: var(--gs-fontcolor-one);
+  color: #818690;
 }
 .rich-text-editor:empty:before {
   content: attr(data-placeholder);

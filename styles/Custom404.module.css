@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  text-align: center;
+  font-family: sans-serif;
+  color: var(--gs-fontcolor-one);
+}
+
+.container h1 {
+  font-size: 6rem;
+  margin: 0;
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.container a {
+  font-size: 1rem;
+  border: 2px solid var(--gs-color-primary-light);
+  background-color: var(--gs-color-primary-dark);
+  color: var(--gs-fontcolor-one);
+  padding:15px;
+  border-radius: 10px;
+  text-decoration: none;
+}

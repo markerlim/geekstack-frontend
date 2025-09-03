@@ -23,13 +23,13 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
   const [postUrl, setPostUrl] = useState("");
   const sqlUser = useUserStore((state) => state.sqlUser);
   const [isLiked, setIsLiked] = useState(
-    sqlUser?.userId ? post.listoflikes.includes(sqlUser.userId) : false
+    sqlUser?.userId ? post?.listoflikes?.includes(sqlUser.userId) : false
   );
 
   // Set initial liked state based on post likes and current user
   useEffect(() => {
     setIsLiked(
-      sqlUser?.userId ? post.listoflikes.includes(sqlUser.userId) : false
+      sqlUser?.userId ? post?.listoflikes?.includes(sqlUser.userId) : false
     );
   }, [post.listoflikes, sqlUser?.userId]);
 
@@ -39,7 +39,7 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     if (!sqlUser?.userId || !post.postId) return;
 
     const previousState = isLiked;
-    setIsLiked(true); // Optimistic update
+    setIsLiked(true);
 
     try {
       const response = await userLikePost(post.postId, sqlUser.userId);
@@ -107,7 +107,6 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
     detailStackEvent.on("post:liked", handleExternalLike);
     detailStackEvent.on("post:unliked", handleExternalUnlike);
     detailStackEvent.on("post:share", handleExternalShare);
-
     return () => {
       detailStackEvent.off("post:liked", handleExternalLike);
       detailStackEvent.off("post:unliked", handleExternalUnlike);
@@ -122,9 +121,11 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
         data-post-id={post.postId}
         onClick={handleOpenPost}
       >
-        <div className={styles["stacks-component-cover"]}>
-          <img src={post.selectedCards[0].imageSrc} alt="deck" />
-        </div>
+        {post.selectedCards && post.selectedCards[0]?.imageSrc && (
+          <div className={styles["stacks-component-cover"]}>
+            <img src={post.selectedCards[0].imageSrc} alt="deck" />
+          </div>
+        )}
         <div className={styles["stacks-component-content"]}>
           <div className={styles["stacks-component-headline"]}>
             <span>{post.headline}</span>

@@ -61,6 +61,10 @@
   object-fit: cover;
 }
 
+.user-photo-fallback{
+  color:var(--gs-fontcolor-one);
+}
+
 .username {
   font-weight: 600;
   color: var(--gs-fontcolor-one);

@@ -1,6 +1,7 @@
 /* globals.css */
 :root {
   --gs-color-primary: #7c4fff;
+  --gs-color-primary-dark: #2d1682;
   --gs-color-primary-light: #c8a2c8;
   --gs-color-secondary: #e33c58;
   --gs-bgcolor-one: rgb(16, 20, 24);

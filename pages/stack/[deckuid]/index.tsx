@@ -40,7 +40,7 @@ const StacksDetailPage = () => {
       fetchPost();
     }
   }, [deckuid, router.isReady]);
-
+  
   return (
     <Layout title={`Stacks | ${deckuid}`} scrollable={false}>
       {isLoading ? (

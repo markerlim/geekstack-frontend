@@ -1,6 +1,7 @@
 import {
   CommentObject,
   DeckPost,
+  MongoDBDeckPost,
   SubmitComment,
 } from "../../model/deckpost.model";
 import { getApiBaseUrl } from "../../utils/apiBase";
@@ -121,7 +122,7 @@ export async function fetchUserPostBySearch(
   if (code) {
     urlPath += `&code=${code}`;
   }
-  console.log(urlPath)
+  console.log(urlPath);
   const response = await apiClient.get<DeckPost[]>(urlPath);
   return response.data;
 }
@@ -131,7 +132,8 @@ export async function fetchUserPostBySearch(
  * @param post
  * @returns
  */
-export async function userMakePost(post: DeckPost) {
+export async function userMakePost(post: MongoDBDeckPost) {
+  console.log(post);
   const response = await apiClient.post(`/userpost/post`, post);
   return {
     message: response.data.message,
@@ -163,10 +165,17 @@ export async function userCommentPost(payload: SubmitComment) {
   return response.data.commentObject;
 }
 
+/**
+ * This function allows user to delete comment from a post
+ * @param postId
+ * @param commentId
+ * @returns
+ */
 export async function userDeleteComment(postId: string, commentId: string) {
   const response = await apiClient.delete(
     `/userpost/comment/${postId}/delete/${commentId}`
   );
+  console.log("COMPLETED");
   return {
     commentId: response.data.comment,
     message: response.data.message,
@@ -237,5 +246,26 @@ export async function userReportError(
       message: error.response?.data?.message || "Failed to report error",
       success: false,
     };
+  }
+}
+
+export async function updateImage(postId: string, file: File) {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await apiClient.post(
+      `/userpost/upd/${postId}`,
+      formData
+    );
+
+    return {
+      message: response.data?.message || "Updated successfully",
+      fileUrl: response.data?.fileUrl,
+      success: response.status >= 200 && response.status < 300,
+    };
+  } catch (error) {
+    console.error("Error updating image:", error);
+    throw error;
   }
 }

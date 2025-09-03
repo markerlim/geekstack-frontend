@@ -50,7 +50,7 @@
   width: calc(100% - 22px);
   font-size: 12px;
   height: 20px;
-  background-color: #2d1682;
+  background-color: var(--gs-color-primary-dark);
   border: 1px solid var(--gs-color-primary-light);
   border-radius: 10px;
   font-weight: 500;

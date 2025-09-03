@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styles from "../../styles/Navbar.module.css";
 import LoginModal from "../features/LoginModal";
-import { Bell, CircleUser, LogOut, Search } from "lucide-react";
+import {
+  Bell,
+  CircleUser,
+  CircleUserRound,
+  LogOut,
+  Search,
+} from "lucide-react";
 import { useUserStore } from "../../services/store/user.store";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useRouter } from "next/router";
@@ -20,6 +26,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const [isAvatarError, setIsAvatarError] = useState(false);
   const [loaderTimer, setLoaderTimer] = useState<NodeJS.Timeout | null>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +74,7 @@ const Navbar = () => {
   useEffect(() => {
     if (loading) {
       setShowLoader(true);
-      
+
       if (loaderTimer) {
         clearTimeout(loaderTimer);
         setLoaderTimer(null);
@@ -76,10 +83,10 @@ const Navbar = () => {
       const timer = setTimeout(() => {
         setShowLoader(false);
       }, 1000);
-      
+
       setLoaderTimer(timer);
     }
-    
+
     return () => {
       if (loaderTimer) {
         clearTimeout(loaderTimer);
@@ -115,7 +122,9 @@ const Navbar = () => {
       </div>
       <div className={styles.login}>
         {showLoader ? ( // Use showLoader instead of loading directly
-          <div className={styles.loading}><CardSpinner/></div>
+          <div className={styles.loading}>
+            <CardSpinner />
+          </div>
         ) : sqlUser ? (
           <>
             <div
@@ -123,15 +132,16 @@ const Navbar = () => {
               tabIndex={0}
               onClick={toggleMenu}
             >
-              <img
-                src={sqlUser.displaypic || "/images/default-avatar.png"}
-                alt="User Photo"
-                className={styles["user-photo"]}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "/images/default-avatar.png";
-                }}
-              />
+              {!isAvatarError ? (
+                <img
+                  src={sqlUser.displaypic}
+                  alt="User Photo"
+                  className={styles["user-photo"]}
+                  onError={() => setIsAvatarError(true)}
+                />
+              ) : (
+                <CircleUserRound className={styles['user-photo-fallback']} size={36}/>
+              )}
               {isDesktop && (
                 <span className={styles.username}>
                   {sqlUser.name || "Guest"}
@@ -174,7 +184,9 @@ const Navbar = () => {
             LOGIN
           </button>
         )}
-        {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
+        {loginOpen && (
+          <LoginModal onClose={() => setLoginOpen(false)} isModal={true} />
+        )}
       </div>
     </nav>
   );

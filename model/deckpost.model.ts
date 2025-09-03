@@ -1,4 +1,4 @@
-export interface DeckPost {
+export interface MongoDBDeckPost {
   postId?: string;
   postType: string;
   userId: string;
@@ -7,19 +7,22 @@ export interface DeckPost {
   deckName: string;
   isTournamentDeck: boolean;
   timestamp?: { $date: TimestampValue };
-  selectedCards: {
+  selectedCards?: {
     imageSrc: string;
   }[];
-  listofcards: {
+  listofcards?: {
     _id: string;
     imageSrc: string;
     cardName: string;
     count: number;
   }[];
-  listoflikes: string[]; // assuming userId strings
-  listofcomments: CommentObject[];
   name?: string;
   displaypic?: string;
+}
+
+export interface DeckPost extends MongoDBDeckPost {
+  listoflikes?: string[];
+  listofcomments?: CommentObject[];
 }
 
 export interface CommentObject {
