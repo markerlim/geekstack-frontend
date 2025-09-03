@@ -7,9 +7,7 @@ export interface MongoDBDeckPost {
   deckName: string;
   isTournamentDeck: boolean;
   timestamp?: { $date: TimestampValue };
-  selectedCards?: {
-    imageSrc: string;
-  }[];
+  selectedCover?: string;
   listofcards?: {
     _id: string;
     imageSrc: string;

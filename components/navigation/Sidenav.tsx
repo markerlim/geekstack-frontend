@@ -16,9 +16,9 @@ const Sidenav = () => {
     },
     {
       icon: "/icons/bottomnav/NewsSelected.svg",
-      alt: "Stacks",
-      label: "Stacks",
-      path: "/stacks",
+      alt: "Stack",
+      label: "Stack",
+      path: "/stack",
     },
   ];
 

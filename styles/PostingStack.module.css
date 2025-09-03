@@ -403,6 +403,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  margin-left: auto; 
     background-color: #2d1682;
   border: 1px solid var(--gs-color-primary-light);
   color: var(--gs-fontcolor-one);

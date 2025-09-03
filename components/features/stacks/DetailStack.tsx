@@ -47,6 +47,7 @@ const DetailStack = ({ postDetails,isLiked, onClose }: DetailStackProps) => {
   };
 
   const cardlist = postDetails?.listofcards;
+  const selectedCover = postDetails?.selectedCover;
   const posteePic = postDetails?.displaypic;
   const posteeName = postDetails?.name || "No Name";
 

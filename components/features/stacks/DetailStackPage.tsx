@@ -62,6 +62,7 @@ const DetailStackPage = ({
 
   const cardlist = postDetails?.listofcards;
   const posteePic = postDetails?.displaypic;
+  const selectedCover = postDetails?.selectedCover;
   const posteeName = postDetails?.name || "No Name";
   const postUrl = `${router.basePath}/stacks/${postDetails.postId}`;
   const emojiList = ["😀", "😂", "😍", "🔥", "👍", "💯", "🥳", "🤔", "🎉"];
@@ -214,6 +215,9 @@ const DetailStackPage = ({
                 ))}
             </div>
           )}
+          {selectedCover &&
+          <img src={selectedCover} alt="Cover"/>
+          }
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
             <p>{postDetails?.content}</p>

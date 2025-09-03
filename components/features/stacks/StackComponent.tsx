@@ -121,9 +121,9 @@ const StacksComponent = ({ post }: StacksComponentProps) => {
         data-post-id={post.postId}
         onClick={handleOpenPost}
       >
-        {post.selectedCards && post.selectedCards[0]?.imageSrc && (
+        {post.selectedCover && (
           <div className={styles["stacks-component-cover"]}>
-            <img src={post.selectedCards[0].imageSrc} alt="deck" />
+            <img src={post.selectedCover} alt="deck" />
           </div>
         )}
         <div className={styles["stacks-component-content"]}>

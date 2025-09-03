@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styles from "../styles/Custom404.module.css"; // optional CSS
 import CardLoader from "../components/genericComponent/CardLoader";
 

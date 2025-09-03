@@ -8,7 +8,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { updateImage, userMakePost } from "../../../services/functions/gsUserPostService";
+import {
+  updateImage,
+  userMakePost,
+} from "../../../services/functions/gsUserPostService";
 import { DeckPost, MongoDBDeckPost } from "../../../model/deckpost.model";
 import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import { formatFirstLetterCap } from "../../../utils/FormatText";
@@ -126,7 +129,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         userId: sqlUser?.userId || "",
         deckName: "",
         isTournamentDeck: false,
-        selectedCards: [],
+        selectedCover: "",
         listofcards: [],
         name: sqlUser?.name || "Anonymous",
         displaypic: sqlUser?.displaypic || "/images/default-avatar.png",
@@ -153,7 +156,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       userId: sqlUser?.userId || "",
       deckName: deck.deckname || "Untitled Deck",
       isTournamentDeck: false,
-      selectedCards: [{ imageSrc: selectedPostCover || deck.deckcover }],
+      selectedCover: selectedPostCover,
       listofcards: deck.listofcards.map((card) => ({
         _id: card._id,
         imageSrc: card.imageSrc,
@@ -189,16 +192,19 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   const handleImageUpload = async (file: File) => {
     try {
       const result = await updateImage("test", file);
-      console.log('Image uploaded successfully:', result);
+      setSelectedPostCover(result.fileUrl);
+      console.log("Image uploaded successfully:", result);
     } catch (error) {
-      console.error('Image upload failed:', error);
+      console.error("Image upload failed:", error);
     }
   };
 
   const removeDeck = (e: any) => {
     e.stopPropagation();
-    setSelectedDeck(null);
-    setSelectedPostCover("");
+    if (window.confirm("Do you want to remove the cover?")) {
+      setSelectedDeck(null);
+      setSelectedPostCover("");
+    }
   };
 
   const handleDeckSelect = (deck: DeckRecord) => {
@@ -262,7 +268,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
             transition={{ duration: 0.5 }}
             onClick={toggleDeckSelector}
           >
-            {selectedPostCover && selectedDeck && (
+            {selectedPostCover && (
               <div className={styles["selected-deck-header"]}>
                 <div className={styles["deck-cover-preview"]}>
                   <img
@@ -273,10 +279,13 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
                       e.currentTarget.src = "/gsdeckimage.jpg";
                     }}
                   />
+
                   <div className={styles["deck-cover-func"]}>
-                    <span className={styles["deck-cover-deckname"]}>
-                      {selectedDeck.deckname}
-                    </span>
+                    {selectedDeck && (
+                      <span className={styles["deck-cover-deckname"]}>
+                        {selectedDeck.deckname}
+                      </span>
+                    )}
                     <button
                       onClick={(e) => removeDeck(e)}
                       className={styles["remove-deck-btn"]}
