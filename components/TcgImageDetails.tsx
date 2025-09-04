@@ -136,9 +136,7 @@ const TcgImageDetails = ({
                     className="adsbygoogle"
                     style={{
                       display: "block",
-                      minWidth: "300px",
-                      maxWidth: "970px",
-                      width: "100%",
+                      width: "300px",
                       height: "250px",
                     }}
                     data-ad-client="ca-pub-5722537590677945"
