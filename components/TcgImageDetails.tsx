@@ -11,7 +11,6 @@ import TB_Gundam from "./tcgeffects/TB_gundam";
 import { useSwipeable } from "react-swipeable";
 import TB_Duelmasters from "./tcgeffects/TB_duelmasters";
 import RTB_Duelmasters from "./tcgeffects/RTB_duelmasters";
-import AdSenseAd from "../services/ads/AdSenseAd";
 
 interface CardModalProps {
   card: any;

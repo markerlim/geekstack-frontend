@@ -10,6 +10,7 @@ import { SearchProvider } from "../contexts/SearchContext";
 import { Noto_Sans, Titillium_Web } from "next/font/google";
 import { ToastProvider } from "../contexts/ToastManager";
 import AdvancedRouteGuard from "../services/auth/RouteGuard";
+import Script from "next/script";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -77,12 +78,12 @@ function MyApp({
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945"
+        crossOrigin="anonymous"
+      />
       <main className={`${notoSans.variable} ${titillium.variable}`}>
         <DeviceContext.Provider value={deviceType}>
           <AuthProvider>

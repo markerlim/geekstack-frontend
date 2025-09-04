@@ -126,7 +126,7 @@
 }
 
 .AdContainer {
-  width: calc(100% - 2px);
+  width: 300px;
   border: 1px solid var(--gs-bordercolor);
   border-radius: 20px;
   height: 250px; 
