@@ -133,16 +133,18 @@ const TcgImageDetails = ({
                 </div>
                 {TBComponent && <TBComponent card={card} />}
                 <div className={styles.AdContainer}>
-                  <AdSenseAd
-                    slot="2585541280"
-                    format="autorelaxed"
-                    responsive={true}
+                  <ins
+                    className="adsbygoogle"
                     style={{
                       display: "block",
+                      minWidth: "300px",
+                      maxWidth: "970px",
                       width: "100%",
-                      minHeight: "150px",
+                      height: "150px",
                     }}
-                  />
+                    data-ad-client="ca-pub-5722537590677945"
+                    data-ad-slot="6828764971"
+                  ></ins>
                 </div>
                 <button
                   title="close button"
