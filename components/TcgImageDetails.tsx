@@ -11,6 +11,7 @@ import TB_Gundam from "./tcgeffects/TB_gundam";
 import { useSwipeable } from "react-swipeable";
 import TB_Duelmasters from "./tcgeffects/TB_duelmasters";
 import RTB_Duelmasters from "./tcgeffects/RTB_duelmasters";
+import AdSenseAd from "../services/ads/AdSenseAd";
 
 interface CardModalProps {
   card: any;
@@ -69,20 +70,30 @@ const TcgImageDetails = ({
   const TBComponent = TBComponentsMap[tcgtype] || null;
   const allowedTypes = [TCGTYPE.COOKIERUN, TCGTYPE.DRAGONBALLZFW];
 
-  const showImageOnly = initialIsCookieRun ?? allowedTypes.includes(tcgtype as TCGTYPE);
+  const showImageOnly =
+    initialIsCookieRun ?? allowedTypes.includes(tcgtype as TCGTYPE);
 
   return (
     <AnimatePresence>
       <>
         {card && (
-          <motion.div
-            className={styles.backdrop}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
-          />
+          <>
+            <div style={{ position: "fixed", color: "#fff", top: 0, height:'10vh', width:'100%'}}>
+              <AdSenseAd 
+              slot="6828764971" 
+              format="auto" 
+              responsive={true} 
+              style={{display:"block"}}/>
+            </div>
+            <motion.div
+              className={styles.backdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={onClose}
+            />
+          </>
         )}
         {showImageOnly ? (
           <div className={styles.cookieRunModalContainer}>

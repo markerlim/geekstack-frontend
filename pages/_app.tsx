@@ -77,16 +77,20 @@ function MyApp({
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945"
+          crossOrigin="anonymous"
+        ></script>
       </Head>
       <main className={`${notoSans.variable} ${titillium.variable}`}>
-    
         <DeviceContext.Provider value={deviceType}>
           <AuthProvider>
             <SearchProvider>
               <DeckProvider>
                 <ToastProvider>
                   <AdvancedRouteGuard>
-                  <Component {...pageProps} />
+                    <Component {...pageProps} />
                   </AdvancedRouteGuard>
                 </ToastProvider>
               </DeckProvider>

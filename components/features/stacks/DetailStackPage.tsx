@@ -95,7 +95,7 @@ const DetailStackPage = ({
       alert("Failed to delete post. Please try again.");
     } finally {
       setIsDeleting(false);
-      setTimeout(()=>onClose(),500);
+      setTimeout(() => onClose(), 500);
     }
   };
 
@@ -199,6 +199,11 @@ const DetailStackPage = ({
           </div>
         </div>
         <div className={styles["scroll-cont"]}>
+          {selectedCover && !cardlist && (
+            <div className={styles["cover-image"]}>
+              <img src={selectedCover} alt="Cover" />
+            </div>
+          )}
           {cardlist && cardlist?.length > 0 && (
             <div className={styles["listofcard"]}>
               {cardlist?.length > 0 &&
@@ -215,9 +220,7 @@ const DetailStackPage = ({
                 ))}
             </div>
           )}
-          {selectedCover &&
-          <img src={selectedCover} alt="Cover"/>
-          }
+
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
             <p>{postDetails?.content}</p>
