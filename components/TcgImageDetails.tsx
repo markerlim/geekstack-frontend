@@ -136,7 +136,7 @@ const TcgImageDetails = ({
                   slot="6828764971"
                   format="horizontal"
                   responsive={true}
-                  style={{ display: "block", width: "calc(100% - 20px)", minHeight: "50px", margin:"10px"}}
+                  style={{ display: "block", width: "calc(100% - 20px)", height: "100px", margin:"10px"}}
                 />
                 <button
                   title="close button"
