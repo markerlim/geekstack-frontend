@@ -132,7 +132,11 @@ const TcgImageDetails = ({
                   )}
                 </div>
                 {TBComponent && <TBComponent card={card} />}
-                <GenericGoogleAd />
+                <div
+                  style={{ width: "100%", maxWidth: "728px", margin: "0 auto" }}
+                >
+                  <GenericGoogleAd />
+                </div>
                 <button
                   title="close button"
                   className={styles.closeBtn}

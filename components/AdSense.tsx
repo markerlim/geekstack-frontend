@@ -4,6 +4,7 @@ interface GenericGoogleAdProps {
   className?: string;
   style?: React.CSSProperties;
 }
+
 declare global {
   interface Window {
     adsbygoogle: unknown[];
@@ -12,22 +13,17 @@ declare global {
 
 function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
   useEffect(() => {
-    // Check if script already exists to avoid duplicates
-    if (
-      document.querySelector('script[src*="pagead2.googlesyndication.com"]')
-    ) {
+    if (document.querySelector('script[src*="pagead2.googlesyndication.com"]')) {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
       return;
     }
 
-    // Load the Google AdSense script
     const script = document.createElement("script");
     script.async = true;
     script.src =
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945";
     script.crossOrigin = "anonymous";
 
-    // Push the ad once the script is loaded
     script.onload = () => {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     };
@@ -35,7 +31,6 @@ function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
     document.head.appendChild(script);
 
     return () => {
-      // Clean up the script when the component unmounts
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
@@ -45,11 +40,11 @@ function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
   return (
     <ins
       className={`adsbygoogle ${className}`}
-      style={{ display: "block", minWidth: "250px", ...style }}
-      data-ad-format="fluid"
-      data-ad-layout-key="-fb+5w+4e-db+86"
+      style={{ display: "block", ...style }}
       data-ad-client="ca-pub-5722537590677945"
-      data-ad-slot="1635710053"
+      data-ad-slot="6828764971"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
     />
   );
 }
