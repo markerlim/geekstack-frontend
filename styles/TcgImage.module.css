@@ -71,7 +71,7 @@
   gap: 10px;
   width: 100%;
 }
-.upper-eff-table img{
+.upper-eff-table img {
   border-radius: 10px;
   border: var(--gs-border);
 }
@@ -123,4 +123,15 @@
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.AdContainer {
+  position: fixed;
+  color: #fff;
+  background-color: var(--gs-color-primary-light);
+  top: 0;
+  height: 10vh !important;
+  width: 100%;
+  z-index: 9998;
+  overflow: hidden;
 }

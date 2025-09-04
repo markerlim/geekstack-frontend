@@ -78,12 +78,15 @@ const TcgImageDetails = ({
       <>
         {card && (
           <>
-            <div style={{ position: "fixed", color: "#fff", top: 0, height:'10vh', width:'100%'}}>
-              <AdSenseAd 
-              slot="6828764971" 
-              format="auto" 
-              responsive={true} 
-              style={{display:"block"}}/>
+            <div
+              className={styles.AdContainer}
+            >
+              <AdSenseAd
+                slot="6828764971"
+                format="horizontal"
+                responsive={true}
+                style={{ display: "block"}}
+              />
             </div>
             <motion.div
               className={styles.backdrop}
