@@ -133,7 +133,7 @@ const TcgImageDetails = ({
                 </div>
                 {TBComponent && <TBComponent card={card} />}
                 <div
-                  style={{ width: "100%", maxWidth: "728px", margin: "0 auto" }}
+                  style={{ width: "100%", maxWidth: "728px", margin: "10px 0px", overflow:'hidden'}}
                 >
                   <GenericGoogleAd />
                 </div>
