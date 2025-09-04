@@ -1,10 +1,8 @@
-import { Heart } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 interface GenericGoogleAdProps {
   className?: string;
   style?: React.CSSProperties;
-  fallbackHeight?: number; // height for blank placeholder
 }
 
 declare global {
@@ -13,26 +11,10 @@ declare global {
   }
 }
 
-function GenericGoogleAd({
-  className = "",
-  style = {},
-  fallbackHeight = 100, // default height for placeholder
-}: GenericGoogleAdProps) {
-  const [adLoaded, setAdLoaded] = useState(false);
-
+function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
   useEffect(() => {
-    const loadAd = () => {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        setAdLoaded(true);
-      } catch (err) {
-        console.warn("Adsense failed to load:", err);
-        setAdLoaded(false);
-      }
-    };
-
     if (document.querySelector('script[src*="pagead2.googlesyndication.com"]')) {
-      loadAd();
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
       return;
     }
 
@@ -42,7 +24,9 @@ function GenericGoogleAd({
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945";
     script.crossOrigin = "anonymous";
 
-    script.onload = loadAd;
+    script.onload = () => {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    };
 
     document.head.appendChild(script);
 
@@ -53,17 +37,15 @@ function GenericGoogleAd({
     };
   }, []);
 
-  return adLoaded ? (
+  return (
     <ins
       className={`adsbygoogle ${className}`}
-      style={{display: "block",margin:"10px 0px",...style}}
+      style={{ display: "block",margin:"10px 0px", ...style }}
       data-ad-client="ca-pub-5722537590677945"
       data-ad-slot="6828764971"
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
-  ) : (
-    <></>
   );
 }
 
