@@ -132,12 +132,14 @@ const TcgImageDetails = ({
                   )}
                 </div>
                 {TBComponent && <TBComponent card={card} />}
-                <AdSenseAd
-                  slot="2585541280"
-                  format="autorelaxed"
-                  responsive={true}
-                  style={{ display: "block", margin: "10px 10px" }}
-                />
+                <div className={styles.AdContainer}>
+                  <AdSenseAd
+                    slot="2585541280"
+                    format="autorelaxed"
+                    responsive={true}
+                    style={{ display: "block", margin: "10px 10px" }}
+                  />
+                </div>
                 <button
                   title="close button"
                   className={styles.closeBtn}
