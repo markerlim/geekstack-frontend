@@ -140,7 +140,7 @@ const TcgImageDetails = ({
                       minWidth: "300px",
                       maxWidth: "970px",
                       width: "100%",
-                      height: "150px",
+                      height: "250px",
                     }}
                     data-ad-client="ca-pub-5722537590677945"
                     data-ad-slot="6828764971"
