@@ -127,7 +127,10 @@
 
 .AdContainer {
   width: 100%;
-  margin: 10px 0;
+  height: 150px; 
+  overflow: hidden;
   display: block;
+  margin: 10px 0; 
+  position: relative;
 }
 

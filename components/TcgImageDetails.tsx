@@ -137,7 +137,11 @@ const TcgImageDetails = ({
                     slot="2585541280"
                     format="autorelaxed"
                     responsive={true}
-                    style={{ display: "block", margin: "10px 10px" }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      minHeight: "150px",
+                    }}
                   />
                 </div>
                 <button
