@@ -11,6 +11,7 @@ import TB_Gundam from "./tcgeffects/TB_gundam";
 import { useSwipeable } from "react-swipeable";
 import TB_Duelmasters from "./tcgeffects/TB_duelmasters";
 import RTB_Duelmasters from "./tcgeffects/RTB_duelmasters";
+import GenericGoogleAd from "./AdSense";
 
 interface CardModalProps {
   card: any;
@@ -131,18 +132,7 @@ const TcgImageDetails = ({
                   )}
                 </div>
                 {TBComponent && <TBComponent card={card} />}
-                <div className={styles.AdContainer}>
-                  <ins
-                    className="adsbygoogle"
-                    style={{
-                      display: "block",
-                      width: "300px",
-                      height: "250px",
-                    }}
-                    data-ad-client="ca-pub-5722537590677945"
-                    data-ad-slot="6828764971"
-                  ></ins>
-                </div>
+                <GenericGoogleAd />
                 <button
                   title="close button"
                   className={styles.closeBtn}
