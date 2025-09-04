@@ -78,16 +78,6 @@ const TcgImageDetails = ({
       <>
         {card && (
           <>
-            <div
-              className={styles.AdContainer}
-            >
-              <AdSenseAd
-                slot="6828764971"
-                format="horizontal"
-                responsive={true}
-                style={{ display: "block", width: "100%", minHeight: "50px" }}
-              />
-            </div>
             <motion.div
               className={styles.backdrop}
               initial={{ opacity: 0 }}
@@ -142,6 +132,12 @@ const TcgImageDetails = ({
                   )}
                 </div>
                 {TBComponent && <TBComponent card={card} />}
+                <AdSenseAd
+                  slot="6828764971"
+                  format="horizontal"
+                  responsive={true}
+                  style={{ display: "block", width: "calc(100% - 20px)", minHeight: "50px", margin:"10px"}}
+                />
                 <button
                   title="close button"
                   className={styles.closeBtn}
