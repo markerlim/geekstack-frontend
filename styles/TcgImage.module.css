@@ -130,8 +130,7 @@
   color: #fff;
   background-color: var(--gs-color-primary-light);
   top: 0;
-  height: 10vh !important;
+  height: 90px;
   width: 100%;
   z-index: 9998;
-  overflow: hidden;
 }

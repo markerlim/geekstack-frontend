@@ -85,7 +85,7 @@ const TcgImageDetails = ({
                 slot="6828764971"
                 format="horizontal"
                 responsive={true}
-                style={{ display: "block"}}
+                style={{ display: "block", width: "100%", minHeight: "50px" }}
               />
             </div>
             <motion.div
