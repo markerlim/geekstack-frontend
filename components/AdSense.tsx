@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import { Heart } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 interface GenericGoogleAdProps {
   className?: string;
   style?: React.CSSProperties;
+  fallbackHeight?: number; // height for blank placeholder
 }
 
 declare global {
@@ -11,10 +13,26 @@ declare global {
   }
 }
 
-function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
+function GenericGoogleAd({
+  className = "",
+  style = {},
+  fallbackHeight = 100, // default height for placeholder
+}: GenericGoogleAdProps) {
+  const [adLoaded, setAdLoaded] = useState(false);
+
   useEffect(() => {
+    const loadAd = () => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        setAdLoaded(true);
+      } catch (err) {
+        console.warn("Adsense failed to load:", err);
+        setAdLoaded(false);
+      }
+    };
+
     if (document.querySelector('script[src*="pagead2.googlesyndication.com"]')) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      loadAd();
       return;
     }
 
@@ -24,9 +42,7 @@ function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5722537590677945";
     script.crossOrigin = "anonymous";
 
-    script.onload = () => {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    };
+    script.onload = loadAd;
 
     document.head.appendChild(script);
 
@@ -37,15 +53,17 @@ function GenericGoogleAd({ className = "", style = {} }: GenericGoogleAdProps) {
     };
   }, []);
 
-  return (
+  return adLoaded ? (
     <ins
       className={`adsbygoogle ${className}`}
-      style={{ display: "block", ...style }}
+      style={{display: "block",margin:"10px 0px",...style}}
       data-ad-client="ca-pub-5722537590677945"
       data-ad-slot="6828764971"
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
+  ) : (
+    <></>
   );
 }
 

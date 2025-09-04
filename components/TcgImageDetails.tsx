@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import { X } from "lucide-react";
 import styles from "../styles/TcgImage.module.css";
 import { TCGTYPE } from "../utils/constants";
@@ -12,6 +12,7 @@ import { useSwipeable } from "react-swipeable";
 import TB_Duelmasters from "./tcgeffects/TB_duelmasters";
 import RTB_Duelmasters from "./tcgeffects/RTB_duelmasters";
 import GenericGoogleAd from "./AdSense";
+import { useCallback } from "react";
 
 interface CardModalProps {
   card: any;
@@ -53,6 +54,7 @@ const TcgImageDetails = ({
     [TCGTYPE.DUELMASTERS]: TB_Duelmasters,
   };
 
+  const panelY = useMotionValue(0);
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
       if (onNext) onNext();
@@ -60,11 +62,34 @@ const TcgImageDetails = ({
     onSwipedRight: () => {
       if (onPrev) onPrev();
     },
-    onSwipedDown: (e) => onClose(),
     delta: 30,
     trackTouch: true,
     trackMouse: false,
   });
+  const threshold = 100;
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      const startY = e.clientY;
+
+      const moveHandler = (moveEvent: PointerEvent) => {
+        const delta = moveEvent.clientY - startY;
+        if (delta > 0) panelY.set(delta);
+      };
+
+      const upHandler = (upEvent: PointerEvent) => {
+        const totalDelta = upEvent.clientY - startY;
+        if (totalDelta > threshold) onClose();
+        else panelY.set(0);
+
+        window.removeEventListener("pointermove", moveHandler);
+        window.removeEventListener("pointerup", upHandler);
+      };
+
+      window.addEventListener("pointermove", moveHandler);
+      window.addEventListener("pointerup", upHandler);
+    },
+    [panelY, onClose, threshold]
+  );
 
   const RTBComponent = RTBComponentsMap[tcgtype] || null;
   const TBComponent = TBComponentsMap[tcgtype] || null;
@@ -108,21 +133,15 @@ const TcgImageDetails = ({
         ) : (
           <motion.div
             className={styles.fullscreenPanel}
+            style={{ y: panelY }}
             initial={{ y: "100%" }}
             animate={{ y: card ? 0 : "100%" }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.3 }}
-            drag="y"
-            dragConstraints={{ top: 0, bottom: 100 }}
-            dragElastic={0}
-            dragMomentum={false}
-            onDragEnd={(e, info) => {
-              const swipeThreshold = 50;
-              if (info.offset.y > swipeThreshold) onClose();
-            }}
+            dragListener={false}
             {...swipeHandlers}
           >
-            <div className={styles.puller} />
+            <div className={styles.puller} onPointerDown={onPointerDown} />
             {card && (
               <div className={styles.detailsContent}>
                 <div className={styles["upper-eff-table"]}>
@@ -133,7 +152,11 @@ const TcgImageDetails = ({
                 </div>
                 {TBComponent && <TBComponent card={card} />}
                 <div
-                  style={{ width: "100%", maxWidth: "728px", margin: "10px 0px", overflow:'hidden'}}
+                  style={{
+                    width: "100%",
+                    maxWidth: "728px",
+                    overflow: "hidden",
+                  }}
                 >
                   <GenericGoogleAd />
                 </div>
