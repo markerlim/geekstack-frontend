@@ -69,6 +69,22 @@
   font-size: 1.4rem;
 }
 
+.image-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--gs-bgcolor-two);
+  border: 1px solid var(--gs-formgrey);
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  color: var(--gs-fontcolor-three);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-left: 20px;
+}
 /* Deck selector overlay styles */
 .deck-selector-overlay {
   position: fixed;
@@ -313,7 +329,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 10px;
+  padding-top: 15px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 70px; /* Increased padding to account for function bar */
@@ -323,8 +339,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
-  gap: 8px;
+  gap: 20px;
 }
 
 .form-label {
@@ -341,13 +356,13 @@
   font-weight: 700;
   resize: none;
   overflow: hidden;
-  line-height: 1.5rem; 
+  line-height: 1.5rem;
   max-height: calc(1.5rem * 3);
-  padding: 0; 
+  padding: 0;
   margin: 0;
 }
 
-.form-textarea::selection{
+.form-textarea::selection {
   background-color: #6a0dad;
   color: #ffffff;
 }
@@ -403,8 +418,8 @@
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: auto; 
-    background-color: #2d1682;
+  margin-left: auto;
+  background-color: #2d1682;
   border: 1px solid var(--gs-color-primary-light);
   color: var(--gs-fontcolor-one);
   padding: 4px;
@@ -514,6 +529,9 @@
 .posting-space {
   padding-top: 20px;
   height: calc(100% - 80px);
+  justify-self: center;
+  max-width: 700px;
+  width: 100%;
   overflow-y: auto;
   scrollbar-width: thin;
 }

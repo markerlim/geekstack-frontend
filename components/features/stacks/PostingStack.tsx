@@ -1,5 +1,5 @@
 import styles from "../../../styles/PostingStack.module.css";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImagePlus, X } from "lucide-react";
 import { useUserStore } from "../../../services/store/user.store";
 import { useState, useRef, useEffect } from "react";
 import { TCGTYPE } from "../../../utils/constants";
@@ -27,29 +27,30 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   const [selectedDeck, setSelectedDeck] = useState<DeckRecord | null>(null);
   const [selectedPostCover, setSelectedPostCover] = useState<string>("");
   const [showDeckSelector, setShowDeckSelector] = useState(false);
-
   const { sqlUser, getDecksByCategory } = useUserStore();
   const listofdecks = getDecksByCategory(deckType);
-
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const swiperRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
-
+  const headlineRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const editorImageInputRef = useRef<HTMLInputElement>(null);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
-
+  const [isEditorFocused, setIsEditorFocused] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
   const [formData, setFormData] = useState({
     headline: "",
     content: "",
   });
-
   const [errors, setErrors] = useState({
     headline: "",
     content: "",
   });
 
+  // Validating of form
   const validateField = (name: string, value: string) => {
     if (name === "headline") {
       if (value.length > 50) return "Maximum 50 characters";
@@ -62,8 +63,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     return "";
   };
 
-  const headlineRef = useRef<HTMLTextAreaElement>(null);
-
+  //Adjusting headline size
   const handleHeadlineChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const el = e.target;
 
@@ -77,6 +77,68 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     const error = validateField(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  //Image click for Post Cover
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  //Handle the image after file is selected, no way to change after selecting
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      handleImageUpload(files[0]);
+      event.target.value = "";
+    }
+  };
+
+  // Handle click on editor image button
+  const handleEditorImageClick = () => {
+    editorImageInputRef.current?.click();
+  };
+
+  // Handle file selection for editor images
+  const handleEditorFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      try {
+        // Upload the image
+        const result = await updateImage("editor-image", files[0]);
+
+        // Insert the image into the editor at cursor position
+        insertImageIntoEditor(result.fileUrl);
+
+        console.log("Editor image uploaded successfully:", result);
+      } catch (error) {
+        console.error("Editor image upload failed:", error);
+      } finally {
+        // Reset the file input
+        event.target.value = "";
+      }
+    }
+  };
+
+  // Function to insert image at cursor position
+  const insertImageIntoEditor = (imageUrl: string) => {
+    if (!editorRef.current) return;
+
+    // Focus the editor first
+    editorRef.current.focus();
+
+    // Create image element
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+
+    // Insert at current cursor position
+    document.execCommand("insertHTML", false, img.outerHTML);
+
+    // Update the editor content
+    handleEditorChange();
   };
 
   // Handle formatting commands
@@ -96,7 +158,11 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
   // Handle content change
   const handleEditorChange = () => {
     if (editorRef.current) {
-      const content = editorRef.current.innerHTML;
+      let content = editorRef.current.innerHTML;
+
+      content = content.replace(/<div>/g, "<p>").replace(/<\/div>/g, "</p>");
+
+      setEditorContent(content);
       setFormData((prev) => ({ ...prev, content }));
 
       const textContent = editorRef.current.textContent || "";
@@ -215,7 +281,13 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
     !errors.headline &&
     !errors.content &&
     formData.headline.trim().length > 0 &&
-    formData.content.trim().length > 0;
+    editorContent.replace(/<[^>]*>/g, "").trim().length > 0;
+
+  const updateFormattingState = () => {
+    setIsBold(document.queryCommandState("bold"));
+    setIsItalic(document.queryCommandState("italic"));
+    setIsUnderline(document.queryCommandState("underline"));
+  };
 
   useEffect(() => {
     if (
@@ -261,6 +333,29 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
       >
         <AnimatePresence>
           <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: !selectedPostCover ? "50px" : 0 }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {!selectedPostCover && (
+              <>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                />
+                <div className={styles["image-btn"]} onClick={handleImageClick}>
+                  <ImagePlus />
+                </div>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
+        <AnimatePresence>
+          <motion.div
             id="prevent"
             initial={{ height: 0 }}
             animate={{ height: selectedPostCover ? "260px" : 0 }}
@@ -299,6 +394,13 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
             )}
           </motion.div>
         </AnimatePresence>
+        <input
+          type="file"
+          ref={editorImageInputRef}
+          onChange={handleEditorFileChange}
+          accept="image/*"
+          style={{ display: "none" }}
+        />
         <form className={styles["post-form"]}>
           <div className={styles["form-group"]} id="prevent">
             <textarea
@@ -313,15 +415,20 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
           </div>
 
           <div className={styles["form-group"]}>
-            {/* Contenteditable div as rich text editor */}
             <div
               ref={editorRef}
-              className={styles["rich-text-editor"]}
+              className={`${styles["rich-text-editor"]} ${
+                !editorContent && !isEditorFocused
+                  ? styles["placeholderVisible"]
+                  : ""
+              }`}
               contentEditable="true"
               data-placeholder="What have you been cooking?"
               onInput={handleEditorChange}
               onPaste={handlePaste}
+              onFocus={() => setIsEditorFocused(true)}
               onBlur={() => {
+                setIsEditorFocused(false);
                 if (
                   editorRef.current &&
                   (editorRef.current.innerHTML.trim() === "<br>" ||
@@ -329,14 +436,13 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
                     editorRef.current.innerHTML.trim() === "")
                 ) {
                   editorRef.current.innerHTML = "";
+                  setEditorContent("");
                 }
               }}
               onKeyUp={() => {
                 handleEditorChange();
                 autoResizeEditor();
-                setIsBold(document.queryCommandState("bold"));
-                setIsItalic(document.queryCommandState("italic"));
-                setIsUnderline(document.queryCommandState("underline"));
+                updateFormattingState();
               }}
             />
           </div>
@@ -346,7 +452,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         toggleDeckSelector={toggleDeckSelector}
         selectedDeck={selectedDeck}
         handleFormat={handleFormat}
-        handleImageUpload={handleImageUpload}
+        handleEditorImageUpload={handleEditorImageClick}
         isBold={isBold}
         isItalic={isItalic}
         isUnderline={isUnderline}
@@ -419,6 +525,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
                   {listofdecks.map((deck) => (
                     <SwiperSlide key={deck.deckuid} style={{ width: "120px" }}>
                       <div
+                        key={deck.deckuid}
                         className={`${styles["deck-card"]} ${
                           selectedDeck?.deckuid === deck.deckuid
                             ? styles["selected"]

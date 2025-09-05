@@ -85,7 +85,10 @@
 .detail-content {
   line-height: 1.2rem;
   color: var(--gs-fontcolor-one);
-  padding: 13px;
+  padding-top: 13px;
+    padding-bottom: 13px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .detail-content h3 {
