@@ -195,7 +195,7 @@ const PostingStack = ({ onClose }: PostingStackProps) => {
         userId: sqlUser?.userId || "",
         deckName: "",
         isTournamentDeck: false,
-        selectedCover: "",
+        selectedCover: selectedPostCover || "",
         listofcards: [],
         name: sqlUser?.name || "Anonymous",
         displaypic: sqlUser?.displaypic || "/images/default-avatar.png",

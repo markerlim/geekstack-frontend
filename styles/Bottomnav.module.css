@@ -26,53 +26,136 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0);
   z-index: 900;
 }
 
-.cardGameOption {
+.cardGameOptionWrapper {
   position: fixed;
-  bottom: calc(var(--bottom-nav-height) + 1px);/**/
+  bottom: calc(var(--bottom-nav-height) + 1px);
   left: 0;
   right: 0;
-  height: 50px;
-  width: calc(100% - 30px);
-  background: var(--gs-bgcolor-one);
-  border-top: var(--gs-border);
   display: flex;
-  flex-direction: row;
-  gap:20px;
-  overflow-x: scroll;
-  padding: 12px 15px;
-  z-index: 1000;
-  animation-duration: 0.3s;
+  flex-direction: column; /* stack vertically */
+  align-items: center;
+  width: fit-content;
+  justify-self: center;
+  gap: 15px;
+  z-index: 999;
 }
 
-.slideIn {
-  animation-name: slideIn;
+.cardGameOption {
+  opacity: 1;
+  height: 60px;
+  width: 160px;
+  border-radius: 30px;
+  background: var(--gs-bgcolor-one);
+  border: var(--gs-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.slideOut {
-  animation-name: slideOut;
-}
-
-.gameSelect{
+.gameSelect {
   width: 40px;
-  flex:0 0 auto;
+  flex: 0 0 auto;
 }
 
 .gameSelect img {
   width: 40px;
-    flex:0 0 auto;
-
+  flex: 0 0 auto;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+.horizontalScrollContainer {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 10px;
+  width: calc(100% - 20px);
+  scroll-snap-type: x mandatory;
+  line-height: 0;
+  /* hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
-@keyframes slideOut {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+.horizontalScrollContainer div{
+  color: var(--gs-color-primary);
+  justify-self: center;
+  align-self: center  ;
+}
+
+.horizontalScrollContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+.firstButtonContainer{
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.firstButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 20px); 
+  overflow: hidden;
+  color: var(--gs-fontcolor-one);
+}
+.firstButton div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:8px;
+}
+.firstButton img {
+  height: 35px;
+}
+
+.firstButton span{
+  font-size: 14px;
+}
+
+.secondButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 20px); 
+  overflow: hidden;
+  color: var(--gs-fontcolor-one);
+}
+.secondButton div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:8px;
+}
+.secondButton img {
+  height: 35px;
+}
+
+.secondButton span{
+  font-size: 14px;
+}
+
+.postingStackWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1004;
+
+  /* Modern solution */
+  height: 100dvh;
+
+  /* Fallbacks */
+  height: 100vh;
+  height: -webkit-fill-available; /* For Safari */
+
+  /* Prevent address bar show/hide jumps */
+  -webkit-overflow-scrolling: touch;
 }

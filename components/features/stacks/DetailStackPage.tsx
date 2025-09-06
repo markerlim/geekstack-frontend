@@ -58,7 +58,7 @@ const DetailStackPage = ({
   // Function to sanitize HTML content
   const sanitizeHTML = (html: string) => {
     // Check if we're in the browser environment
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return DOMPurify.sanitize(html);
     }
     return html; // For server-side rendering
@@ -214,7 +214,7 @@ const DetailStackPage = ({
           </div>
         </div>
         <div className={styles["scroll-cont"]}>
-          {selectedCover && !cardlist && (
+          {selectedCover && cardlist?.length == 0 && (
             <div className={styles["cover-image"]}>
               <img src={selectedCover} alt="Cover" />
             </div>
@@ -239,7 +239,11 @@ const DetailStackPage = ({
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
             {/* Use dangerouslySetInnerHTML with sanitized content */}
-            <div dangerouslySetInnerHTML={createSanitizedMarkup(postDetails?.content || '')} />
+            <div
+              dangerouslySetInnerHTML={createSanitizedMarkup(
+                postDetails?.content || ""
+              )}
+            />
             <div className={styles["date-format"]}>
               {formatTimestamp(postDetails?.timestamp)}
             </div>
@@ -263,9 +267,11 @@ const DetailStackPage = ({
                         {comment.name}
                       </div>
                       {/* Sanitize comment content as well */}
-                      <span 
+                      <span
                         className={styles["comment-holder-comment"]}
-                        dangerouslySetInnerHTML={createSanitizedMarkup(comment.comment || '')}
+                        dangerouslySetInnerHTML={createSanitizedMarkup(
+                          comment.comment || ""
+                        )}
                       />
                       <div className={styles["comment-holder-func"]}>
                         <code>{formatTimeAgo(comment.timestamp)}</code>

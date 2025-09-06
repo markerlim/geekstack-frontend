@@ -1,9 +1,12 @@
 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M24 109H118V182L24 167V109Z" fill="#7C4FFF"/>
-<path d="M121 19L179 14V32.5V164L121 182.5V19Z" fill="#7C4FFF"/>
-<path d="M21 11L86.7484 7L179 9.5V11L120.244 16L21 12V11Z" fill="#7C4FFF"/>
-<path d="M21 15L118 19V123L102.5 132.5L95.5696 128.693C77.4377 118.733 55.857 117.201 36.5 124.5L21 110.5V15Z" fill="#5F04AD"/>
-<circle cx="126" cy="169" r="24" fill="#8DC53F"/>
-<path d="M112 169H139" stroke="#7C4FFF" stroke-width="6" stroke-linecap="round"/>
-<path d="M126 156L126 183" stroke="#7C4FFF" stroke-width="6" stroke-linecap="round"/>
+<path d="M35.2217 120.307C52.9034 113.319 72.8064 114.774 89.2832 124.261L95.7783 128L110 118.864V136.118C97.8745 139.591 89 150.759 89 164C89 164.552 89.0164 165.101 89.0469 165.646L24 155.232V109.683L35.2217 120.307ZM169 153.763L146.827 160.84C145.252 146.31 132.948 135 118 135C116.987 135 115.986 135.052 115 135.153V18.6592L169 14V153.763ZM110 18.6768V114.269L95.7783 123L88.7314 119.122C72.5436 110.214 53.2538 108.89 36 115.5L21 101.5V15L110 18.6768ZM169.5 11L112.5 14.5L21 11L83.4189 5.5L169.5 11Z" fill="url(#paint0_linear_2283_12)"/>
+<circle cx="118" cy="164" r="24" fill="#6AFFBA"/>
+<path d="M104 164H131" stroke="#7C4FFF" stroke-width="6" stroke-linecap="round"/>
+<path d="M118 151L118 178" stroke="#7C4FFF" stroke-width="6" stroke-linecap="round"/>
+<defs>
+<linearGradient id="paint0_linear_2283_12" x1="95.25" y1="5.5" x2="95.25" y2="165.646" gradientUnits="userSpaceOnUse">
+<stop stop-color="#7C4FFF"/>
+<stop offset="1" stop-color="#4A2F99"/>
+</linearGradient>
+</defs>
 </svg>
