@@ -33,13 +33,11 @@
 .cardGameOptionWrapper {
   position: fixed;
   bottom: calc(var(--bottom-nav-height) + 1px);
-  left: 0;
-  right: 0;
+  left: 50%;
   display: flex;
-  flex-direction: column; /* stack vertically */
+  flex-direction: column;
   align-items: center;
   width: fit-content;
-  justify-self: center;
   gap: 15px;
   z-index: 999;
 }
@@ -47,7 +45,7 @@
 .cardGameOption {
   opacity: 1;
   height: 60px;
-  width: 160px;
+  width: 180px;
   border-radius: 30px;
   background: var(--gs-bgcolor-one);
   border: var(--gs-border);
@@ -80,64 +78,64 @@
   -ms-overflow-style: none; /* IE 10+ */
 }
 
-.horizontalScrollContainer div{
+.horizontalScrollContainer div {
   color: var(--gs-color-primary);
   justify-self: center;
-  align-self: center  ;
+  align-self: center;
 }
 
 .horizontalScrollContainer::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge */
 }
-.firstButtonContainer{
+.firstButtonContainer {
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
 }
 
-.firstButton{
+.firstButton {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: calc(100% - 20px); 
+  width: calc(100% - 20px);
   overflow: hidden;
   color: var(--gs-fontcolor-one);
 }
-.firstButton div{
+.firstButton div {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:8px;
+  gap: 8px;
 }
 .firstButton img {
   height: 35px;
 }
 
-.firstButton span{
+.firstButton span {
   font-size: 14px;
 }
 
-.secondButton{
+.secondButton {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: calc(100% - 20px); 
+  width: calc(100% - 20px);
   overflow: hidden;
   color: var(--gs-fontcolor-one);
 }
-.secondButton div{
+.secondButton div {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:8px;
+  gap: 8px;
 }
 .secondButton img {
   height: 35px;
 }
 
-.secondButton span{
+.secondButton span {
   font-size: 14px;
 }
 

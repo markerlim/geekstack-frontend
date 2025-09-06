@@ -266,13 +266,9 @@ const DetailStackPage = ({
                         {" "}
                         {comment.name}
                       </div>
-                      {/* Sanitize comment content as well */}
                       <span
                         className={styles["comment-holder-comment"]}
-                        dangerouslySetInnerHTML={createSanitizedMarkup(
-                          comment.comment || ""
-                        )}
-                      />
+                      >{comment.comment}</span>
                       <div className={styles["comment-holder-func"]}>
                         <code>{formatTimeAgo(comment.timestamp)}</code>
                         {comment.userId == userId && (

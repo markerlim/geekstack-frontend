@@ -124,8 +124,8 @@ const Bottomnav = () => {
       {/* Panel */}
       <motion.div
         className={styles.cardGameOptionWrapper}
-        initial={{ y: "100%" }}
-        animate={{ y: isOpen ? "-20px" : "100%" }}
+        initial={{ y: "100%", x:"-50%" }}
+        animate={{ y: isOpen ? "-20px" : "100%", x:"-50%" }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.div
@@ -148,10 +148,10 @@ const Bottomnav = () => {
         </motion.div>
         <motion.div
           className={styles.cardGameOption}
-          initial={{ scale: 0.8, width: 160 }} // small initial height
+          initial={{ scale: 0.8, width: 180 }} // small initial height
           animate={{
             scale: isOpen ? 1 : 0.8,
-            width: isTCGListVisible ? 250 : 160,
+            width: isTCGListVisible ? 250 : 180,
           }}
           transition={{
             scale: { duration: 0.3, delay: 0.3 }, // scale transition
