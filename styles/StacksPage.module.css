@@ -50,8 +50,8 @@
   gap: 4px;
   color: var(--gs-fontcolor-one);
   min-width: 0;
-  flex: 1; /* This allows it to grow and shrink */
-  max-width: calc(100% - 45px); /* ← ADD THIS: Reserve space for the icons */
+  flex: 1;
+  max-width: calc(100% - 45px);
 }
 
 .user-info img {
@@ -70,6 +70,7 @@
   min-width: 0;
   align-content: center;
 }
+
 .stacks-component-headline {
   display: -webkit-box;
   -webkit-line-clamp: 2;

@@ -1,6 +1,5 @@
 import {
   ChevronLeft,
-  Delete,
   Ellipsis,
   Heart,
   MessageSquareText,
@@ -8,7 +7,6 @@ import {
   Share,
   Share2,
   Trash,
-  X,
 } from "lucide-react";
 import { DeckPost, SubmitComment } from "../../../model/deckpost.model";
 import styles from "../../../styles/DetailStackPage.module.css";
@@ -25,6 +23,7 @@ import { detailStackEvent } from "../../../services/eventBus/detailStackEvent";
 import ShareContent from "./ShareContent";
 import { useRouter } from "next/router";
 import DOMPurify from "dompurify";
+import GenericGoogleAd from "../../AdSense";
 
 interface DetailStackProps {
   onClose: () => void;
@@ -238,7 +237,6 @@ const DetailStackPage = ({
 
           <div className={styles["detail-content"]}>
             <h3>{postDetails?.headline}</h3>
-            {/* Use dangerouslySetInnerHTML with sanitized content */}
             <div
               dangerouslySetInnerHTML={createSanitizedMarkup(
                 postDetails?.content || ""
@@ -266,9 +264,9 @@ const DetailStackPage = ({
                         {" "}
                         {comment.name}
                       </div>
-                      <span
-                        className={styles["comment-holder-comment"]}
-                      >{comment.comment}</span>
+                      <span className={styles["comment-holder-comment"]}>
+                        {comment.comment}
+                      </span>
                       <div className={styles["comment-holder-func"]}>
                         <code>{formatTimeAgo(comment.timestamp)}</code>
                         {comment.userId == userId && (
@@ -290,6 +288,15 @@ const DetailStackPage = ({
                 ))}
             </div>
           </div>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "728px",
+            overflow: "hidden",
+          }}
+        >
+          <GenericGoogleAd />
         </div>
         <div className={styles["comment-bar"]}>
           <div
