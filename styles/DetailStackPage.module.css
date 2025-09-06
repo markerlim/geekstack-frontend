@@ -21,13 +21,9 @@
   color: var(--gs-fontcolor-one);
 }
 .cover-image {
-  width: calc(100% - 40px);
+  width: calc(100%);
   height: 150px;
-  border-radius: 10px;
   flex: 0 0 auto;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
   overflow: hidden;
   position: relative;
 }
@@ -199,14 +195,11 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-
-  /* Viewport height with fallbacks */
-  height: calc(100% - 170px); /* Dynamic viewport (best) */
-
-  /* Mobile scrolling behavior */
+  height: calc(100% - 170px);
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
-  overscroll-behavior: contain; /* Prevent parent scroll */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .comment-bar {
