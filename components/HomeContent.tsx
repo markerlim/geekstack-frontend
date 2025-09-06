@@ -8,6 +8,7 @@ import Link from "next/link";
 import { tcgList } from "../data/tcgList";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ExchangeRate from "./features/ExchangeRateComponent";
+import EventListComponent from "./features/EventListComponent";
 
 const HomeContent = () => {
   const prevRef = useRef<HTMLButtonElement>(null);
@@ -67,8 +68,8 @@ const HomeContent = () => {
           <ChevronRight />
         </button>
       </div>
-
       <ExchangeRate />
+      <EventListComponent/> 
     </>
   );
 };

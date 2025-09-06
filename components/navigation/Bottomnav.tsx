@@ -16,8 +16,8 @@ const bottoms = [
   },
   {
     src: "/icons/bottomnav/Create.svg",
-    alt: "Deckbuilder",
-    path: "/deckbuilder",
+    alt: "Function Menu",
+    path: "funcmenu",
   },
   { src: "/icons/bottomnav/Stacks.svg", alt: "Stacks", path: "/stack" },
   {
@@ -33,6 +33,9 @@ const Bottomnav = () => {
   const [isTCGListVisible, setIsTCGListVisible] = useState(false);
   const [isPostingOpen, setIsPostingOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
   const isActive = (path: string) => {
     const validPaths = bottoms.filter((b) => b.path !== "/").map((b) => b.path);
 
@@ -46,8 +49,8 @@ const Bottomnav = () => {
   };
 
   const onBottomNavClick = (tab: any) => {
-    if (tab.path === "/deckbuilder") {
-      setIsOpen(true); // open panel
+    if (tab.path === "funcmenu") {
+      toggleMenu();
     } else {
       router.push(tab.path);
     }
@@ -95,13 +98,27 @@ const Bottomnav = () => {
             }`}
             onClick={() => onBottomNavClick(bottom)}
           >
-            <Image
-              src={bottom.src}
-              alt={bottom.alt}
-              width={30}
-              height={30}
-              className={!isActive(bottom.path) ? styles.greyScale : ""}
-            />
+            {bottom.path === "funcmenu" ? (
+              <motion.div
+                animate={{ rotate: isOpen ? 135 : 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <Image
+                  src={bottom.src}
+                  alt={bottom.alt}
+                  width={40}
+                  height={40}
+                />
+              </motion.div>
+            ) : (
+              <Image
+                src={bottom.src}
+                alt={bottom.alt}
+                width={32}
+                height={32}
+                className={!isActive(bottom.path) ? styles.greyScale : ""}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -124,8 +141,8 @@ const Bottomnav = () => {
       {/* Panel */}
       <motion.div
         className={styles.cardGameOptionWrapper}
-        initial={{ y: "100%", x:"-50%" }}
-        animate={{ y: isOpen ? "-20px" : "100%", x:"-50%" }}
+        initial={{ y: "100%", x: "-50%" }}
+        animate={{ y: isOpen ? "-20px" : "100%", x: "-50%" }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <motion.div
@@ -137,10 +154,7 @@ const Bottomnav = () => {
         >
           <div className={styles.secondButton}>
             <div>
-              <img
-                  src="/icons/bottomnav/StacksCreate.svg"
-                  alt="Create post"
-                />
+              <img src="/icons/bottomnav/StacksCreate.svg" alt="Create post" />
               <span>Post Content</span>
             </div>
             <ChevronRight size={14} />

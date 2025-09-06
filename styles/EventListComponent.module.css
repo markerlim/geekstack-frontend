@@ -1,0 +1,18 @@
+.eventListContainer {
+  height: 200px;
+  width: calc(100% - 60px);
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: var(--gs-bgcolor-four);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.eventListHeader{
+  border: 2px solid var(--gs-bordercolor);
+  background-color: var(--gs-bgcolor-one);
+  color: var(--gs-color-primary);
+  padding:4px 15px;
+  border-radius: 20px;
+  width: fit-content;
+}

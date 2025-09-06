@@ -2,17 +2,19 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: var(--bottom-nav-height);
+  height:calc(var(--bottom-nav-height) - 10px);
   background: var(--gs-bgcolor-one);
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 10px;
   border-top: var(--gs-border);
   z-index: 1000;
 }
 
 .bottomNavIcon {
   cursor: pointer;
+  line-height: 0;
 }
 
 .active img {

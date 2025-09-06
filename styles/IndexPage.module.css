@@ -91,7 +91,6 @@
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
 }
 
@@ -148,11 +147,11 @@
 }
 
 .additional-content {
-  background: var(--gs-bgcolor-three);
-  padding: 20px;
-  border-radius: 8px;
-  width: 80vw;
-  max-width: 400px;
+  background: var(--gs-bgcolor-four);
+  padding: 10px;
+  border-radius: 10px;
+  width: calc(100% - 60px);
+  max-width: 600px;
   margin: 0 auto;
   box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
   text-align: center;
